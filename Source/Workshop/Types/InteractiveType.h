@@ -1,3 +1,6 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -5,7 +8,7 @@
 
 
 UENUM(BlueprintType)
-enum EInteractiveType
+enum class EInteractiveType : uint8
 {
   Base        UMETA(DisplayName = "Any"),
   Ability     UMETA(DisplayName = "Ability"),

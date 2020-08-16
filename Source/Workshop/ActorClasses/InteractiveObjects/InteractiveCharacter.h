@@ -3,12 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InteractiveObject.h"
 #include "PaperSpriteComponent.h"
 #include "PaperFlipbookComponent.h"
+#include "Workshop/Types/Effects/EffectData.h"
 #include "InteractiveCharacter.generated.h"
 
-class UEffectData;
+const int32    DefaultPointsValue   = 10;
+const FString  DefaultStringValue   = "Dude";
+
+const int32    CharacterNameStatId  = 0;
+const int32    HealthStatId         = 1;
 
 // Interactive characters have visual represenation, abilities, types, 
 // they are able to take actions in turn-based events and connected to 
@@ -24,14 +28,30 @@ protected:
   TMap<int32, UPaperFlipbook*> AnimationsCollection;
   UPaperFlipbookComponent* CharacterPresentation;
 
-  // Stats
+  // Character Statistics
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+  TMap<int32, FString> StringStats = 
+  { 
+    {CharacterNameStatId, DefaultStringValue},
+  };
 
-  // Effects
-  TArray<UEffectData*> AppliedEffects;
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+  TMap<int32, int32> IntegerStats =
+  {
+    {HealthStatId, DefaultPointsValue},
+  };
+
+  // Statistics Principals:
+  // every stat has it's id, which stays the same for the whole game
+  //++++ id description should be gathered in some document
+  //++++ also editor should be modified in a way to show this desprions for developer
+
+  // List of effects which are applied to the character in the current state
+  TArray<UEffectData*> AccumulatedEffects;
 
 public:
   // ---------------------------------------------------------------
-  //                              Setup
+  //                        Construction
   // ---------------------------------------------------------------
 
   AInteractiveCharacter();
@@ -39,6 +59,12 @@ public:
   virtual void OnConstruction(const FTransform & Transform) override;
 
   void PlayAnimation(int32 AnimationId);
+
+  // ---------------------------------------------------------------
+  //            Change effects, witch Character already has
+  // ---------------------------------------------------------------
+
+  void RemoveEffectsBySpecifiersMask(int mask);
 
   // ---------------------------------------------------------------
   //         Step, when player can interact with character
@@ -58,8 +84,7 @@ public:
   //                  Character's turn
   // ---------------------------------------------------------------
 
-  void ResolveEffects();
-
   void OnTurnStart();
 
+  void OnTurnEnd();
 };

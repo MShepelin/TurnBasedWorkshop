@@ -20,7 +20,7 @@ protected:
   TSet<AInteractiveObject*> DependenciesList;
   TSet<AInteractiveObject*> InfluencesList;
 
-  EInteractiveType InteractiveType = Base;
+  EInteractiveType InteractiveType = EInteractiveType::Base;
 
   USceneComponent* RootScene;
 

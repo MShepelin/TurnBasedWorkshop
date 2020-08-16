@@ -18,23 +18,33 @@ void AInteractiveCharacter::GatherInformation()
   Super::GatherInformation();
 }
 
+
 void AInteractiveCharacter::ShowInfluences()
 {
 
 }
 
-void AInteractiveCharacter::ResolveEffects()
-{
-  for (UEffectData* effect : AppliedEffects)
-  {
-    // ???
-  }
-}
 
 void AInteractiveCharacter::OnTurnStart()
 {
-
+  // Apply effects
 }
+
+
+void AInteractiveCharacter::OnTurnEnd()
+{
+  // Decrease effects' duration
+  for (int EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
+  {
+    AccumulatedEffects[EffectIndex]->DecreaseDuration();
+    if (!AccumulatedEffects[EffectIndex]->GetDuration())
+    {
+      AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
+      AccumulatedEffects.Pop();
+    }
+  }
+}
+
 
 void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
 {
@@ -49,7 +59,14 @@ void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
   }
 }
 
+
 void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
 {
   Super::OnConstruction(Transform);
+
+  // Check if needed Stats are present
+  if (!StringStats.Find(CharacterNameStatId))
+  {
+    UE_LOG(LogTemp, Warning, TEXT("Incorrect Character Stats!"));
+  }
 }

@@ -6,7 +6,7 @@
 #include "CoreMinimal.h"
 #include "Workshop/Types/EffectType.h"
 #include "Workshop/Types/InteractiveType.h"
-#include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
+#include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
 #include "EffectData.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)
@@ -20,10 +20,10 @@ protected:
   FString AspectName = "";
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (OverrideNativeName = "EffectType"))
-  TEnumAsByte<EEffectType> EffectType = StatChange;
+  EEffectType EffectType = EEffectType::StatChange;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (OverrideNativeName = "TargetType"))
-  TEnumAsByte <EInteractiveType> TargetType = Character;
+  EInteractiveType TargetType = EInteractiveType::Character;
 
   // Duration of effect, 0 means that effect is permanent
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta= (OverrideNativeName = "Duration", ClampMin = "0"))
@@ -40,6 +40,10 @@ protected:
   // Is used to gather same effects
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (OverrideNativeName = "EffectIdentifier"))
   int EffectId = 0;
+
+  // Effect Specifiers gather Effects in groups so that they can be changed together
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, meta = (OverrideNativeName = "EffectIdentifier"))
+  int EffectSpecifiersMask = 0;
 
   // tag types to affect on
 

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InteractiveObject.h"
 #include "InteractiveCharacter.h"
 #include "InteractiveAbility.generated.h"
 
