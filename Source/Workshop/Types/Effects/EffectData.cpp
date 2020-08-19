@@ -10,16 +10,16 @@ UEffectData::UEffectData()
 
 UEffectData::UEffectData(
   FString AspectNameInput, 
-  TEnumAsByte<EEffectType> EffectTypeInput,
-  TEnumAsByte <EInteractiveType> TargetTypeInput, 
+  EEffectType EffectTypeInput,
+  EInteractiveType TargetTypeInput, 
   int DurationInput = 0, 
   int EffectValueInput = 0,
   TSubclassOf<AInteractiveObject> SpawnTypeInput = nullptr, 
-  int EffectIdentifier = 0) :
+  int EffectIdentifier = 0, int32 EffectSpecifiersMaskInput = 1) :
   AspectName(AspectNameInput), EffectType(EffectTypeInput), 
   TargetType(TargetTypeInput), Duration(DurationInput), 
   EffectValue(EffectValueInput), SpawnType(SpawnTypeInput), 
-  EffectId(EffectIdentifier)
+  EffectId(EffectIdentifier), EffectSpecifiersMask(EffectSpecifiersMaskInput)
 {
 
 }
@@ -67,7 +67,7 @@ FString UEffectData::GetAspectName()
   return AspectName;
 }
 
-TEnumAsByte<EEffectType> UEffectData::GetEffectType()
+EEffectType UEffectData::GetEffectType()
 {
   return EffectType;
 }
@@ -77,7 +77,12 @@ TSubclassOf<AInteractiveObject> UEffectData::GetSpawnType()
   return SpawnType;
 }
 
-TEnumAsByte <EInteractiveType> UEffectData::GetTargetType()
+EInteractiveType UEffectData::GetTargetType()
 {
   return TargetType;
+}
+
+int32 UEffectData::GetEffectSpecifiers()
+{
+  return EffectSpecifiersMask;
 }

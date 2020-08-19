@@ -6,7 +6,8 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "BuildAbility.generated.h"
 
-// Helps to construct new anilities with good performance inside
+// Functions from UBuildAbility should be added to construction script and CustomEffect 
+// of AInteractiveAbility to implement needed skills
 UCLASS()
 class WORKSHOP_API UBuildAbility : public UBlueprintFunctionLibrary
 {

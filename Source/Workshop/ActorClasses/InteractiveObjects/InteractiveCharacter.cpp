@@ -31,6 +31,12 @@ void AInteractiveCharacter::OnTurnStart()
 }
 
 
+void AInteractiveCharacter::RemoveEffectByIndex(int EffectIndex)
+{
+  AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
+  AccumulatedEffects.Pop();
+}
+
 void AInteractiveCharacter::OnTurnEnd()
 {
   // Decrease effects' duration
@@ -39,8 +45,7 @@ void AInteractiveCharacter::OnTurnEnd()
     AccumulatedEffects[EffectIndex]->DecreaseDuration();
     if (!AccumulatedEffects[EffectIndex]->GetDuration())
     {
-      AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
-      AccumulatedEffects.Pop();
+      RemoveEffectByIndex(EffectIndex);
     }
   }
 }
@@ -68,5 +73,16 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
   if (!StringStats.Find(CharacterNameStatId))
   {
     UE_LOG(LogTemp, Warning, TEXT("Incorrect Character Stats!"));
+  }
+}
+
+void AInteractiveCharacter::RemoveEffectsBySpecifiersMask(int32 mask)
+{
+  for (int EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
+  {
+    if (AccumulatedEffects[EffectIndex]->GetEffectSpecifiers() & mask)
+    {
+      RemoveEffectByIndex(EffectIndex);
+    }
   }
 }

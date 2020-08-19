@@ -7,13 +7,15 @@
 #include "EffectSpecifiers.generated.h"
 
 UENUM(meta = (Bitflags))
-enum class EEffectSpecifiers : uint32
+enum class EEffectSpecifiers : int32
 {
-  Accident    = 0x01,
-  Exhaust     = 0x02,
-  Plan        = 0x04,
-  Luck        = 0x08,
-  Fear        = 0x10,
+  Accident    = 1,
+  Exhaust     = 2,
+  Plan        = 4,
+  Luck        = 8,
+  Fear        = 16,
+  Boredom     = 32,
+  Madness     = 64
 };
 
 ENUM_CLASS_FLAGS(EEffectSpecifiers)

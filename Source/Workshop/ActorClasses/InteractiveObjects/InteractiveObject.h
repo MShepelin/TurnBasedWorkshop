@@ -24,7 +24,7 @@ protected:
 
   USceneComponent* RootScene;
 
-  UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = Icon)
+  UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "InteractivitySettings")
   UIconComponent* InteractivityIcon;
   
 public:

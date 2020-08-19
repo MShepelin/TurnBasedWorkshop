@@ -8,11 +8,22 @@
 #include "Workshop/Types/Effects/EffectData.h"
 #include "InteractiveCharacter.generated.h"
 
+
+class AInteractiveAbility;
+
+// ---------------------------------------------------------------
+//                     Default stats
+// ---------------------------------------------------------------
+
 const int32    DefaultPointsValue   = 10;
 const FString  DefaultStringValue   = "Dude";
 
 const int32    CharacterNameStatId  = 0;
 const int32    HealthStatId         = 1;
+
+// ---------------------------------------------------------------
+//                   Class desription
+// ---------------------------------------------------------------
 
 // Interactive characters have visual represenation, abilities, types, 
 // they are able to take actions in turn-based events and connected to 
@@ -28,14 +39,15 @@ protected:
   TMap<int32, UPaperFlipbook*> AnimationsCollection;
   UPaperFlipbookComponent* CharacterPresentation;
 
-  // Character Statistics
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+  // Character statisctics in form of strings
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings | Statistics")
   TMap<int32, FString> StringStats = 
   { 
     {CharacterNameStatId, DefaultStringValue},
   };
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+  // Character statisctics in form of integers
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings | Statistics")
   TMap<int32, int32> IntegerStats =
   {
     {HealthStatId, DefaultPointsValue},
@@ -46,8 +58,14 @@ protected:
   //++++ id description should be gathered in some document
   //++++ also editor should be modified in a way to show this desprions for developer
 
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings | AbilitiesControl")
+  TArray<TSubclassOf<AInteractiveAbility>> Abilities;
+
   // List of effects which are applied to the character in the current state
   TArray<UEffectData*> AccumulatedEffects;
+
+  // ATTANTION: doesn't make sanity checks!
+  void RemoveEffectByIndex(int EffectIndex);
 
 public:
   // ---------------------------------------------------------------
@@ -61,13 +79,14 @@ public:
   void PlayAnimation(int32 AnimationId);
 
   // ---------------------------------------------------------------
-  //            Change effects, witch Character already has
+  //            Change effects when Character already has
   // ---------------------------------------------------------------
 
-  void RemoveEffectsBySpecifiersMask(int mask);
+  // Effect would be removed if any flag of mask is met
+  void RemoveEffectsBySpecifiersMask(int32 mask);
 
   // ---------------------------------------------------------------
-  //         Step, when player can interact with character
+  //           Step when player can interact with character
   // ---------------------------------------------------------------
 
   virtual void GatherInformation() override;
@@ -75,13 +94,13 @@ public:
   void ShowInfluences() override;
 
   // ---------------------------------------------------------------
-  //              Step, when all actions are resolved
+  //              Step when all actions are resolved
   // ---------------------------------------------------------------
 
   // ???
 
   //----------------------------------------------------------------
-  //                  Character's turn
+  //                      Character's turn
   // ---------------------------------------------------------------
 
   void OnTurnStart();

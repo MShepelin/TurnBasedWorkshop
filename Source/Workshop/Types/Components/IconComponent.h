@@ -18,7 +18,7 @@ protected:
   UPaperFlipbookComponent* SpriteOfIcon;
   UIconData* IconProperties;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = IconClass)
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconClass")
   TSubclassOf<UIconData> IconPropertiesClass;
 
 public:

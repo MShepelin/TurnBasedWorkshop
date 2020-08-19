@@ -9,7 +9,9 @@
 UENUM(BlueprintType)
 enum class EEffectType : uint8
 {
-  Advantage   UMETA(DisplayName = "Advantage"),
-  StatChange  UMETA(DisplayName = "StatChange"),
-  Spawn       UMETA(DisplayName = "Spawn")
+  DataHolder          = 0,
+  Advantage           = 1 UMETA(DisplayName = "Advantage"),
+  StatChange          = 2 UMETA(DisplayName = "StatChange"),
+  RelativeStatChange  = 4 UMETA(DisplayName = "RelativeStatChange"),
+  Spawn               = 8 UMETA(DisplayName = "Spawn")
 };

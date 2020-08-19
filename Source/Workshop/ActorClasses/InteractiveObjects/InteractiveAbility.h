@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PaperFlipbookComponent.h"
 #include "InteractiveCharacter.h"
 #include "InteractiveAbility.generated.h"
 
@@ -12,7 +13,8 @@ class UEffectData;
 // create EffectData variables to have all data needed to resolve effects
 // override CustomEffect to use this variables to affect InteractiveObject
 
-//++++ description
+// Visual representation of Ability, which holds all needed information about its' effects.
+// Can be connected to other Interactive Objects to apply effects on them
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
 {
@@ -21,16 +23,23 @@ class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
 protected:
   AInteractiveCharacter* CharacterOwner;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+  // Animation identifier which should be played by owner, when ability is resolved
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   int32 AbilityAnimationId;
 
-  // Effects specifiers, modified only by CustomEffect
-  TArray<TSubclassOf<UEffectData>> UsedEffects;
+  // Used to accumulate effects for this ability
+  TArray<UEffectData> UsedEffects;
 
 public:
   // ---------------------------------------------------------------
   //                              Setup
   // ---------------------------------------------------------------
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInSlot"))
+  UPaperFlipbook* Icon;
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInScene"))
+  UPaperFlipbook* IconScene;
 
   AInteractiveAbility();
 
