@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EffectData.h"
+
 
 UEffectData::UEffectData()
 {
@@ -12,10 +12,10 @@ UEffectData::UEffectData(
   FString AspectNameInput, 
   EEffectType EffectTypeInput,
   EInteractiveType TargetTypeInput, 
-  int DurationInput = 0, 
-  int EffectValueInput = 0,
+  int32 DurationInput = 0, 
+  int32 EffectValueInput = 0,
   TSubclassOf<AInteractiveObject> SpawnTypeInput = nullptr, 
-  int EffectIdentifier = 0, int32 EffectSpecifiersMaskInput = 1) :
+  int32 EffectIdentifier = 0, int32 EffectSpecifiersMaskInput = 1) :
   AspectName(AspectNameInput), EffectType(EffectTypeInput), 
   TargetType(TargetTypeInput), Duration(DurationInput), 
   EffectValue(EffectValueInput), SpawnType(SpawnTypeInput), 
@@ -24,7 +24,7 @@ UEffectData::UEffectData(
 
 }
 
-void UEffectData::DecreaseDuration(int OnValue)
+void UEffectData::DecreaseDuration(int32 OnValue)
 {
   if (OnValue < 0)
   {
@@ -47,42 +47,42 @@ void UEffectData::DecreaseDuration()
   DecreaseDuration(1);
 }
 
-int UEffectData::GetEffectId()
+int UEffectData::GetEffectId() const
 {
   return EffectId;
 }
 
-int UEffectData::GetDuration()
+int UEffectData::GetDuration() const
 {
   return Duration;
 }
 
-int UEffectData::GetSpecialValue()
+int UEffectData::GetSpecialValue() const
 {
   return EffectValue;
 }
 
-FString UEffectData::GetAspectName()
+FString UEffectData::GetAspectName() const
 {
   return AspectName;
 }
 
-EEffectType UEffectData::GetEffectType()
+EEffectType UEffectData::GetEffectType() const
 {
   return EffectType;
 }
 
-TSubclassOf<AInteractiveObject> UEffectData::GetSpawnType()
+TSubclassOf<AInteractiveObject> UEffectData::GetSpawnType() const
 {
   return SpawnType;
 }
 
-EInteractiveType UEffectData::GetTargetType()
+EInteractiveType UEffectData::GetTargetType() const
 {
   return TargetType;
 }
 
-int32 UEffectData::GetEffectSpecifiers()
+int32 UEffectData::GetEffectSpecifiers() const
 {
   return EffectSpecifiersMask;
 }

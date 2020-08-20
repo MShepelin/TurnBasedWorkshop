@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "InteractiveAbility.h"
 
-void AInteractiveAbility::GatherInformation()
+
+void AInteractiveAbility::GatherInformation() const
 {
   Super::GatherInformation();
 }
 
-void AInteractiveAbility::ShowInfluences()
+void AInteractiveAbility::ShowInfluences() const
 {
 
 }

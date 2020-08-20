@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "InteractiveCharacter.h"
 
 
@@ -13,13 +12,13 @@ AInteractiveCharacter::AInteractiveCharacter()
 }
 
 
-void AInteractiveCharacter::GatherInformation()
+void AInteractiveCharacter::GatherInformation() const
 {
   Super::GatherInformation();
 }
 
 
-void AInteractiveCharacter::ShowInfluences()
+void AInteractiveCharacter::ShowInfluences() const
 {
 
 }
@@ -31,7 +30,7 @@ void AInteractiveCharacter::OnTurnStart()
 }
 
 
-void AInteractiveCharacter::RemoveEffectByIndex(int EffectIndex)
+void AInteractiveCharacter::RemoveEffectByIndex(int32 EffectIndex)
 {
   AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
   AccumulatedEffects.Pop();

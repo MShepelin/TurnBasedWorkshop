@@ -10,6 +10,7 @@
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
 #include "EffectData.generated.h"
 
+
 UCLASS(Blueprintable, BlueprintType)
 class WORKSHOP_API UEffectData : public UObject
 {
@@ -28,11 +29,11 @@ protected:
 
   // Duration of effect, 0 means that effect is permanent
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta= (ClampMin = "0"))
-  int Duration = 0;
+  int32 Duration = 0;
 
   // Used only with Spawn/StatChange EffectType
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta = (OverrideNativeName = "ValueToUse"))
-  int EffectValue = 0;
+  int32 EffectValue = 0;
 
   // Used only with Spawn EffectType
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta = (OverrideNativeName = "ObjectToSpawn"))
@@ -40,7 +41,7 @@ protected:
 
   // Is used to gather same effects
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta = (OverrideNativeName = "EffectIdentifier"))
-  int EffectId = 0;
+  int32 EffectId = 0;
 
   // Effect Specifiers gather Effects in groups so that they can be changed together
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta =(Bitmask, BitmaskEnum = "EEffectSpecifiers"))
@@ -48,28 +49,29 @@ protected:
 
   // Types of objects which are affected by this effect
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
-  TArray<int> TagsToAffect;
+  TArray<int32> TagsToAffect;
 
   // Desription in Tags system should be done in some sort of document
   //++++ add option to edit tags, which shouldn't be used
   //++++ add editor button to add all existing tags
+  //++++ add icon to visualise property effect???
 
 public:
   UEffectData();
 
   UEffectData(FString AspectNameInput, EEffectType EffectTypeInput,
-    EInteractiveType TargetTypeInput, int DurationInput, int EffectValueInput,
-    TSubclassOf<AInteractiveObject> SpawnTypeInput, int EffectIdentifier, int32 EffectSpecifiersMaskInput);
+    EInteractiveType TargetTypeInput, int32 DurationInput, int32 EffectValueInput,
+    TSubclassOf<AInteractiveObject> SpawnTypeInput, int32 EffectIdentifier, int32 EffectSpecifiersMaskInput);
 
-  void DecreaseDuration(int OnValue);
+  void DecreaseDuration(int32 OnValue);
   void DecreaseDuration();
 
-  int GetEffectId();
-  int GetDuration();
-  int GetSpecialValue();
-  FString GetAspectName();
-  int32 GetEffectSpecifiers();
-  EEffectType GetEffectType();
-  EInteractiveType GetTargetType();
-  TSubclassOf<AInteractiveObject> GetSpawnType();
+  int GetEffectId() const;
+  int GetDuration() const;
+  int GetSpecialValue() const;
+  FString GetAspectName() const;
+  int32 GetEffectSpecifiers() const;
+  EEffectType GetEffectType() const;
+  EInteractiveType GetTargetType() const;
+  TSubclassOf<AInteractiveObject> GetSpawnType() const;
 };

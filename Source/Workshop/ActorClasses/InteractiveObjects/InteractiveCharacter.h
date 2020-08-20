@@ -11,29 +11,25 @@
 
 class AInteractiveAbility;
 
-// ---------------------------------------------------------------
-//                     Default stats
-// ---------------------------------------------------------------
-
 const int32    DefaultPointsValue   = 10;
 const FString  DefaultStringValue   = "Dude";
 
 const int32    CharacterNameStatId  = 0;
 const int32    HealthStatId         = 1;
 
-// ---------------------------------------------------------------
-//                   Class desription
-// ---------------------------------------------------------------
-
-// Interactive characters have visual represenation, abilities, types, 
-// they are able to take actions in turn-based events and connected to 
-// skill activations
+/**
+ * Interactive characters have visual represenation, abilities, types, 
+ * they are able to take actions in turn-based events and connected to 
+ * skill activations
+ */
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveCharacter : public AInteractiveObject
 {
 	GENERATED_BODY()
 
 protected:
+  EInteractiveType InteractiveType = EInteractiveType::Character;
+
   // Animation state machine (may be connected??? graph???)
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
   TMap<int32, UPaperFlipbook*> AnimationsCollection;
@@ -64,44 +60,26 @@ protected:
   // List of effects which are applied to the character in the current state
   TArray<UEffectData*> AccumulatedEffects;
 
-  // ATTANTION: doesn't make sanity checks!
-  void RemoveEffectByIndex(int EffectIndex);
+  /**
+   * @warning: Doesn't make sanity checks!
+   */
+  void RemoveEffectByIndex(int32 EffectIndex);
 
 public:
-  // ---------------------------------------------------------------
-  //                        Construction
-  // ---------------------------------------------------------------
-
   AInteractiveCharacter();
 
   virtual void OnConstruction(const FTransform & Transform) override;
 
   void PlayAnimation(int32 AnimationId);
 
-  // ---------------------------------------------------------------
-  //            Change effects when Character already has
-  // ---------------------------------------------------------------
-
-  // Effect would be removed if any flag of mask is met
+  /**
+   * Effect would be removed if any flag of mask is met.
+   */
   void RemoveEffectsBySpecifiersMask(int32 mask);
 
-  // ---------------------------------------------------------------
-  //           Step when player can interact with character
-  // ---------------------------------------------------------------
+  virtual void GatherInformation() const override;
 
-  virtual void GatherInformation() override;
-
-  void ShowInfluences() override;
-
-  // ---------------------------------------------------------------
-  //              Step when all actions are resolved
-  // ---------------------------------------------------------------
-
-  // ???
-
-  //----------------------------------------------------------------
-  //                      Character's turn
-  // ---------------------------------------------------------------
+  void ShowInfluences() const override;
 
   void OnTurnStart();
 

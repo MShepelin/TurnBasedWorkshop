@@ -2,6 +2,7 @@
 
 #include "InteractiveObject.h"
 
+
 // Sets default values
 AInteractiveObject::AInteractiveObject()
 {
@@ -59,12 +60,12 @@ void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
   }
 }
 
-void AInteractiveObject::GatherInformation()
+void AInteractiveObject::GatherInformation() const
 {
 
 }
 
-void AInteractiveObject::ShowInfluences()
+void AInteractiveObject::ShowInfluences() const
 {
 
 }
@@ -83,4 +84,14 @@ void AInteractiveObject::ClearDependencies()
   {
     RemoveDependenceFrom(InfluencingObject);
   }
+}
+
+std::shared_ptr<Node<AInteractiveObject>>& AInteractiveObject::GetNode()
+{
+  return NodeForTags;
+}
+
+TArray<int32>& AInteractiveObject::GetTags()
+{
+  return TagsForTypizationSearch;
 }

@@ -7,6 +7,7 @@
 #include "../IconData.h"
 #include "IconComponent.generated.h"
 
+
 UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class WORKSHOP_API UIconComponent : public USceneComponent
 {

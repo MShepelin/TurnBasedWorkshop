@@ -3,14 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Workshop/Types/Nonblueprintable/TagsSystem.h"
 #include "Workshop/Types/Components/IconComponent.h"
 #include "Workshop/Types/InteractiveType.h"
 #include "GameFramework/Actor.h"
 #include <unordered_map>
 #include "InteractiveObject.generated.h"
 
-// Base, can be clicked
-//++++ add a little bit more info
+/**
+ * Interactive object supports tag typization and dependecy from other interactive objects
+ * Although it doesn't listen to other entity's interaction there are functions to
+ * consider external actions
+ */
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveObject : public AActor
 {
@@ -32,20 +36,32 @@ public:
 	AInteractiveObject();
 
 protected:
-
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
   
+  // Node for tag system
+  // Any object can be added only to one system of tags
+  // (For multiple tag systems object-decorator should be used)
+  std::shared_ptr<Node<AInteractiveObject>> NodeForTags = nullptr;
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "TagsSettings")
+  TArray<int32> TagsForTypizationSearch;
+
+  std::shared_ptr<Node<AInteractiveObject>>&    GetNode();
+  TArray<int32>&                                GetTags();
+
+  friend class TagsGraph<int32, AInteractiveObject>;
+
 public:
-  // Called before construction script
+  /**
+   * Called before construction script.
+   */
   virtual void OnConstruction(const FTransform & Transform) override;
 
-	// Called every frame
+  /**
+   * Called every frame.
+   */ 
 	virtual void Tick(float DeltaTime) override;
-
-  // ---------------------------------------------------------------
-  //                      Influence Management
-  // ---------------------------------------------------------------
 
   UFUNCTION(BlueprintCallable)
   void AddInfluenceOn(AInteractiveObject* object);
@@ -62,14 +78,13 @@ public:
   friend void AddInfluenceOn(AInteractiveObject*);
   friend void RemoveInfluenceFrom(AInteractiveObject*);
 
-  // ---------------------------------------------------------------
-  //                   Get information about object
-  // ---------------------------------------------------------------
+  /**
+   * Happens when player chooses this object.
+   */
+  virtual void GatherInformation() const;
 
-  // Happens when player chooses this object
-  //++++ returns json to get current information
-  virtual void GatherInformation();
-
-  // Visual interpretation of connections
-  virtual void ShowInfluences();
+  /**
+   * Visual interpretation of connections.
+   */
+  virtual void ShowInfluences() const;
 };

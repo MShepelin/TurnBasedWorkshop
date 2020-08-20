@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "RegistrationManager.h"
+
 
 // Sets default values
 ARegistrationManager::ARegistrationManager()
@@ -25,3 +25,34 @@ void ARegistrationManager::Tick(float DeltaTime)
 
 }
 
+void ARegistrationManager::PostInitProperties()
+{
+  Super::PostInitProperties();
+  for (TPair<int32, FString>& Tag : TagsWithNames)
+  {
+    TagsSystem.AddTag(Tag.Key);
+  }
+}
+
+void ARegistrationManager::ConnectObjectToTagsSystem(AInteractiveObject* ObjectToAdd)
+{
+  TagsSystem.AddObject(ObjectToAdd);
+}
+
+void ARegistrationManager::DisconnectObjectFromTagsSystem(AInteractiveObject* ObjectToRemove)
+{
+  TagsSystem.RemoveObject(ObjectToRemove);
+}
+
+TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByTags(const TArray<int32> TagsArray, int32 EnoughNumberOfTags) const
+{
+  TArray<AInteractiveObject*> FoundObjects = TagsSystem.FindByTags(TagsArray, EnoughNumberOfTags);
+
+  for (AInteractiveObject* FoundObject : FoundObjects)
+  {
+    DrawDebugLine(GetWorld(), GetActorLocation(), FoundObject->GetActorLocation(),
+      DebugColor, false);
+  }
+
+  return FoundObjects;
+}
