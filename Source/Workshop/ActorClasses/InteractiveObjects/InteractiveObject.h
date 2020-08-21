@@ -14,13 +14,13 @@
 
 
 class UBuildAbility;
+class UEffectData;
+class ARegistrationManager;
 
 
-/**
- * Interactive object supports tag typization and dependecy from other interactive objects
- * Although it doesn't listen to other entity's interaction there are functions to
- * consider external actions
- */
+// Interactive object supports tag typization and dependecy from other interactive objects
+// Although it doesn't listen to other entity's interaction there are functions to
+// consider external actions
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveObject : public AActor
 {
@@ -45,6 +45,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
   
+  ARegistrationManager* MainManager = nullptr;
+
   // Node for tag system
   // Any object can be added only to one system of tags
   // (For multiple tag systems object-decorator should be used)
@@ -58,18 +60,24 @@ protected:
 
   friend class TagsGraph<int32, AInteractiveObject>;
 
+
+  // List of effects which are applied in the current state
+  TArray<UEffectData*> AccumulatedEffects;
+
+  friend class UBuildAbility;
+
 public:
-  /**
-   * Called before construction script.
-   */
+  //Called before construction script.
   virtual void OnConstruction(const FTransform & Transform) override;
 
   virtual void PostInitProperties() override;
 
-  /**
-   * Called every frame.
-   */ 
+  // Called every frame.
 	virtual void Tick(float DeltaTime) override;
+
+
+  void ConnectToManager(ARegistrationManager* Manager);
+
 
   UFUNCTION(BlueprintCallable)
   void AddInfluenceOn(AInteractiveObject* object);
@@ -86,13 +94,10 @@ public:
   friend void AddInfluenceOn(AInteractiveObject*);
   friend void RemoveInfluenceFrom(AInteractiveObject*);
 
-  /**
-   * Happens when player chooses this object.
-   */
-  virtual void GatherInformation() const;
 
-  /**
-   * Visual interpretation of connections.
-   */
+  // Happens when player chooses this object.
+  virtual FString GatherInformation() const;
+
+  //Visual interpretation of connections.
   virtual void ShowInfluences() const;
 };

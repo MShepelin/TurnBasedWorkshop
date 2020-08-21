@@ -14,9 +14,21 @@ AInteractiveCharacter::AInteractiveCharacter()
 }
 
 
-void AInteractiveCharacter::GatherInformation() const
+FString AInteractiveCharacter::GatherInformation() const
 {
-  Super::GatherInformation();
+  FString CharacterInformation = "";
+
+  for (TPair<int32, int32> IntegerStatPair : IntegerStats)
+  {
+    CharacterInformation += "\n";
+  }
+
+  for (TPair<int32, FString> StringStatPair : StringStats)
+  {
+    CharacterInformation += "\n";
+  }
+
+  return Super::GatherInformation() + CharacterInformation;
 }
 
 

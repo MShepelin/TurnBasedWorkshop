@@ -8,13 +8,8 @@
 #include "InteractiveAbility.generated.h"
 
 
-class UEffectData;
-
-
-/**
- * Visual representation of Ability, which holds all needed information about its' effects.
- * Can be connected to other Interactive Objects to apply effects on them.
- */
+// Visual representation of Ability, which holds all needed information about its' effects.
+// Can be connected to other Interactive Objects to apply effects on them.
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
 {
@@ -27,30 +22,34 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   int32 AbilityAnimationId;
 
-  // This array collectes all effects which will send their description and affect target of ability.
+
+  // This array collectes all effects used in ability.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   TArray<TSubclassOf<UEffectData>> UsedEffects;
 
   friend class UBuildAbility;
 
-public:
+
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInSlot"))
   UPaperFlipbook* Icon;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInScene"))
   UPaperFlipbook* IconScene;
 
+public:
   AInteractiveAbility();
 
   AInteractiveAbility(AInteractiveCharacter* Owner);
 
+
   UFUNCTION(BlueprintNativeEvent)
-  void CustomEffect(AInteractiveObject* Aim);
-  virtual void CustomEffect_Implementation(AInteractiveObject* Aim);
-
-  virtual void GatherInformation() const override;
-
-  void ShowInfluences() const override;
+  void CustomEffect(AInteractiveObject* TargetObject);
+  virtual void CustomEffect_Implementation(AInteractiveObject* TargetObject);
 
   void ResolveAbility();
+
+
+  virtual FString GatherInformation() const override;
+
+  void ShowInfluences() const override;
 };

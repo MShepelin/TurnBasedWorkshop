@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
-#include "Workshop/Types/Effects/EffectData.h"
 #include "BuildAbility.generated.h"
 
 /**
@@ -19,6 +18,5 @@ class WORKSHOP_API UBuildAbility : public UBlueprintFunctionLibrary
 
 public:
   UFUNCTION(BlueprintCallable)
-  AInteractiveObject* AddEffectToCharacter(AInteractiveCharacter* Aim, AInteractiveAbility* Ability, int32 EffectIndex);
-	
+  AInteractiveObject* AddEffectToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability, int32 EffectIndex);
 };

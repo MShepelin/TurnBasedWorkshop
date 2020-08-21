@@ -65,9 +65,10 @@ void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
   }
 }
 
-void AInteractiveObject::GatherInformation() const
+FString AInteractiveObject::GatherInformation() const
 {
-
+  // Temporary
+  return DebugString;
 }
 
 void AInteractiveObject::ShowInfluences() const
@@ -104,4 +105,14 @@ std::shared_ptr<Node<AInteractiveObject>>& AInteractiveObject::GetNode()
 TArray<int32>& AInteractiveObject::GetTags()
 {
   return TagsForTypizationSearch;
+}
+
+void AInteractiveObject::ConnectToManager(ARegistrationManager* Manager)
+{
+  if (MainManager)
+  {
+    //++++ edit error: MainManager->DisconnectObjectFromTagsSystem(this);
+  }
+
+  MainManager = Manager;
 }

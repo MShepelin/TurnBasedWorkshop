@@ -3,14 +3,16 @@
 #include "InteractiveAbility.h"
 
 
-void AInteractiveAbility::GatherInformation() const
+FString AInteractiveAbility::GatherInformation() const
 {
-  Super::GatherInformation();
+  FString AbilityInformation = "";
 
   for (TSubclassOf<UEffectData> EffectClass : UsedEffects)
   {
-
+    AbilityInformation += Cast<UEffectData>(EffectClass->StaticClass())->GatherInformation(true) + FString("\n");
   }
+
+  return Super::GatherInformation() + AbilityInformation;
 }
 
 void AInteractiveAbility::ShowInfluences() const
@@ -29,7 +31,7 @@ AInteractiveAbility::AInteractiveAbility(
 
 }
 
-void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* Aim)
+void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* TargetObject)
 {
 
 }

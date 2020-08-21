@@ -50,3 +50,14 @@ int32 UEffectData::GetEffectSpecifiers() const
 {
   return EffectSpecifiersMask;
 }
+
+FString UEffectData::GatherInformation(bool bIsAbilityInfo) const
+{
+  if (bIsAbilityInfo)
+  {
+    //++++ use connected Manager
+    return DebugString;
+  }
+
+  return FString();
+}

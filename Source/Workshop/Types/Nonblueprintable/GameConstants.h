@@ -14,3 +14,5 @@ const int32    HealthStatId = 1;
 // 2. Debug
 // Used for drawing lines, spheres and other shapes for debug only
 const FColor DebugColor(255, 0, 0);
+
+const FString DebugString("Hello, world!");

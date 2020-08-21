@@ -22,8 +22,8 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
   EInteractiveType TargetType;
 
-  // Duration of effect, 0 means that effect is permanent.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta = (ClampMin = "0"))
+  // Duration of effect, 0 means that effect is instant, -1 means that effect is permanent.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta = (ClampMin = "-1"))
   int32 Duration = 0;
 
   // Effect Specifiers gather Effects in groups so that they can be changed together.
@@ -46,4 +46,6 @@ public:
   int32 GetEffectSpecifiers() const;
   EEffectType GetEffectType() const;
   EInteractiveType GetTargetType() const;
+
+  virtual FString GatherInformation(bool bIsAbilityInfo) const;
 };

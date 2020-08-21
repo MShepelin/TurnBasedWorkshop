@@ -37,6 +37,7 @@ void ARegistrationManager::PostInitProperties()
 void ARegistrationManager::ConnectObjectToTagsSystem(AInteractiveObject* ObjectToAdd)
 {
   TagsSystem.AddObject(ObjectToAdd);
+  ObjectToAdd->ConnectToManager(this);
 }
 
 void ARegistrationManager::DisconnectObjectFromTagsSystem(AInteractiveObject* ObjectToRemove)
