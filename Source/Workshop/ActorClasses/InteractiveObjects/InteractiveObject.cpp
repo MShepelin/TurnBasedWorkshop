@@ -22,6 +22,11 @@ void AInteractiveObject::OnConstruction(const FTransform & Transform)
   InteractivityIcon->Initialize();
 }
 
+void AInteractiveObject::PostInitProperties()
+{
+  Super::PostInitProperties();
+}
+
 // Called when the game starts or when spawned
 void AInteractiveObject::BeginPlay()
 {
@@ -67,7 +72,12 @@ void AInteractiveObject::GatherInformation() const
 
 void AInteractiveObject::ShowInfluences() const
 {
-
+  // Show what objects are influenced by this object
+  for (AInteractiveObject* DependentObject : InfluencesList)
+  {
+    DrawDebugLine(GetWorld(), GetActorLocation(), DependentObject->GetActorLocation(),
+      DebugColor, false);
+  }
 }
 
 void AInteractiveObject::ClearInflunces()

@@ -5,6 +5,8 @@
 
 AInteractiveCharacter::AInteractiveCharacter()
 {
+  InteractiveType = EInteractiveType::Character;
+
   CharacterPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
   CharacterPresentation->SetupAttachment(RootComponent);
 
@@ -36,6 +38,7 @@ void AInteractiveCharacter::RemoveEffectByIndex(int32 EffectIndex)
   AccumulatedEffects.Pop();
 }
 
+
 void AInteractiveCharacter::OnTurnEnd()
 {
   // Decrease effects' duration
@@ -64,9 +67,9 @@ void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
 }
 
 
-void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
+void AInteractiveCharacter::PostInitProperties()
 {
-  Super::OnConstruction(Transform);
+  Super::PostInitProperties();
 
   // Check if needed Stats are present
   if (!StringStats.Find(CharacterNameStatId))
@@ -74,6 +77,7 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
     UE_LOG(LogTemp, Warning, TEXT("Incorrect Character Stats!"));
   }
 }
+
 
 void AInteractiveCharacter::RemoveEffectsBySpecifiersMask(int32 mask)
 {

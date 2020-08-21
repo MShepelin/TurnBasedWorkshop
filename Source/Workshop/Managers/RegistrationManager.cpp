@@ -48,11 +48,14 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByTags(const TArray
 {
   TArray<AInteractiveObject*> FoundObjects = TagsSystem.FindByTags(TagsArray, EnoughNumberOfTags);
 
+#if WITH_EDITOR
+  // Show what objects are found
   for (AInteractiveObject* FoundObject : FoundObjects)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), FoundObject->GetActorLocation(),
       DebugColor, false);
   }
+#endif
 
   return FoundObjects;
 }

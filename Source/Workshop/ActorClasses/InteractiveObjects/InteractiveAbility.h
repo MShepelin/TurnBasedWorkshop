@@ -21,16 +21,17 @@ class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
   GENERATED_BODY()
 
 protected:
-  EInteractiveType InteractiveType = EInteractiveType::Ability;
-
   AInteractiveCharacter* CharacterOwner;
 
-  // Animation identifier which should be played by owner, when ability is resolved
+  // Animation identifier which should be played by owner when ability is resolved.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   int32 AbilityAnimationId;
 
-  // Used to accumulate effects for this ability
-  TArray<UEffectData> UsedEffects;
+  // This array collectes all effects which will send their description and affect target of ability.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
+  TArray<TSubclassOf<UEffectData>> UsedEffects;
+
+  friend class UBuildAbility;
 
 public:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInSlot"))
@@ -44,8 +45,8 @@ public:
   AInteractiveAbility(AInteractiveCharacter* Owner);
 
   UFUNCTION(BlueprintNativeEvent)
-  void CustomEffect(AInteractiveObject* aim);
-  virtual void CustomEffect_Implementation(AInteractiveObject* aim);
+  void CustomEffect(AInteractiveObject* Aim);
+  virtual void CustomEffect_Implementation(AInteractiveObject* Aim);
 
   virtual void GatherInformation() const override;
 

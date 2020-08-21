@@ -6,6 +6,11 @@
 void AInteractiveAbility::GatherInformation() const
 {
   Super::GatherInformation();
+
+  for (TSubclassOf<UEffectData> EffectClass : UsedEffects)
+  {
+
+  }
 }
 
 void AInteractiveAbility::ShowInfluences() const
@@ -15,7 +20,7 @@ void AInteractiveAbility::ShowInfluences() const
 
 AInteractiveAbility::AInteractiveAbility()
 {
-
+  InteractiveType = EInteractiveType::Ability;
 }
 
 AInteractiveAbility::AInteractiveAbility(
@@ -24,7 +29,7 @@ AInteractiveAbility::AInteractiveAbility(
 
 }
 
-void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* aim)
+void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* Aim)
 {
 
 }

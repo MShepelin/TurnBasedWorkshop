@@ -12,6 +12,5 @@ enum class EEffectType : uint8
   DataHolder          = 0,
   Advantage           = 1 UMETA(DisplayName = "Advantage"),
   StatChange          = 2 UMETA(DisplayName = "StatChange"),
-  RelativeStatChange  = 4 UMETA(DisplayName = "RelativeStatChange"),
-  Spawn               = 8 UMETA(DisplayName = "Spawn")
+  Spawn               = 4 UMETA(DisplayName = "Spawn")
 };

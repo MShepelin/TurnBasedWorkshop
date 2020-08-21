@@ -3,3 +3,9 @@
 
 #include "BuildAbility.h"
 
+AInteractiveObject* UBuildAbility::AddEffectToCharacter(AInteractiveCharacter* Aim, AInteractiveAbility* Ability, int32 EffectIndex)
+{
+  Aim->AccumulatedEffects.Add(NewObject<UEffectData>(Aim, Ability->UsedEffects[EffectIndex]));
+
+  return Aim;
+}

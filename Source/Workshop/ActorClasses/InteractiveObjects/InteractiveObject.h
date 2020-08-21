@@ -3,12 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "Workshop/Types/Nonblueprintable/TagsSystem.h"
 #include "Workshop/Types/Components/IconComponent.h"
 #include "Workshop/Types/InteractiveType.h"
 #include "GameFramework/Actor.h"
 #include <unordered_map>
+#include "DrawDebugHelpers.h"
 #include "InteractiveObject.generated.h"
+
+
+class UBuildAbility;
+
 
 /**
  * Interactive object supports tag typization and dependecy from other interactive objects
@@ -44,7 +50,7 @@ protected:
   // (For multiple tag systems object-decorator should be used)
   std::shared_ptr<Node<AInteractiveObject>> NodeForTags = nullptr;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "TagsSettings")
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings")
   TArray<int32> TagsForTypizationSearch;
 
   std::shared_ptr<Node<AInteractiveObject>>&    GetNode();
@@ -57,6 +63,8 @@ public:
    * Called before construction script.
    */
   virtual void OnConstruction(const FTransform & Transform) override;
+
+  virtual void PostInitProperties() override;
 
   /**
    * Called every frame.

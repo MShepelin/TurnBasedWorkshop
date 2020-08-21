@@ -3,14 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "GameFramework/Actor.h"
 #include "DrawDebugHelpers.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
 #include "RegistrationManager.generated.h"
 
 
-// Used for drawing lines, spheres and other shapes for debug only
-const FColor DebugColor(255, 0, 0);
 
 /**
  * Manager connects Interactive objects, supports their references, provides search by tags.
