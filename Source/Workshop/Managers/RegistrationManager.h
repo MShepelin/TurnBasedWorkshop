@@ -3,51 +3,76 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Workshop/Types/Nonblueprintable/GameConstants.h"
-#include "GameFramework/Actor.h"
 #include "DrawDebugHelpers.h"
+#include "GameFramework/Actor.h"
+#include "Components/BillboardComponent.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
+#include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "RegistrationManager.generated.h"
 
 
-
-/**
- * Manager connects Interactive objects, supports their references, provides search by tags.
- */
+// Manager connects Interactive objects, provides search by CTs, serves as setup for gameplay events.
 UCLASS()
 class WORKSHOP_API ARegistrationManager : public AActor
 {
 	GENERATED_BODY()
-	
-public:
-  //++++ debugicon
-
-  // Here are all tags available in this manager
-  UPROPERTY(BlueprintReadWrite /*BlueprintReadOnly*/, EditDefaultsOnly)
-  TMap<int32, FString> TagsWithNames;
-
-  // System of tags
-  TagsGraph<int32, AInteractiveObject> TagsSystem;
-
-	// Sets default values for this actor's properties
-	ARegistrationManager();
 
 protected:
-	// Called when the game starts or when spawned
+  // Icon to visualise Manager's position in the world.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerVisuals")
+  UBillboardComponent* ManagerIcon;
+
+  // Here are all tags available in this manager.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
+  TMap<int32, FString> CTsToNameMap;
+
+  // Here are all stats available in this manager.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
+  TMap<int32, FString> StatIDToNameMap;
+
+  // System of CTs.
+  CTsGraph<int32, AInteractiveObject> CTsSystem;
+
+	// Called when the game starts or when spawned.
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+public:
+  // Sets default values for this actor's properties.
+  ARegistrationManager();
+
+  // ------------------------ //
+  // Actor functions overload //
+  // ------------------------ //
+
+	// Called every frame.
 	virtual void Tick(float DeltaTime) override;
 
   void PostInitProperties() override;
 
-  UFUNCTION(BlueprintCallable)
-  void ConnectObjectToTagsSystem(AInteractiveObject* ObjectToAdd);
+  // ---------- //
+  // Connection //
+  // ---------- //
 
   UFUNCTION(BlueprintCallable)
-  void DisconnectObjectFromTagsSystem(AInteractiveObject* ObjectToRemove);
+  void ConnectObjectToManager(AInteractiveObject* ObjectToAdd);
 
   UFUNCTION(BlueprintCallable)
-  TArray<AInteractiveObject*> FindObjectsByTags(const TArray<int32> TagsArray, int32 EnoughNumberOfTags) const;
+  void DisconnectObjectFromManager(AInteractiveObject* ObjectToRemove);
+
+  //---------- //
+  // CTs usage //
+  //---------- //
+
+  UFUNCTION(BlueprintCallable)
+  TArray<AInteractiveObject*> FindObjectsByCTs(const TArray<int32> TagsArray, int32 EnoughNumberOfTags) const;
+
+  // ----------------------------- //
+  // Access to Manager information //
+  // ----------------------------- //
+
+  UFUNCTION(BlueprintCallable)
+  FString GetCTName(int32 TagIdentifier) const;
+
+  UFUNCTION(BlueprintCallable)
+  FString GetStatNameByID(int32 StatIdentifier) const;
 };

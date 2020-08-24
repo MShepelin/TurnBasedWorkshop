@@ -16,16 +16,24 @@ AInteractiveObject::AInteractiveObject()
   InteractivityIcon->SetupAttachment(RootScene);
 }
 
+
 void AInteractiveObject::OnConstruction(const FTransform & Transform)
 {
   Super::OnConstruction(Transform);
   InteractivityIcon->Initialize();
 }
 
+
 void AInteractiveObject::PostInitProperties()
 {
   Super::PostInitProperties();
+
+  if (!StringStats.Find(ObjectNameStatID))
+  {
+    UE_LOG(LogTemp, Error, TEXT("Incorrect object stats!"));
+  }
 }
+
 
 // Called when the game starts or when spawned
 void AInteractiveObject::BeginPlay()
@@ -33,18 +41,20 @@ void AInteractiveObject::BeginPlay()
 	Super::BeginPlay();
 }
 
+
 // Called every frame
 void AInteractiveObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
+
 void AInteractiveObject::AddInfluenceOn(AInteractiveObject * TargetObject)
 {
-  if (!InfluencesList.Find(TargetObject))
+  if (!InfluencesArray.Find(TargetObject))
   {
-    InfluencesList.Add(TargetObject);
-    TargetObject->DependenciesList.Add(this);
+    InfluencesArray.Add(TargetObject);
+    TargetObject->DependenciesArray.Add(this);
   }
   else
   {
@@ -52,12 +62,13 @@ void AInteractiveObject::AddInfluenceOn(AInteractiveObject * TargetObject)
   }
 }
 
+
 void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
 {
-  if (DependenciesList.Find(this))
+  if (DependenciesArray.Find(this))
   {
-    TargetObject->InfluencesList.Remove(this);
-    DependenciesList.Remove(TargetObject);
+    TargetObject->InfluencesArray.Remove(this);
+    DependenciesArray.Remove(TargetObject);
   }
   else
   {
@@ -65,54 +76,82 @@ void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
   }
 }
 
+
 FString AInteractiveObject::GatherInformation() const
 {
-  // Temporary
-  return DebugString;
+  if (!MainManager) // || IsValid(MainManager))
+  {
+    UE_LOG(LogTemp, Error, TEXT("Can't gather information without correct manager!"));
+    return "";
+  }
+
+  return StringStats[ObjectNameStatID].ToString();
 }
+
 
 void AInteractiveObject::ShowInfluences() const
 {
   // Show what objects are influenced by this object
-  for (AInteractiveObject* DependentObject : InfluencesList)
+  for (AInteractiveObject* DependentObject : InfluencesArray)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), DependentObject->GetActorLocation(),
-      DebugColor, false);
+      DebugColor, false, DebugTime);
   }
 }
 
+
 void AInteractiveObject::ClearInflunces()
 {
-  for (AInteractiveObject* DependingObject : InfluencesList)
+  for (AInteractiveObject* DependingObject : InfluencesArray)
   {
     DependingObject->RemoveDependenceFrom(this);
   }
 }
 
+
 void AInteractiveObject::ClearDependencies()
 {
-  for (AInteractiveObject* InfluencingObject : DependenciesList)
+  for (AInteractiveObject* InfluencingObject : DependenciesArray)
   {
     RemoveDependenceFrom(InfluencingObject);
   }
 }
 
-std::shared_ptr<Node<AInteractiveObject>>& AInteractiveObject::GetNode()
+
+std::shared_ptr<Node<AInteractiveObject>>& AInteractiveObject::GetNodeForCT()
 {
-  return NodeForTags;
+  return NodeForCT;
 }
 
-TArray<int32>& AInteractiveObject::GetTags()
+
+const TArray<int32>* AInteractiveObject::GetCTs() const
 {
-  return TagsForTypizationSearch;
+  return &CTsOfObject;
 }
 
-void AInteractiveObject::ConnectToManager(ARegistrationManager* Manager)
+
+ARegistrationManager* AInteractiveObject::GetManager() const
 {
-  if (MainManager)
+  return MainManager;
+}
+
+
+void AInteractiveObject::SetManager(ARegistrationManager* NewManager)
+{
+  if (MainManager && NewManager)
   {
-    //++++ edit error: MainManager->DisconnectObjectFromTagsSystem(this);
+    UE_LOG(LogTemp, Error, TEXT("Manager is already set, this object should be disconnected first"));
+    return;
   }
 
-  MainManager = Manager;
+  MainManager = NewManager;
+}
+
+
+void AInteractiveObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+  if (NodeForCT)
+  {
+    NodeForCT.reset();
+  }
 }

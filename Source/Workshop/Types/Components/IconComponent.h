@@ -22,20 +22,17 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconClass")
   TSubclassOf<UIconData> IconPropertiesClass;
 
+  // Called when the game starts.
+  virtual void BeginPlay() override;
+
 public:
-	// Sets default values for this component's properties
 	UIconComponent();
 
-protected:
-
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
+	// Called every frame.
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-  // Initialize components' visuals, better to be called on Actors' OnConstruction()
+  // Create Icon Components' visuals.
+  // Should be called on Actor's OnConstruction().
   void Initialize();
 
   UFUNCTION(BlueprintCallable)

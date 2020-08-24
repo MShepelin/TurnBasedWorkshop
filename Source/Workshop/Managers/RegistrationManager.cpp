@@ -3,60 +3,94 @@
 #include "RegistrationManager.h"
 
 
-// Sets default values
 ARegistrationManager::ARegistrationManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+  ManagerIcon = CreateDefaultSubobject<UBillboardComponent>(TEXT("ManagerIcon"));
 }
 
-// Called when the game starts or when spawned
+
 void ARegistrationManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
+
 void ARegistrationManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
+
 
 void ARegistrationManager::PostInitProperties()
 {
   Super::PostInitProperties();
-  for (TPair<int32, FString>& Tag : TagsWithNames)
+  for (TPair<int32, FString>& CT : CTsToNameMap)
   {
-    TagsSystem.AddTag(Tag.Key);
+    CTsSystem.AddCT(CT.Key);
   }
 }
 
-void ARegistrationManager::ConnectObjectToTagsSystem(AInteractiveObject* ObjectToAdd)
+
+void ARegistrationManager::ConnectObjectToManager(AInteractiveObject* ObjectToAdd)
 {
-  TagsSystem.AddObject(ObjectToAdd);
-  ObjectToAdd->ConnectToManager(this);
+  ARegistrationManager* CurrentManagerOfObject = ObjectToAdd->GetManager();
+
+  if (CurrentManagerOfObject)
+  {
+    CurrentManagerOfObject->DisconnectObjectFromManager(ObjectToAdd);
+  }
+
+  // Add to CTs system
+  CTsSystem.AddObject(ObjectToAdd);
+  ObjectToAdd->SetManager(this);
 }
 
-void ARegistrationManager::DisconnectObjectFromTagsSystem(AInteractiveObject* ObjectToRemove)
+
+void ARegistrationManager::DisconnectObjectFromManager(AInteractiveObject* ObjectToRemove)
 {
-  TagsSystem.RemoveObject(ObjectToRemove);
+  CTsSystem.RemoveObject(ObjectToRemove);
+  ObjectToRemove->SetManager(nullptr);
 }
 
-TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByTags(const TArray<int32> TagsArray, int32 EnoughNumberOfTags) const
+
+TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<int32> TagsArray, int32 EnoughNumberOfTags) const
 {
-  TArray<AInteractiveObject*> FoundObjects = TagsSystem.FindByTags(TagsArray, EnoughNumberOfTags);
+  TArray<AInteractiveObject*> FoundObjects = CTsSystem.FindByCTs(TagsArray, EnoughNumberOfTags);
 
 #if WITH_EDITOR
-  // Show what objects are found
+  // Show what objects were found
   for (AInteractiveObject* FoundObject : FoundObjects)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), FoundObject->GetActorLocation(),
-      DebugColor, false);
+      DebugColor, false, DebugTime);
   }
 #endif
 
   return FoundObjects;
+}
+
+
+FString ARegistrationManager::GetCTName(int32 TagIdentifier) const
+{
+  if (!CTsToNameMap.Find(TagIdentifier))
+  {
+    UE_LOG(LogTemp, Error, TEXT("Wrong tag identifier!"));
+    return "";
+  }
+  
+  return CTsToNameMap[TagIdentifier];
+}
+
+
+FString ARegistrationManager::GetStatNameByID(int32 StatIdentifier) const
+{
+  if (!StatIDToNameMap.Find(StatIdentifier))
+  {
+    UE_LOG(LogTemp, Error, TEXT("Wrong tag identifier!"));
+    return "";
+  }
+
+  return StatIDToNameMap[StatIdentifier];
 }

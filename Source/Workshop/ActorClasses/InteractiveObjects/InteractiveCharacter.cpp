@@ -10,25 +10,25 @@ AInteractiveCharacter::AInteractiveCharacter()
   CharacterPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
   CharacterPresentation->SetupAttachment(RootComponent);
 
-  // Set first default animation?
+  //???? set first default animation?
 }
 
 
 FString AInteractiveCharacter::GatherInformation() const
 {
-  FString CharacterInformation = "";
+  FString CharacterInformation = Super::GatherInformation();
 
-  for (TPair<int32, int32> IntegerStatPair : IntegerStats)
+  for (TTuple<int32, int32> IntegerStatPair : IntegerStats)
   {
-    CharacterInformation += "\n";
+    CharacterInformation += MainManager->GetStatNameByID(IntegerStatPair.Key) + " " + FString::FromInt(IntegerStatPair.Value) + "\n";
   }
 
-  for (TPair<int32, FString> StringStatPair : StringStats)
+  for (TTuple<int32, FName> StringStatPair : StringStats)
   {
-    CharacterInformation += "\n";
+    CharacterInformation += MainManager->GetStatNameByID(StringStatPair.Key) + " " + StringStatPair.Value.ToString() + "\n";
   }
 
-  return Super::GatherInformation() + CharacterInformation;
+  return CharacterInformation + "\n";
 }
 
 
@@ -40,7 +40,7 @@ void AInteractiveCharacter::ShowInfluences() const
 
 void AInteractiveCharacter::OnTurnStart()
 {
-  // Apply effects
+  //++++ apply effects
 }
 
 
@@ -54,7 +54,7 @@ void AInteractiveCharacter::RemoveEffectByIndex(int32 EffectIndex)
 void AInteractiveCharacter::OnTurnEnd()
 {
   // Decrease effects' duration
-  for (int EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
+  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
   {
     AccumulatedEffects[EffectIndex]->DecreaseDuration();
     if (!AccumulatedEffects[EffectIndex]->GetDuration())
@@ -67,14 +67,15 @@ void AInteractiveCharacter::OnTurnEnd()
 
 void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
 {
-  UPaperFlipbook** FoundFlipbook = AnimationsCollection.Find(AnimationId);
+  UPaperFlipbook** FoundFlipbook = AnimationsMap.Find(AnimationId);
+
   if (FoundFlipbook)
   {
     CharacterPresentation->SetFlipbook(*FoundFlipbook);
   }
   else
   {
-    UE_LOG(LogTemp, Warning, TEXT("Animation not found!"));
+    UE_LOG(LogTemp, Error, TEXT("Animation not found!"));
   }
 }
 
@@ -83,19 +84,15 @@ void AInteractiveCharacter::PostInitProperties()
 {
   Super::PostInitProperties();
 
-  // Check if needed Stats are present
-  if (!StringStats.Find(CharacterNameStatId))
-  {
-    UE_LOG(LogTemp, Warning, TEXT("Incorrect Character Stats!"));
-  }
+  //???? check if needed Stats are present
 }
 
 
-void AInteractiveCharacter::RemoveEffectsBySpecifiersMask(int32 mask)
+void AInteractiveCharacter::RemoveEffectsBySpecifiersMask(int32 SpecifiersMask)
 {
-  for (int EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
+  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
   {
-    if (AccumulatedEffects[EffectIndex]->GetEffectSpecifiers() & mask)
+    if (AccumulatedEffects[EffectIndex]->GetEffectSpecifiers() & SpecifiersMask)
     {
       RemoveEffectByIndex(EffectIndex);
     }

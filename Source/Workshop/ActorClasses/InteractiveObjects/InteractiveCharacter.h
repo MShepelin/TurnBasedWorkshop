@@ -20,51 +20,59 @@ class WORKSHOP_API AInteractiveCharacter : public AInteractiveObject
 	GENERATED_BODY()
 
 protected:
-  // Animation state machine
-  // +++add state machine support functions
+  // Map of animations with their integer identifiers.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-  TMap<int32, UPaperFlipbook*> AnimationsCollection;
+  TMap<int32, UPaperFlipbook*> AnimationsMap;
+
+  //???? add state machine support functions
+
   UPaperFlipbookComponent* CharacterPresentation;
 
-
-  // Character statisctics in form of strings
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings | Statistics")
-  TMap<int32, FString> StringStats = 
-  { 
-    {CharacterNameStatId, DefaultStringValue},
-  };
-
-  // Character statisctics in form of integers
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings | Statistics")
-  TMap<int32, int32> IntegerStats =
-  {
-    {HealthStatId, DefaultPointsValue},
-  };
-
+  // Abilities which Interactive character can use.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings | AbilitiesControl")
   TArray<TSubclassOf<AInteractiveAbility>> Abilities;
 
-  friend class UBuildAbility;
-
-
-  // @warning: Doesn't make sanity checks!
+private:
   void RemoveEffectByIndex(int32 EffectIndex);
 
 public:
   AInteractiveCharacter();
 
+  // ------------------------ //
+  // Actor functions overload //
+  // ------------------------ //
+
   virtual void PostInitProperties() override;
 
-  void PlayAnimation(int32 AnimationId);
+  // ---------- //
+  // Animations //
+  // ---------- //
 
-  //Effect would be removed if any flag of mask is met.
+  // Play animation by its ID
+  void PlayAnimation(int32 AnimationID);
+
+  // ----------------------- //
+  // Applied effects changes //
+  // ----------------------- //
+
+  // Effect would be removed if any flag of mask is met.
   void RemoveEffectsBySpecifiersMask(int32 mask);
+
+  // ---------- //
+  // Turn-based //
+  // ---------- //
+
+  void OnTurnStart();
+
+  void OnTurnEnd();
+
+  // ------ //
+  // Others //
+  // ------ //
 
   virtual FString GatherInformation() const override;
 
   void ShowInfluences() const override;
 
-  void OnTurnStart();
-
-  void OnTurnEnd();
+  friend class UBuildAbility; // for optimisation purposes
 };

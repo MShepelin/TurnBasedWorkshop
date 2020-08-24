@@ -13,8 +13,16 @@ class WORKSHOP_API UChangeStatEffectData : public UEffectData
 
 protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta = (OverrideNativeName = "ValueToUse"))
-  int32 EffectValue = 0;
+  int32 EffectValue;
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta = (OverrideNativeName = "StatIdentifier"))
+  int32 StatID;
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
+  bool bIsRelative;
 
 public:
   UChangeStatEffectData();
+
+  virtual FString GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const override;
 };

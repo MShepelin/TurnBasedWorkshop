@@ -3,13 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DrawDebugHelpers.h"
+#include "GameFramework/Actor.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
-#include "Workshop/Types/Nonblueprintable/TagsSystem.h"
+#include "Workshop/Types/Nonblueprintable/CTsSystem.h"
 #include "Workshop/Types/Components/IconComponent.h"
 #include "Workshop/Types/InteractiveType.h"
-#include "GameFramework/Actor.h"
-#include <unordered_map>
-#include "DrawDebugHelpers.h"
 #include "InteractiveObject.generated.h"
 
 
@@ -18,66 +17,93 @@ class UEffectData;
 class ARegistrationManager;
 
 
-// Interactive object supports tag typization and dependecy from other interactive objects
-// Although it doesn't listen to other entity's interaction there are functions to
-// consider external actions
+// Interactive object supports CTs classification and dependecy from other Interactive objects.
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveObject : public AActor
 {
 	GENERATED_BODY()
 
 protected:
-  TSet<AInteractiveObject*> DependenciesList;
-  TSet<AInteractiveObject*> InfluencesList;
-
   EInteractiveType InteractiveType = EInteractiveType::Base;
+
+  TSet<AInteractiveObject*> DependenciesArray;
+  TSet<AInteractiveObject*> InfluencesArray;
+
+  // ------------- //
+  // Visualisation //
+  // ------------- //
 
   USceneComponent* RootScene;
 
   UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "InteractivitySettings")
   UIconComponent* InteractivityIcon;
-  
-public:
-	// Sets default values for this actor's properties
-	AInteractiveObject();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-  
+  // ------------------ //
+  // Object Statisctics //
+  // ------------------ //
+
+  // Statisctics in form of strings
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings | Statistics")
+  TMap<int32, FName> StringStats =
+  {
+    {ObjectNameStatID, DefaultStringValue},
+  };
+
+  // Statisctics in form of integers
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings | Statistics")
+  TMap<int32, int32> IntegerStats;
+
+  // ------------------ //
+  // CTs System Support //
+  // ------------------ //
+
+  // Manager is a way for objects to find other Interactive objects to influence.
   ARegistrationManager* MainManager = nullptr;
 
-  // Node for tag system
+  // Node for tag system.
   // Any object can be added only to one system of tags
-  // (For multiple tag systems object-decorator should be used)
-  std::shared_ptr<Node<AInteractiveObject>> NodeForTags = nullptr;
+  // (For multiple tag systems object-wrapper should be used).
+  std::shared_ptr<Node<AInteractiveObject>> NodeForCT = nullptr;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings")
-  TArray<int32> TagsForTypizationSearch;
+  TArray<int32> CTsOfObject;
 
-  std::shared_ptr<Node<AInteractiveObject>>&    GetNode();
-  TArray<int32>&                                GetTags();
-
-  friend class TagsGraph<int32, AInteractiveObject>;
-
-
-  // List of effects which are applied in the current state
+  // Array of effects which are applied in the current state.
   TArray<UEffectData*> AccumulatedEffects;
 
-  friend class UBuildAbility;
+protected:
+  // Called when the game starts or when spawned.
+  virtual void BeginPlay() override;
 
 public:
-  //Called before construction script.
+  AInteractiveObject();
+
+  // ------------------------ //
+  // Actor functions overload //
+  // ------------------------ //
+
+  // Called before construction script.
   virtual void OnConstruction(const FTransform & Transform) override;
 
+  // Called before construction script.
   virtual void PostInitProperties() override;
 
   // Called every frame.
 	virtual void Tick(float DeltaTime) override;
 
+  virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-  void ConnectToManager(ARegistrationManager* Manager);
+  // ----------------------- //
+  // Connection with Manager //
+  // ----------------------- //
 
+  ARegistrationManager* GetManager() const;
+
+  void SetManager(ARegistrationManager* NewManager);
+
+  // --------------------------- //
+  // Influences and dependencies //
+  // --------------------------- //
 
   UFUNCTION(BlueprintCallable)
   void AddInfluenceOn(AInteractiveObject* object);
@@ -91,13 +117,28 @@ public:
   UFUNCTION(BlueprintCallable)
   void ClearDependencies();
 
-  friend void AddInfluenceOn(AInteractiveObject*);
-  friend void RemoveInfluenceFrom(AInteractiveObject*);
+protected:
+  // -------- //
+  // CT usage //
+  // -------- //
 
+  std::shared_ptr<Node<AInteractiveObject>>& GetNodeForCT();
+
+  const TArray<int32>* GetCTs() const;
+
+public:
+  // ------ //
+  // Others //
+  // ------ //
 
   // Happens when player chooses this object.
   virtual FString GatherInformation() const;
 
   //Visual interpretation of connections.
   virtual void ShowInfluences() const;
+
+  friend void AddInfluenceOn(AInteractiveObject*);
+  friend void RemoveInfluenceFrom(AInteractiveObject*);
+  friend class CTsGraph<int32, AInteractiveObject>; // for optimisation purposes
+  friend class UBuildAbility;                        // for optimisation purposes
 };

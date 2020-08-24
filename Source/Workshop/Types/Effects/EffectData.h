@@ -7,7 +7,7 @@
 #include "Workshop/Types/EffectType.h"
 #include "Workshop/Types/EffectSpecifiers.h"
 #include "Workshop/Types/InteractiveType.h"
-#include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
+#include "Workshop/Managers/RegistrationManager.h"
 #include "EffectData.generated.h"
 
 
@@ -31,10 +31,11 @@ protected:
   int32 EffectSpecifiersMask;
 
   // Types of objects which are affected by this effect.
+  // Affects everithing if empty.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
-  TArray<int32> TagsToAffect;
+  TArray<int32> CTsToAffect;
 
-  //++++ add option to edit tags, which shouldn't be used.
+  //???? add option to edit tags, which shouldn't be used.
 
 public:
   UEffectData();
@@ -47,5 +48,5 @@ public:
   EEffectType GetEffectType() const;
   EInteractiveType GetTargetType() const;
 
-  virtual FString GatherInformation(bool bIsAbilityInfo) const;
+  virtual FString GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const;
 };

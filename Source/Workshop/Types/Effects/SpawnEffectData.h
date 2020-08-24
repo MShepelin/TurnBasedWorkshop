@@ -20,4 +20,6 @@ protected:
 
 public:
   USpawnEffectData();
+
+  //++++ override GatherInformation function
 };

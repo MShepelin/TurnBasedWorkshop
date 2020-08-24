@@ -8,8 +8,7 @@
 #include "InteractiveAbility.generated.h"
 
 
-// Visual representation of Ability, which holds all needed information about its' effects.
-// Can be connected to other Interactive Objects to apply effects on them.
+// Represenatation of character's gameplay possibilities on game scene.
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
 {
@@ -18,17 +17,17 @@ class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
 protected:
   AInteractiveCharacter* CharacterOwner;
 
-  // Animation identifier which should be played by owner when ability is resolved.
+  // Animation identifier which should be played by owner when this ability is resolved.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   int32 AbilityAnimationId;
-
 
   // This array collectes all effects used in ability.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   TArray<TSubclassOf<UEffectData>> UsedEffects;
 
-  friend class UBuildAbility;
-
+  // ------- //
+  // Visuals //
+  // ------- //
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInSlot"))
   UPaperFlipbook* Icon;
@@ -41,6 +40,9 @@ public:
 
   AInteractiveAbility(AInteractiveCharacter* Owner);
 
+  // ----------------- //
+  // Ability's actions //
+  // ----------------- //
 
   UFUNCTION(BlueprintNativeEvent)
   void CustomEffect(AInteractiveObject* TargetObject);
@@ -48,8 +50,13 @@ public:
 
   void ResolveAbility();
 
+  // ------ //
+  // Others //
+  // ------ //
 
   virtual FString GatherInformation() const override;
 
   void ShowInfluences() const override;
+
+  friend class UBuildAbility; // for optimisation purposes
 };

@@ -6,7 +6,11 @@
 
 AInteractiveObject* UBuildAbility::AddEffectToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability, int32 EffectIndex)
 {
-  //++++ check if pointers are valid
+  if (!IsValid(TargetObject) || !IsValid(Ability))
+  {
+    UE_LOG(LogTemp, Error, TEXT("Invalid input!"));
+    return TargetObject;
+  }
 
   if (EffectIndex < 0 || EffectIndex < Ability->UsedEffects.Num())
   {

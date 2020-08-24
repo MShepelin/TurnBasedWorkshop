@@ -6,13 +6,22 @@
 // 1.1 Character
 
 const int32    DefaultPointsValue = 10;
-const FString  DefaultStringValue = "Dude";
+const FName    DefaultStringValue = "Dude";
 
-const int32    CharacterNameStatId = 0;
-const int32    HealthStatId = 1;
+const int32    ObjectNameStatID = 0;
+const int32    HealthStatID = 1;
 
 // 2. Debug
-// Used for drawing lines, spheres and other shapes for debug only
+// Used for drawing lines, spheres and other shapes.
+
 const FColor DebugColor(255, 0, 0);
 
-const FString DebugString("Hello, world!");
+const int32 DebugTime = 5;
+
+const FName DebugString("Hello, world!");
+
+// Some used difinitions:
+// Interactive with capital I is a name of class and not this word itself
+// CT - custom tag (CTs - custom tags), always int32
+// //++++ comment means that some code must be added
+// //???? comment means that some code may be useful to add

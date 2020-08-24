@@ -5,14 +5,14 @@
 
 FString AInteractiveAbility::GatherInformation() const
 {
-  FString AbilityInformation = "";
+  FString AbilityInformation = Super::GatherInformation();
 
   for (TSubclassOf<UEffectData> EffectClass : UsedEffects)
   {
-    AbilityInformation += Cast<UEffectData>(EffectClass->StaticClass())->GatherInformation(true) + FString("\n");
+    AbilityInformation += Cast<UEffectData>(EffectClass->StaticClass())->GatherInformation(true, MainManager) + "\n";
   }
 
-  return Super::GatherInformation() + AbilityInformation;
+  return AbilityInformation + "\n";
 }
 
 void AInteractiveAbility::ShowInfluences() const
@@ -42,9 +42,9 @@ void AInteractiveAbility::ResolveAbility()
   
   //++++ apply movememt
 
-  for (AInteractiveObject* DependingObject : InfluencesList)
+  for (AInteractiveObject* DependentObject : InfluencesArray)
   {
-    CustomEffect(DependingObject);
+    CustomEffect(DependentObject);
   }
 
   ClearInflunces();

@@ -3,7 +3,6 @@
 #include "IconComponent.h"
 
 
-// Sets default values for this component's properties
 UIconComponent::UIconComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
@@ -17,17 +16,18 @@ UIconComponent::UIconComponent()
   }
 }
 
-// Called when the game starts
+
 void UIconComponent::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-// Called every frame
+
 void UIconComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
+
 
 void UIconComponent::Initialize()
 {
@@ -41,24 +41,22 @@ void UIconComponent::Initialize()
     SpriteOfIcon->SetRelativeScale3D(FVector(
       IconProperties->Scale, IconProperties->Scale, IconProperties->Scale));
   }
-  else
-  {
-    //Unreal engine does some magic, don't interrupt please
-    //UE_LOG(LogTemp, Warning, TEXT("Initialize failed!"));
-  }
 
   Show();
 }
+
 
 void UIconComponent::Show()
 {
   SpriteOfIcon->SetVisibility(true, true);
 }
 
+
 void UIconComponent::Hide()
 {
   SpriteOfIcon->SetVisibility(false, true);
 }
+
 
 void UIconComponent::SetAvailability(bool bNewAvailability)
 {
@@ -72,6 +70,7 @@ void UIconComponent::SetAvailability(bool bNewAvailability)
     SpriteOfIcon->SetFlipbook(IconProperties->SpriteIfUnavailable);
   }
 }
+
 
 bool UIconComponent::IsAvailable()
 {
