@@ -8,8 +8,8 @@
 const int32    DefaultPointsValue = 10;
 const FName    DefaultStringValue = "Dude";
 
-const int32    ObjectNameStatID = 0;
-const int32    HealthStatID = 1;
+const int32    ObjectNameStatID = 1;
+const int32    HealthStatID = 2;
 
 // 2. Debug
 // Used for drawing lines, spheres and other shapes.

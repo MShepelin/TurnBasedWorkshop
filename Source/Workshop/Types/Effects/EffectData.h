@@ -11,7 +11,7 @@
 #include "EffectData.generated.h"
 
 
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Blueprintable, BlueprintType, EditInlineNew)
 class WORKSHOP_API UEffectData : public UObject
 {
   GENERATED_BODY()

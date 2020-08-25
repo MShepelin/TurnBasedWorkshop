@@ -6,7 +6,7 @@
 #include "ChangeStatEffectData.generated.h"
 
 
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Blueprintable, BlueprintType, EditInlineNew)
 class WORKSHOP_API UChangeStatEffectData : public UEffectData
 {
   GENERATED_BODY()

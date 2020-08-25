@@ -16,13 +16,11 @@ AInteractiveObject::AInteractiveObject()
   InteractivityIcon->SetupAttachment(RootScene);
 }
 
-
 void AInteractiveObject::OnConstruction(const FTransform & Transform)
 {
   Super::OnConstruction(Transform);
   InteractivityIcon->Initialize();
 }
-
 
 void AInteractiveObject::PostInitProperties()
 {
@@ -34,20 +32,15 @@ void AInteractiveObject::PostInitProperties()
   }
 }
 
-
-// Called when the game starts or when spawned
 void AInteractiveObject::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-
-// Called every frame
 void AInteractiveObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
 
 void AInteractiveObject::AddInfluenceOn(AInteractiveObject * TargetObject)
 {
@@ -62,7 +55,6 @@ void AInteractiveObject::AddInfluenceOn(AInteractiveObject * TargetObject)
   }
 }
 
-
 void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
 {
   if (DependenciesArray.Find(this))
@@ -76,18 +68,16 @@ void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
   }
 }
 
-
 FString AInteractiveObject::GatherInformation() const
 {
-  if (!MainManager) // || IsValid(MainManager))
+  if (!MainManager)
   {
     UE_LOG(LogTemp, Error, TEXT("Can't gather information without correct manager!"));
     return "";
   }
 
-  return StringStats[ObjectNameStatID].ToString();
+  return StringStats[ObjectNameStatID].ToString() + "\n";
 }
-
 
 void AInteractiveObject::ShowInfluences() const
 {
@@ -99,7 +89,6 @@ void AInteractiveObject::ShowInfluences() const
   }
 }
 
-
 void AInteractiveObject::ClearInflunces()
 {
   for (AInteractiveObject* DependingObject : InfluencesArray)
@@ -107,7 +96,6 @@ void AInteractiveObject::ClearInflunces()
     DependingObject->RemoveDependenceFrom(this);
   }
 }
-
 
 void AInteractiveObject::ClearDependencies()
 {
@@ -117,24 +105,20 @@ void AInteractiveObject::ClearDependencies()
   }
 }
 
-
 std::shared_ptr<Node<AInteractiveObject>>& AInteractiveObject::GetNodeForCT()
 {
   return NodeForCT;
 }
-
 
 const TArray<int32>* AInteractiveObject::GetCTs() const
 {
   return &CTsOfObject;
 }
 
-
 ARegistrationManager* AInteractiveObject::GetManager() const
 {
   return MainManager;
 }
-
 
 void AInteractiveObject::SetManager(ARegistrationManager* NewManager)
 {
@@ -147,11 +131,15 @@ void AInteractiveObject::SetManager(ARegistrationManager* NewManager)
   MainManager = NewManager;
 }
 
-
 void AInteractiveObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
   if (NodeForCT)
   {
     NodeForCT.reset();
   }
+}
+
+EInteractiveType AInteractiveObject::GetInteractiveType()
+{
+  return InteractiveType;
 }

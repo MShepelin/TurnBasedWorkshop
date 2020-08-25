@@ -10,18 +10,15 @@ ARegistrationManager::ARegistrationManager()
   ManagerIcon = CreateDefaultSubobject<UBillboardComponent>(TEXT("ManagerIcon"));
 }
 
-
 void ARegistrationManager::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-
 void ARegistrationManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
 
 void ARegistrationManager::PostInitProperties()
 {
@@ -31,7 +28,6 @@ void ARegistrationManager::PostInitProperties()
     CTsSystem.AddCT(CT.Key);
   }
 }
-
 
 void ARegistrationManager::ConnectObjectToManager(AInteractiveObject* ObjectToAdd)
 {
@@ -47,13 +43,11 @@ void ARegistrationManager::ConnectObjectToManager(AInteractiveObject* ObjectToAd
   ObjectToAdd->SetManager(this);
 }
 
-
 void ARegistrationManager::DisconnectObjectFromManager(AInteractiveObject* ObjectToRemove)
 {
   CTsSystem.RemoveObject(ObjectToRemove);
   ObjectToRemove->SetManager(nullptr);
 }
-
 
 TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<int32> TagsArray, int32 EnoughNumberOfTags) const
 {
@@ -71,7 +65,6 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<
   return FoundObjects;
 }
 
-
 FString ARegistrationManager::GetCTName(int32 TagIdentifier) const
 {
   if (!CTsToNameMap.Find(TagIdentifier))
@@ -82,7 +75,6 @@ FString ARegistrationManager::GetCTName(int32 TagIdentifier) const
   
   return CTsToNameMap[TagIdentifier];
 }
-
 
 FString ARegistrationManager::GetStatNameByID(int32 StatIdentifier) const
 {

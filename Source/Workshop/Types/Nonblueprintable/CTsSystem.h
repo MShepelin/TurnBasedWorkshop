@@ -131,6 +131,12 @@ public:
 
     for (CT CTOfObject : *(ObjectToAdd->GetCTs()))
     {
+      if (!CTToNodeMap.Find(CTOfObject))
+      {
+        UE_LOG(LogTemp, Error, TEXT("CT of object isn't included in CT system!"));
+        continue;
+      }
+
       CTToNodeMap[CTOfObject]->IndexesInAdjasentNodesArrays.Add(ObjectNode->AdjasentNodes.Num());
       ObjectNode->IndexesInAdjasentNodesArrays.Add(CTToNodeMap[CTOfObject]->AdjasentNodes.Num());
 

@@ -6,7 +6,7 @@
 #include "SpawnEffectData.generated.h"
 
 
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Blueprintable, BlueprintType, EditInlineNew)
 class WORKSHOP_API USpawnEffectData : public UEffectData
 {
   GENERATED_BODY()

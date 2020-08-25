@@ -85,7 +85,6 @@ public:
   // Called before construction script.
   virtual void OnConstruction(const FTransform & Transform) override;
 
-  // Called before construction script.
   virtual void PostInitProperties() override;
 
   // Called every frame.
@@ -127,11 +126,19 @@ protected:
   const TArray<int32>* GetCTs() const;
 
 public:
+  // --------------- //
+  // Get information //
+  // --------------- //
+
+  UFUNCTION(BlueprintCallable)
+  EInteractiveType GetInteractiveType();
+
   // ------ //
   // Others //
   // ------ //
 
   // Happens when player chooses this object.
+  UFUNCTION(BlueprintCallable)
   virtual FString GatherInformation() const;
 
   //Visual interpretation of connections.
@@ -140,5 +147,5 @@ public:
   friend void AddInfluenceOn(AInteractiveObject*);
   friend void RemoveInfluenceFrom(AInteractiveObject*);
   friend class CTsGraph<int32, AInteractiveObject>; // for optimisation purposes
-  friend class UBuildAbility;                        // for optimisation purposes
+  friend class UBuildAbility;                       // for optimisation purposes
 };

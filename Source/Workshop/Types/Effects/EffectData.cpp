@@ -65,7 +65,7 @@ FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager
     return "";
   }
 
-  if (!Manager || IsValid(Manager))
+  if (!Manager)
   {
     UE_LOG(LogTemp, Error, TEXT("Can't gather information without correct manager!"));
     return "";
@@ -75,7 +75,7 @@ FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager
 
   FString EffectInforamtion = "";
 
-  for (size_t ArrayIndex = 0; ArrayIndex < CTsToAffect.Num() - 1; ArrayIndex++)
+  for (int32 ArrayIndex = 0; ArrayIndex < CTsToAffect.Num() - 1; ArrayIndex++)
   {
     if (ArrayIndex)
     {
@@ -94,7 +94,7 @@ FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager
     EffectInforamtion += Manager->GetCTName(CTsToAffect[CTsToAffect.Num() - 1]) + " ";
   }
 
-  EffectInforamtion += UEnum::GetValueAsString(TargetType) + "\n";
+  EffectInforamtion += UEnum::GetValueAsString(TargetType) + " ";
 
   return EffectInforamtion;
 }

@@ -16,28 +16,30 @@ UIconComponent::UIconComponent()
   }
 }
 
-
 void UIconComponent::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
+void UIconComponent::PostInitProperties()
+{
+  Super::PostInitProperties();
+}
 
 void UIconComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-
 void UIconComponent::Initialize()
 {
   bIsAvailable = false;
 
-  if (IconPropertiesClass && !IconProperties)
+  //if (IconPropertiesClass && !IconProperties)
   {
     IconProperties = NewObject<UIconData>(this, IconPropertiesClass, TEXT("IconData"));
 
-    SpriteOfIcon->SetFlipbook(IconProperties->SpriteIfUnavailable);
+    SpriteOfIcon->SetFlipbook(IconProperties->SpriteIfAvailable);
     SpriteOfIcon->SetRelativeScale3D(FVector(
       IconProperties->Scale, IconProperties->Scale, IconProperties->Scale));
   }
@@ -45,18 +47,15 @@ void UIconComponent::Initialize()
   Show();
 }
 
-
 void UIconComponent::Show()
 {
   SpriteOfIcon->SetVisibility(true, true);
 }
 
-
 void UIconComponent::Hide()
 {
   SpriteOfIcon->SetVisibility(false, true);
 }
-
 
 void UIconComponent::SetAvailability(bool bNewAvailability)
 {
@@ -70,7 +69,6 @@ void UIconComponent::SetAvailability(bool bNewAvailability)
     SpriteOfIcon->SetFlipbook(IconProperties->SpriteIfUnavailable);
   }
 }
-
 
 bool UIconComponent::IsAvailable()
 {

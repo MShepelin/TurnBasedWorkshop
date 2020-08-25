@@ -7,7 +7,7 @@
 #include "AdvantageEffectData.generated.h"
 
 
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Blueprintable, BlueprintType, EditInlineNew)
 class WORKSHOP_API UAdvantageEffectData : public UEffectData
 {
   GENERATED_BODY()

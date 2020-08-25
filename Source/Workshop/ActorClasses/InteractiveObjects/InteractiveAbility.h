@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PaperFlipbookComponent.h"
+#include "Templates/SharedPointer.h"
 #include "InteractiveCharacter.h"
 #include "InteractiveAbility.generated.h"
 
@@ -21,9 +22,12 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   int32 AbilityAnimationId;
 
+  UPROPERTY()
+  TArray<UEffectData*> UsedEffects;
+
   // This array collectes all effects used in ability.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
-  TArray<TSubclassOf<UEffectData>> UsedEffects;
+  TArray<TSubclassOf<UEffectData>> UsedEffectsClasses;
 
   // ------- //
   // Visuals //
@@ -32,13 +36,19 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInSlot"))
   UPaperFlipbook* Icon;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInScene"))
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconOnScene"))
   UPaperFlipbook* IconScene;
 
 public:
   AInteractiveAbility();
 
   AInteractiveAbility(AInteractiveCharacter* Owner);
+
+  virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
+  virtual void PostInitProperties() override;
+
+  virtual void BeginPlay() override;
 
   // ----------------- //
   // Ability's actions //

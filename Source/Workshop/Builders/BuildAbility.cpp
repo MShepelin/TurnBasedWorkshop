@@ -18,7 +18,7 @@ AInteractiveObject* UBuildAbility::AddEffectToObject(AInteractiveObject* TargetO
     return TargetObject;
   }
 
-  TargetObject->AccumulatedEffects.Add(NewObject<UEffectData>(TargetObject, Ability->UsedEffects[EffectIndex]));
+  TargetObject->AccumulatedEffects.Add(Ability->UsedEffects[EffectIndex]);
 
   return TargetObject;
 }

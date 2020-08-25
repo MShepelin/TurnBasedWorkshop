@@ -17,6 +17,8 @@ protected:
   bool bIsAvailable;
 
   UPaperFlipbookComponent* SpriteOfIcon;
+
+  UPROPERTY()
   UIconData* IconProperties;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconClass")
@@ -31,8 +33,11 @@ public:
 	// Called every frame.
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+  virtual void PostInitProperties() override;
+
   // Create Icon Components' visuals.
   // Should be called on Actor's OnConstruction().
+  UFUNCTION(BlueprintCallable)
   void Initialize();
 
   UFUNCTION(BlueprintCallable)

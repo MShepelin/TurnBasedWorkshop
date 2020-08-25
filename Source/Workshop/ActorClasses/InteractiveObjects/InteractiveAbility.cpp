@@ -7,12 +7,18 @@ FString AInteractiveAbility::GatherInformation() const
 {
   FString AbilityInformation = Super::GatherInformation();
 
-  for (TSubclassOf<UEffectData> EffectClass : UsedEffects)
+  for (UEffectData* EffectObject : UsedEffects)
   {
-    AbilityInformation += Cast<UEffectData>(EffectClass->StaticClass())->GatherInformation(true, MainManager) + "\n";
+    if (!EffectObject)
+    {
+      UE_LOG(LogTemp, Error, TEXT("Unknown error!"));
+      continue;
+    }
+      
+    AbilityInformation += EffectObject->GatherInformation(true, MainManager);
   }
 
-  return AbilityInformation + "\n";
+  return AbilityInformation;
 }
 
 void AInteractiveAbility::ShowInfluences() const
@@ -48,4 +54,26 @@ void AInteractiveAbility::ResolveAbility()
   }
 
   ClearInflunces();
+}
+
+void AInteractiveAbility::PostInitProperties()
+{
+  Super::PostInitProperties();
+
+  UsedEffects.Empty();
+  for (TSubclassOf<UEffectData> EffectClass : UsedEffectsClasses)
+  {
+    UEffectData* NewEffect = NewObject<UEffectData>(this, EffectClass);
+    UsedEffects.Add(NewEffect);
+  }
+}
+
+void AInteractiveAbility::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+  Super::EndPlay(EndPlayReason);
+}
+
+void AInteractiveAbility::BeginPlay()
+{
+  Super::BeginPlay();
 }
