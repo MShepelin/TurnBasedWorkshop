@@ -49,9 +49,9 @@ void ARegistrationManager::DisconnectObjectFromManager(AInteractiveObject* Objec
   ObjectToRemove->SetManager(nullptr);
 }
 
-TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<int32> TagsArray, int32 EnoughNumberOfTags) const
+TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs) const
 {
-  TArray<AInteractiveObject*> FoundObjects = CTsSystem.FindByCTs(TagsArray, EnoughNumberOfTags);
+  TArray<AInteractiveObject*> FoundObjects = CTsSystem.FindByCTs(CTsArray, EnoughNumberOfCTs);
 
 #if WITH_EDITOR
   // Show what objects were found
@@ -65,24 +65,42 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<
   return FoundObjects;
 }
 
-FString ARegistrationManager::GetCTName(int32 TagIdentifier) const
+FString ARegistrationManager::GetCTName(int32 CTIdentifier) const
 {
-  if (!CTsToNameMap.Find(TagIdentifier))
+  if (!CTsToNameMap.Find(CTIdentifier))
   {
-    UE_LOG(LogTemp, Error, TEXT("Wrong tag identifier!"));
+    UE_LOG(LogTemp, Error, TEXT("Wrong CT identifier!"));
     return "";
   }
   
-  return CTsToNameMap[TagIdentifier];
+  return CTsToNameMap[CTIdentifier];
 }
 
 FString ARegistrationManager::GetStatNameByID(int32 StatIdentifier) const
 {
   if (!StatIDToNameMap.Find(StatIdentifier))
   {
-    UE_LOG(LogTemp, Error, TEXT("Wrong tag identifier!"));
+    UE_LOG(LogTemp, Error, TEXT("Wrong Stat identifier!"));
     return "";
   }
 
   return StatIDToNameMap[StatIdentifier];
+}
+
+TArray<FString> ARegistrationManager::GetCTsNamesOfObject(AInteractiveObject* Object) const
+{
+  if (Object->MainManager != this)
+  {
+    UE_LOG(LogTemp, Error, TEXT("Access to object without connection to this manager isn't allowed"));
+    return {};
+  }
+
+  TArray<FString> CTsNames;
+
+  for (int32 ObjectCT : *Object->GetCTs())
+  {
+    CTsNames.Add(GetCTName(ObjectCT));
+  }
+  
+  return CTsNames;
 }

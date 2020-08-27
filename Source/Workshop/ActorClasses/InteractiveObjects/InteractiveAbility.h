@@ -19,22 +19,19 @@ protected:
   AInteractiveCharacter* CharacterOwner;
 
   // Animation identifier which should be played by owner when this ability is resolved.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings")
   int32 AbilityAnimationId;
 
-  UPROPERTY()
-  TArray<UEffectData*> UsedEffects;
-
   // This array collectes all effects used in ability.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
-  TArray<TSubclassOf<UEffectData>> UsedEffectsClasses;
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Instanced, Category = "AbilitySettings")
+  TArray<UEffectData*> UsedEffects;
 
   // ------- //
   // Visuals //
   // ------- //
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInSlot"))
-  UPaperFlipbook* Icon;
+  UPaperFlipbook* IconUI;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconOnScene"))
   UPaperFlipbook* IconScene;

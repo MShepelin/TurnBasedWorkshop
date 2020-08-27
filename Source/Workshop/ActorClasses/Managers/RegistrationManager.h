@@ -22,7 +22,7 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerVisuals")
   UBillboardComponent* ManagerIcon;
 
-  // Here are all tags available in this manager.
+  // Here are all CTs available in this manager.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
   TMap<int32, FString> CTsToNameMap;
 
@@ -64,15 +64,18 @@ public:
   //---------- //
 
   UFUNCTION(BlueprintCallable)
-  TArray<AInteractiveObject*> FindObjectsByCTs(const TArray<int32> TagsArray, int32 EnoughNumberOfTags) const;
+  TArray<AInteractiveObject*> FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs) const;
 
   // ----------------------------- //
   // Access to Manager information //
   // ----------------------------- //
 
   UFUNCTION(BlueprintCallable)
-  FString GetCTName(int32 TagIdentifier) const;
+  FString GetCTName(int32 CTIdentifier) const;
 
   UFUNCTION(BlueprintCallable)
   FString GetStatNameByID(int32 StatIdentifier) const;
+
+  UFUNCTION(BlueprintCallable)
+  TArray<FString> GetCTsNamesOfObject(AInteractiveObject* Object) const;
 };

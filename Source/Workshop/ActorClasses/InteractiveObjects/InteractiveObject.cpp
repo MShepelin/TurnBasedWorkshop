@@ -28,7 +28,7 @@ void AInteractiveObject::PostInitProperties()
 
   if (!StringStats.Find(ObjectNameStatID))
   {
-    UE_LOG(LogTemp, Error, TEXT("Incorrect object stats!"));
+    UE_LOG(LogTemp, Error, TEXT("Incorrect object stats: a name stat is needed!"));
   }
 }
 
@@ -76,7 +76,8 @@ FString AInteractiveObject::GatherInformation() const
     return "";
   }
 
-  return StringStats[ObjectNameStatID].ToString() + "\n";
+  return "";
+  //return StringStats[ObjectNameStatID].ToString() + "\n";
 }
 
 void AInteractiveObject::ShowInfluences() const
@@ -142,4 +143,9 @@ void AInteractiveObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
 EInteractiveType AInteractiveObject::GetInteractiveType()
 {
   return InteractiveType;
+}
+
+FName AInteractiveObject::GetInteractiveObjectName() const
+{
+  return StringStats[ObjectNameStatID];
 }

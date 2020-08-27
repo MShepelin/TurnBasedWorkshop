@@ -59,13 +59,6 @@ void AInteractiveAbility::ResolveAbility()
 void AInteractiveAbility::PostInitProperties()
 {
   Super::PostInitProperties();
-
-  UsedEffects.Empty();
-  for (TSubclassOf<UEffectData> EffectClass : UsedEffectsClasses)
-  {
-    UEffectData* NewEffect = NewObject<UEffectData>(this, EffectClass);
-    UsedEffects.Add(NewEffect);
-  }
 }
 
 void AInteractiveAbility::EndPlay(const EEndPlayReason::Type EndPlayReason)

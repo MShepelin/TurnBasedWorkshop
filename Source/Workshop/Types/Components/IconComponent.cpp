@@ -35,8 +35,13 @@ void UIconComponent::Initialize()
 {
   bIsAvailable = false;
 
-  //if (IconPropertiesClass && !IconProperties)
+  if (IconPropertiesClass)
   {
+    if (IconProperties)
+    {
+      IconProperties->ConditionalBeginDestroy();
+    }
+
     IconProperties = NewObject<UIconData>(this, IconPropertiesClass, TEXT("IconData"));
 
     SpriteOfIcon->SetFlipbook(IconProperties->SpriteIfAvailable);

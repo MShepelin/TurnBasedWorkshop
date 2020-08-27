@@ -71,8 +71,6 @@ FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager
     return "";
   }
 
-  //???? check if all CTs are valid
-
   FString EffectInforamtion = "";
 
   for (int32 ArrayIndex = 0; ArrayIndex < CTsToAffect.Num() - 1; ArrayIndex++)
@@ -94,7 +92,10 @@ FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager
     EffectInforamtion += Manager->GetCTName(CTsToAffect[CTsToAffect.Num() - 1]) + " ";
   }
 
-  EffectInforamtion += UEnum::GetValueAsString(TargetType) + " ";
+  if (TargetType != EInteractiveType::Any)
+  {
+    EffectInforamtion += UEnum::GetValueAsString(TargetType).RightChop(LengthOfInteractiveTypeName) + " ";
+  }
 
   return EffectInforamtion;
 }

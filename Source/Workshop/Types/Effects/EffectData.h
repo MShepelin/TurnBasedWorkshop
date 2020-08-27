@@ -7,7 +7,7 @@
 #include "Workshop/Types/EffectType.h"
 #include "Workshop/Types/EffectSpecifiers.h"
 #include "Workshop/Types/InteractiveType.h"
-#include "Workshop/Managers/RegistrationManager.h"
+#include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "EffectData.generated.h"
 
 
@@ -34,8 +34,6 @@ protected:
   // Affects everithing if empty.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
   TArray<int32> CTsToAffect;
-
-  //???? add option to edit tags, which shouldn't be used.
 
 public:
   UEffectData();

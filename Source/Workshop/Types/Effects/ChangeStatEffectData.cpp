@@ -20,7 +20,12 @@ FString UChangeStatEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrat
     EffectInforamtion += "+";
   }
 
-  EffectInforamtion += FString::FromInt(EffectValue) + "\n";
+  EffectInforamtion += FString::FromInt(EffectValue);
+    
+  if (bIsRelative)
+  {
+    EffectInforamtion += "%";
+  }
   
-  return EffectInforamtion;
+  return EffectInforamtion + "\n";
 }

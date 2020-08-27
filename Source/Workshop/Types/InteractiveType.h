@@ -9,7 +9,8 @@
 UENUM(BlueprintType)
 enum class EInteractiveType : uint8
 {
-  Base        UMETA(DisplayName = "Any"),
-  Ability     UMETA(DisplayName = "Ability"),
-  Character   UMETA(DisplayName = "Character"),
+  Nothing   = 0,
+  Ability   = 1,
+  Character = 2,
+  Any       = 3,
 };
