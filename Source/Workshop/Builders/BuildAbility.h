@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "GenericPlatform/GenericPlatformMath.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
+#include "Workshop/Types/Effects/AdvantageEffectData.h"
+#include "Workshop/Types/Effects/ChangeStatEffectData.h"
+#include "Workshop/Types/Effects/SpawnEffectData.h"
 #include "BuildAbility.generated.h"
 
 
@@ -22,4 +26,7 @@ public:
 
   UFUNCTION(BlueprintCallable)
   AInteractiveObject* AddEffectToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability, int32 EffectIndex);
+
+  UFUNCTION(BlueprintCallable)
+  AInteractiveObject* AddAllEffectsToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability);
 };

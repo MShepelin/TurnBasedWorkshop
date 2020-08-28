@@ -18,10 +18,8 @@ protected:
 
   UPaperFlipbookComponent* SpriteOfIcon;
 
-  UPROPERTY() UIconData* IconProperties;
-
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconClass")
-  TSubclassOf<UIconData> IconPropertiesClass;
+  FIconData IconProperties;
 
   // Called when the game starts.
   virtual void BeginPlay() override;

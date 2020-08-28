@@ -9,6 +9,7 @@
 #include "Workshop/Types/Nonblueprintable/CTsSystem.h"
 #include "Workshop/Types/Components/IconComponent.h"
 #include "Workshop/Types/InteractiveType.h"
+#include "Workshop/Types/TurnPhase.h"
 #include "InteractiveObject.generated.h"
 
 
@@ -69,7 +70,10 @@ protected:
   TArray<int32> CTsOfObject;
 
   // Array of effects which are applied in the current state.
-  TArray<UEffectData*> AccumulatedEffects;
+  UPROPERTY() TArray<UEffectData*> AccumulatedEffects;
+
+  // Used to search fro advantages in all effects.
+  UPROPERTY() TSet<UEffectData*> SetOfAdvantages;
 
 protected:
   // Called when the game starts or when spawned.
@@ -78,9 +82,9 @@ protected:
 public:
   AInteractiveObject();
 
-  // ------------------------ //
-  // Actor functions overload //
-  // ------------------------ //
+  // ------------------------- //
+  // AActor functions overload //
+  // ------------------------- //
 
   // Called before construction script.
   virtual void OnConstruction(const FTransform & Transform) override;
@@ -133,6 +137,13 @@ public:
 
   UFUNCTION(BlueprintCallable)
   EInteractiveType GetInteractiveType();
+
+  // ------------------ //
+  // Turn-based actions //
+  // ------------------ //
+
+  UFUNCTION(BlueprintCallable)
+  virtual void SetTurn(ETurnPhase TurnPhase);
 
   // ------ //
   // Others //

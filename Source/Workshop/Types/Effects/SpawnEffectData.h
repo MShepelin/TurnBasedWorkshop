@@ -11,14 +11,13 @@ class WORKSHOP_API USpawnEffectData : public UEffectData
 {
   GENERATED_BODY()
 
-protected:
+public:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
   TSubclassOf<AInteractiveObject> ClassToSpawn;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta = (ClampMin = "0"))
   int32 NumberOfSpawns;
 
-public:
   USpawnEffectData();
 
   //++++ override GatherInformation function

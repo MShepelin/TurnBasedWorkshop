@@ -3,21 +3,21 @@
 #pragma once
 
 // 1. Interactive objects
-// 1.1 Character
 
-const int32    DefaultPointsValue = 10;
-const FName    DefaultStringValue = "Dude";
+const int32 DefaultPointsValue = 10;
+const FName DefaultStringValue = "Dude";
 
-const int32    ObjectNameStatID = 1;
-const int32    HealthStatID = 2;
+const int32 ObjectNameStatID = 1;
+const int32 HealthStatID = 2;
+
+const int32 PlayerControlledCharacterCT = 1;
+const int32 CharacterOutOfControlCT = 2;
 
 // 2. Debug
 // Used for drawing lines, spheres and other shapes.
 
 const FColor DebugColor(255, 0, 0);
-
 const int32 DebugTime = 5;
-
 const FName DebugString("Hello, world!");
 
 // 3. Code specifics

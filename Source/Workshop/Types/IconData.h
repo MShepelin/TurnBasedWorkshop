@@ -8,13 +8,11 @@
 #include "PaperFlipbookComponent.h"
 #include "IconData.generated.h"
 
-
-UCLASS(Blueprintable, BlueprintType)
-class WORKSHOP_API UIconData : public UObject
+USTRUCT(BlueprintType)
+struct WORKSHOP_API FIconData
 {
-	GENERATED_BODY()
+  GENERATED_BODY()
 
-public:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconProperties")
   float Scale = 1.f;
 
@@ -23,6 +21,4 @@ public:
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconProperties")
   UPaperFlipbook* SpriteIfUnavailable;
-
-  UIconData();
 };

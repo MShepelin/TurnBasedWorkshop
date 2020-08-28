@@ -12,7 +12,7 @@ class WORKSHOP_API UAdvantageEffectData : public UEffectData
 {
   GENERATED_BODY()
 
-protected:
+public:
   // Type of Advantage to use.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
   EAdvantageType AdvantageType;
@@ -21,7 +21,6 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
   TArray<int32> AdvantageCTs;
 
-public:
   UAdvantageEffectData();
 
   virtual FString GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const override;

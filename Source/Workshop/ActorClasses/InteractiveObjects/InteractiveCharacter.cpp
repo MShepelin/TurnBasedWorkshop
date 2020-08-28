@@ -11,6 +11,8 @@ AInteractiveCharacter::AInteractiveCharacter()
   CharacterPresentation->SetupAttachment(RootComponent);
 
   //???? set first default animation?
+
+  CTsOfObject.Add(CharacterOutOfControlCT);
 }
 
 
@@ -37,31 +39,37 @@ void AInteractiveCharacter::ShowInfluences() const
 
 }
 
-
-void AInteractiveCharacter::OnTurnStart()
+void AInteractiveCharacter::SetTurn(ETurnPhase TurnPhase)
 {
-  //++++ apply effects
-}
+  Super::SetTurn(TurnPhase);
 
+  switch (TurnPhase)
+  {
+  case ETurnPhase::Start:
+    // Decrease effects' duration
+    for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
+    {
+      AccumulatedEffects[EffectIndex]->DecreaseDuration();
+      if (!AccumulatedEffects[EffectIndex]->Duration)
+      {
+        RemoveEffectByIndex(EffectIndex);
+      }
+    }
+    break;
+
+  case ETurnPhase::End:
+    break;
+
+  default:
+    break;
+  }
+
+}
 
 void AInteractiveCharacter::RemoveEffectByIndex(int32 EffectIndex)
 {
   AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
   AccumulatedEffects.Pop();
-}
-
-
-void AInteractiveCharacter::OnTurnEnd()
-{
-  // Decrease effects' duration
-  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
-  {
-    AccumulatedEffects[EffectIndex]->DecreaseDuration();
-    if (!AccumulatedEffects[EffectIndex]->GetDuration())
-    {
-      RemoveEffectByIndex(EffectIndex);
-    }
-  }
 }
 
 
@@ -84,7 +92,27 @@ void AInteractiveCharacter::PostInitProperties()
 {
   Super::PostInitProperties();
 
-  //???? check if needed Stats are present
+  // FOR DEBUG ONLY ->
+  bool bPlayerControlledCTFound = false;
+  bool bOutOfControlCTFound = false;
+
+  for (int32 CT : CTsOfObject)
+  {
+    if (CT == PlayerControlledCharacterCT)
+    {
+      bPlayerControlledCTFound = true;
+    }
+    else if (CT == CharacterOutOfControlCT)
+    {
+      bOutOfControlCTFound = true;
+    }
+  }
+
+  if (bOutOfControlCTFound == bPlayerControlledCTFound)
+  {
+    UE_LOG(LogTemp, Error, TEXT("Every character must be either controlled by player or not, which must be shown in CTs"));
+  }
+  // FOR DEBUG ONLY <-
 }
 
 
@@ -92,7 +120,7 @@ void AInteractiveCharacter::RemoveEffectsBySpecifiersMask(int32 SpecifiersMask)
 {
   for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
   {
-    if (AccumulatedEffects[EffectIndex]->GetEffectSpecifiers() & SpecifiersMask)
+    if (AccumulatedEffects[EffectIndex]->EffectSpecifiersMask & SpecifiersMask)
     {
       RemoveEffectByIndex(EffectIndex);
     }

@@ -149,3 +149,8 @@ FName AInteractiveObject::GetInteractiveObjectName() const
 {
   return StringStats[ObjectNameStatID];
 }
+
+void AInteractiveObject::SetTurn(ETurnPhase TurnPhase)
+{
+
+}

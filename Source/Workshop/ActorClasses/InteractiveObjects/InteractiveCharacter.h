@@ -58,13 +58,11 @@ public:
   // Effect would be removed if any flag of mask is met.
   void RemoveEffectsBySpecifiersMask(int32 mask);
 
-  // ---------- //
-  // Turn-based //
-  // ---------- //
+  // ------------------ //
+  // Turn-based actions //
+  // ------------------ //
 
-  void OnTurnStart();
-
-  void OnTurnEnd();
+  virtual void SetTurn(ETurnPhase TurnPhase) override;
 
   // ------ //
   // Others //

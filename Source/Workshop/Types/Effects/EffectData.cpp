@@ -8,9 +8,13 @@ UEffectData::UEffectData()
 
 }
 
-
 void UEffectData::DecreaseDuration(int32 OnValue)
 {
+  if (Duration == -1)
+  {
+    return;
+  }
+
   if (OnValue < 0)
   {
     UE_LOG(LogTemp, Error, TEXT("Can't use negative value here!!!"));
@@ -27,36 +31,10 @@ void UEffectData::DecreaseDuration(int32 OnValue)
   }
 }
 
-
 void UEffectData::DecreaseDuration()
 {
   DecreaseDuration(1);
 }
-
-
-int UEffectData::GetDuration() const
-{
-  return Duration;
-}
-
-
-EEffectType UEffectData::GetEffectType() const
-{
-  return EffectType;
-}
-
-
-EInteractiveType UEffectData::GetTargetType() const
-{
-  return TargetType;
-}
-
-
-int32 UEffectData::GetEffectSpecifiers() const
-{
-  return EffectSpecifiersMask;
-}
-
 
 FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const
 {

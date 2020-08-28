@@ -8,7 +8,6 @@ UAdvantageEffectData::UAdvantageEffectData()
   EffectType = EEffectType::Advantage;
 }
 
-
 FString UAdvantageEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const
 {
   FString EffectInforamtion = Super::GatherInformation(bIsAbilityInfo, Manager);

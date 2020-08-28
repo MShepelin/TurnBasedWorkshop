@@ -35,19 +35,9 @@ void UIconComponent::Initialize()
 {
   bIsAvailable = false;
 
-  if (IconPropertiesClass)
-  {
-    if (IconProperties)
-    {
-      IconProperties->ConditionalBeginDestroy();
-    }
-
-    IconProperties = NewObject<UIconData>(this, IconPropertiesClass, TEXT("IconData"));
-
-    SpriteOfIcon->SetFlipbook(IconProperties->SpriteIfAvailable);
-    SpriteOfIcon->SetRelativeScale3D(FVector(
-      IconProperties->Scale, IconProperties->Scale, IconProperties->Scale));
-  }
+  SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfAvailable);
+  SpriteOfIcon->SetRelativeScale3D(FVector(
+    IconProperties.Scale, IconProperties.Scale, IconProperties.Scale));
 
   Show();
 }
@@ -67,11 +57,11 @@ void UIconComponent::SetAvailability(bool bNewAvailability)
   bIsAvailable = bNewAvailability;
   if (bIsAvailable)
   {
-    SpriteOfIcon->SetFlipbook(IconProperties->SpriteIfAvailable);
+    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfAvailable);
   }
   else
   {
-    SpriteOfIcon->SetFlipbook(IconProperties->SpriteIfUnavailable);
+    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfUnavailable);
   }
 }
 

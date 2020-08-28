@@ -104,3 +104,25 @@ TArray<FString> ARegistrationManager::GetCTsNamesOfObject(AInteractiveObject* Ob
   
   return CTsNames;
 }
+
+void ARegistrationManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+  Super::EndPlay(EndPlayReason);
+
+  CTsSystem.InitialiseCTs({});
+}
+
+void ARegistrationManager::SetCentralInteractiveObject(AInteractiveObject* Object)
+{
+  CentralObject = Object;
+}
+
+void ARegistrationManager::FindObjectsAndShow(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs)
+{
+  const TArray<AInteractiveObject*> FoundObjects = FindObjectsByCTs(CTsArray, EnoughNumberOfCTs);
+
+  for (AInteractiveObject* Object : FoundObjects)
+  {
+    Object->InteractivityIcon->Show();
+  }
+}

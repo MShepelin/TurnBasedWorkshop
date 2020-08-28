@@ -33,25 +33,30 @@ protected:
   // System of CTs.
   CTsGraph<int32, AInteractiveObject> CTsSystem;
 
+  // This object is in current focus of manager, all found connections will be sent to it.
+  UPROPERTY() AInteractiveObject* CentralObject = nullptr;
+
 	// Called when the game starts or when spawned.
 	virtual void BeginPlay() override;
+
+  virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:
   // Sets default values for this actor's properties.
   ARegistrationManager();
 
-  // ------------------------ //
-  // Actor functions overload //
-  // ------------------------ //
+  // ------------------------- //
+  // AActor functions overload //
+  // ------------------------- //
 
 	// Called every frame.
 	virtual void Tick(float DeltaTime) override;
 
   void PostInitProperties() override;
 
-  // ---------- //
-  // Connection //
-  // ---------- //
+  // ------------------------------- //
+  // Actions with Interactive object //
+  // ------------------------------- //
 
   UFUNCTION(BlueprintCallable)
   void ConnectObjectToManager(AInteractiveObject* ObjectToAdd);
@@ -59,12 +64,18 @@ public:
   UFUNCTION(BlueprintCallable)
   void DisconnectObjectFromManager(AInteractiveObject* ObjectToRemove);
 
+  UFUNCTION(BlueprintCallable)
+  void SetCentralInteractiveObject(AInteractiveObject* Object);
+
   //---------- //
   // CTs usage //
   //---------- //
 
   UFUNCTION(BlueprintCallable)
   TArray<AInteractiveObject*> FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs) const;
+
+  UFUNCTION(BlueprintCallable)
+  void FindObjectsAndShow(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs);
 
   // ----------------------------- //
   // Access to Manager information //
