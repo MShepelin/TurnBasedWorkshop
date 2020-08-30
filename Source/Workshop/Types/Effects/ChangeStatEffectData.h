@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "EffectData.h"
+#include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
 #include "ChangeStatEffectData.generated.h"
 
 
@@ -18,10 +18,9 @@ public:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings", meta = (OverrideNativeName = "StatIdentifier"))
   int32 StatID = 0;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
-  bool bIsRelative = 0;
-
   UChangeStatEffectData();
 
   virtual FString GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const override;
+
+  virtual void ResolveOn(AInteractiveObject* TargetObject) override;
 };

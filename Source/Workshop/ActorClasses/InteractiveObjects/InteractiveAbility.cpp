@@ -7,6 +7,33 @@ FString AInteractiveAbility::GatherInformation() const
 {
   FString AbilityInformation = Super::GatherInformation();
 
+  for (int32 ArrayIndex = 0; ArrayIndex < CTsToAffect.Num() - 1; ArrayIndex++)
+  {
+    if (ArrayIndex)
+    {
+      AbilityInformation += ", ";
+    }
+    AbilityInformation += MainManager->GetCTName(CTsToAffect[ArrayIndex]);
+  }
+
+  if (CTsToAffect.Num() > 1)
+  {
+    AbilityInformation += " or ";
+  }
+
+  if (CTsToAffect.Num())
+  {
+    AbilityInformation += MainManager->GetCTName(CTsToAffect[CTsToAffect.Num() - 1]) + " ";
+  }
+
+  /*
+  if (TargetType != EInteractiveType::Any)
+  {
+    AbilityInformation += UEnum::GetValueAsString(TargetType).RightChop(LengthOfInteractiveTypeName) + " ";
+  }
+  //++++ add mask type support
+  */
+
   for (UEffectData* EffectObject : UsedEffects)
   {
     if (!EffectObject)
@@ -14,7 +41,7 @@ FString AInteractiveAbility::GatherInformation() const
       UE_LOG(LogTemp, Error, TEXT("Unknown error!"));
       continue;
     }
-      
+    
     AbilityInformation += EffectObject->GatherInformation(true, MainManager);
   }
 
@@ -23,7 +50,7 @@ FString AInteractiveAbility::GatherInformation() const
 
 void AInteractiveAbility::ShowInfluences() const
 {
-
+  Super::ShowInfluences();
 }
 
 AInteractiveAbility::AInteractiveAbility()
@@ -39,7 +66,7 @@ AInteractiveAbility::AInteractiveAbility(
 
 void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* TargetObject)
 {
-
+  UE_LOG(LogTemp, Warning, TEXT("Ability has no implementation, change CustomEffect to add it"));
 }
 
 void AInteractiveAbility::ResolveAbility()
@@ -69,4 +96,55 @@ void AInteractiveAbility::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AInteractiveAbility::BeginPlay()
 {
   Super::BeginPlay();
+}
+
+void AInteractiveAbility::PickedAsCentral()
+{
+  Super::PickedAsCentral();
+
+  TArray<AInteractiveObject*> FoundObjects = MainManager->FindObjectsByCTs(CTsToAffect, 1);
+
+  for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num(); ObjectIndex++)
+  {
+    AInteractiveObject* FoundObject = FoundObjects[ObjectIndex];
+
+    if ((FoundObject->GetInteractiveType() & TargetTypeMask) == EInteractiveType::Nothing)
+    {
+      FoundObjects.Swap(ObjectIndex, FoundObjects.Num() - 1);
+      FoundObjects.Pop();
+    }
+  }
+
+#if WITH_EDITOR
+  // Show what objects were found
+  for (AInteractiveObject* FoundObject : FoundObjects)
+  {
+    DrawDebugLine(GetWorld(), GetActorLocation(), FoundObject->GetActorLocation(),
+      DebugColor, false, DebugTime);
+  }
+#endif
+
+  ShowIconsDependingOnInfluence(FoundObjects);
+}
+
+void AInteractiveAbility::UnpickedAsCentral()
+{
+  Super::UnpickedAsCentral();
+
+  HideIconsOfDependent();
+}
+
+void AInteractiveAbility::PickedAsTarget()
+{
+  Super::PickedAsTarget();
+}
+
+void AInteractiveAbility::UnpickedAsTarget()
+{
+  Super::UnpickedAsTarget();
+}
+
+EInteractiveType AInteractiveAbility::GetTargetTypeMask() const
+{
+  return TargetTypeMask;
 }

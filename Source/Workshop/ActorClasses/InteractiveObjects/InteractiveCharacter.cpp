@@ -15,7 +15,6 @@ AInteractiveCharacter::AInteractiveCharacter()
   CTsOfObject.Add(CharacterOutOfControlCT);
 }
 
-
 FString AInteractiveCharacter::GatherInformation() const
 {
   FString CharacterInformation = Super::GatherInformation();
@@ -33,45 +32,32 @@ FString AInteractiveCharacter::GatherInformation() const
   return CharacterInformation + "\n";
 }
 
-
 void AInteractiveCharacter::ShowInfluences() const
 {
-
+  Super::ShowInfluences();
 }
 
 void AInteractiveCharacter::SetTurn(ETurnPhase TurnPhase)
 {
-  Super::SetTurn(TurnPhase);
-
-  switch (TurnPhase)
+  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
   {
-  case ETurnPhase::Start:
-    // Decrease effects' duration
-    for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
+    UEffectData* ChosenEffect = AccumulatedEffects[EffectIndex];
+
+    if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
     {
-      AccumulatedEffects[EffectIndex]->DecreaseDuration();
-      if (!AccumulatedEffects[EffectIndex]->Duration)
-      {
-        RemoveEffectByIndex(EffectIndex);
-      }
+      continue;
     }
-    break;
 
-  case ETurnPhase::End:
-    break;
+    ChosenEffect->ResolveOn(this);
+    ChosenEffect->DecreaseDuration();
 
-  default:
-    break;
+    // Remove effect if it is no longer present
+    if (!ChosenEffect->Duration)
+    {
+      RemoveEffectByIndex(EffectIndex);
+    }
   }
-
 }
-
-void AInteractiveCharacter::RemoveEffectByIndex(int32 EffectIndex)
-{
-  AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
-  AccumulatedEffects.Pop();
-}
-
 
 void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
 {
@@ -87,12 +73,11 @@ void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
   }
 }
 
-
 void AInteractiveCharacter::PostInitProperties()
 {
   Super::PostInitProperties();
 
-  // FOR DEBUG ONLY ->
+#if WITH_EDITOR
   bool bPlayerControlledCTFound = false;
   bool bOutOfControlCTFound = false;
 
@@ -112,17 +97,20 @@ void AInteractiveCharacter::PostInitProperties()
   {
     UE_LOG(LogTemp, Error, TEXT("Every character must be either controlled by player or not, which must be shown in CTs"));
   }
-  // FOR DEBUG ONLY <-
+#endif
 }
 
-
-void AInteractiveCharacter::RemoveEffectsBySpecifiersMask(int32 SpecifiersMask)
+int32 AInteractiveCharacter::GetProtectionFromMask() const
 {
-  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
-  {
-    if (AccumulatedEffects[EffectIndex]->EffectSpecifiersMask & SpecifiersMask)
-    {
-      RemoveEffectByIndex(EffectIndex);
-    }
-  }
+  return ProtectionFrom;
+}
+
+void AInteractiveCharacter::PickedAsCentral()
+{
+  Super::PickedAsCentral();
+}
+
+void AInteractiveCharacter::UnpickedAsCentral()
+{
+  Super::UnpickedAsCentral();
 }

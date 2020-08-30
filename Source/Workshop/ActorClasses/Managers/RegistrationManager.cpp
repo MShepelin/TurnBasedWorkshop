@@ -8,6 +8,7 @@ ARegistrationManager::ARegistrationManager()
 	PrimaryActorTick.bCanEverTick = true;
 
   ManagerIcon = CreateDefaultSubobject<UBillboardComponent>(TEXT("ManagerIcon"));
+  RootComponent = ManagerIcon;
 }
 
 void ARegistrationManager::BeginPlay()
@@ -27,42 +28,35 @@ void ARegistrationManager::PostInitProperties()
   {
     CTsSystem.AddCT(CT.Key);
   }
-}
 
-void ARegistrationManager::ConnectObjectToManager(AInteractiveObject* ObjectToAdd)
-{
-  ARegistrationManager* CurrentManagerOfObject = ObjectToAdd->GetManager();
-
-  if (CurrentManagerOfObject)
+  for (int32 CT : NecessaryCTs)
   {
-    CurrentManagerOfObject->DisconnectObjectFromManager(ObjectToAdd);
+    CTsSystem.AddCT(CT);
   }
 
-  // Add to CTs system
-  CTsSystem.AddObject(ObjectToAdd);
-  ObjectToAdd->SetManager(this);
-}
+  NecessaryCTs.Empty();
+  
 
-void ARegistrationManager::DisconnectObjectFromManager(AInteractiveObject* ObjectToRemove)
-{
-  CTsSystem.RemoveObject(ObjectToRemove);
-  ObjectToRemove->SetManager(nullptr);
+  //Check if all must-have properties are present
+  for (int32 NecessaryStat : {ObjectNameStatID})
+  {
+    if (!StatIDToNameMap.Find(NecessaryStat))
+    {
+      UE_LOG(LogTemp, Error, TEXT("Incorrect manager description: some necessary stats are missing!"));
+    }
+  }
 }
 
 TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs) const
 {
   TArray<AInteractiveObject*> FoundObjects = CTsSystem.FindByCTs(CTsArray, EnoughNumberOfCTs);
 
-#if WITH_EDITOR
-  // Show what objects were found
-  for (AInteractiveObject* FoundObject : FoundObjects)
-  {
-    DrawDebugLine(GetWorld(), GetActorLocation(), FoundObject->GetActorLocation(),
-      DebugColor, false, DebugTime);
-  }
-#endif
-
   return FoundObjects;
+}
+
+TArray<AInteractiveObject*> ARegistrationManager::GetAllConnectedObjects() const
+{
+  return CTsSystem.GetAllObjects();
 }
 
 FString ARegistrationManager::GetCTName(int32 CTIdentifier) const
@@ -87,24 +81,6 @@ FString ARegistrationManager::GetStatNameByID(int32 StatIdentifier) const
   return StatIDToNameMap[StatIdentifier];
 }
 
-TArray<FString> ARegistrationManager::GetCTsNamesOfObject(AInteractiveObject* Object) const
-{
-  if (Object->MainManager != this)
-  {
-    UE_LOG(LogTemp, Error, TEXT("Access to object without connection to this manager isn't allowed"));
-    return {};
-  }
-
-  TArray<FString> CTsNames;
-
-  for (int32 ObjectCT : *Object->GetCTs())
-  {
-    CTsNames.Add(GetCTName(ObjectCT));
-  }
-  
-  return CTsNames;
-}
-
 void ARegistrationManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
   Super::EndPlay(EndPlayReason);
@@ -112,17 +88,7 @@ void ARegistrationManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
   CTsSystem.InitialiseCTs({});
 }
 
-void ARegistrationManager::SetCentralInteractiveObject(AInteractiveObject* Object)
+bool ARegistrationManager::HasCentralObject() const
 {
-  CentralObject = Object;
-}
-
-void ARegistrationManager::FindObjectsAndShow(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs)
-{
-  const TArray<AInteractiveObject*> FoundObjects = FindObjectsByCTs(CTsArray, EnoughNumberOfCTs);
-
-  for (AInteractiveObject* Object : FoundObjects)
-  {
-    Object->InteractivityIcon->Show();
-  }
+  return CentralObject != nullptr;
 }

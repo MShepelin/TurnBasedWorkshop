@@ -8,7 +8,6 @@
 #include "InteractiveCharacter.h"
 #include "InteractiveAbility.generated.h"
 
-
 // Represenatation of character's gameplay possibilities on game scene.
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
@@ -16,6 +15,10 @@ class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
   GENERATED_BODY()
 
 protected:
+  // -------------------------- //
+  // Ability gameplay specifics //
+  // -------------------------- //
+
   AInteractiveCharacter* CharacterOwner;
 
   // Animation identifier which should be played by owner when this ability is resolved.
@@ -25,6 +28,18 @@ protected:
   // This array collectes all effects used in ability.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Instanced, Category = "AbilitySettings")
   TArray<UEffectData*> UsedEffects;
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
+  TArray<int32> CTsToAffect;
+
+  // Target on which this affect is applicable.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings", meta = (Bitmask, BitmaskEnum = "EInteractiveType"))
+  EInteractiveType TargetTypeMask = EInteractiveType::Character;
+
+  // Number of objects which can be chosen.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings", meta = (ClampMin = "1"))
+  int32 NumOfTargets = 1;
+  //++++ add num limit for picking actions
 
   // ------- //
   // Visuals //
@@ -47,6 +62,18 @@ public:
 
   virtual void BeginPlay() override;
 
+  // ----------------------- //
+  // Connection with Manager //
+  // ----------------------- //
+
+  virtual void PickedAsCentral() override;
+
+  virtual void UnpickedAsCentral() override;
+
+  virtual void PickedAsTarget() override;
+
+  virtual void UnpickedAsTarget() override;
+
   // ----------------- //
   // Ability's actions //
   // ----------------- //
@@ -56,6 +83,12 @@ public:
   virtual void CustomEffect_Implementation(AInteractiveObject* TargetObject);
 
   void ResolveAbility();
+
+  // --------------------- //
+  // Ability's information //
+  // --------------------- //
+
+  EInteractiveType GetTargetTypeMask() const;
 
   // ------ //
   // Others //
@@ -67,3 +100,8 @@ public:
 
   friend class UBuildAbility; // for optimisation purposes
 };
+
+// TURN-BASED
+//++++ add decrease duration for BonusEffects in used effects
+//++++ add effect affect like for character (may be move to inter object)
+//++++ change affect mask to int

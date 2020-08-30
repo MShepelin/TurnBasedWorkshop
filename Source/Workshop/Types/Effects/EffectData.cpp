@@ -51,29 +51,10 @@ FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager
 
   FString EffectInforamtion = "";
 
-  for (int32 ArrayIndex = 0; ArrayIndex < CTsToAffect.Num() - 1; ArrayIndex++)
-  {
-    if (ArrayIndex)
-    {
-      EffectInforamtion += ", ";
-    }
-    EffectInforamtion += Manager->GetCTName(CTsToAffect[ArrayIndex]);
-  }
-
-  if (CTsToAffect.Num() > 1)
-  {
-    EffectInforamtion += " or ";
-  }
-
-  if (CTsToAffect.Num())
-  {
-    EffectInforamtion += Manager->GetCTName(CTsToAffect[CTsToAffect.Num() - 1]) + " ";
-  }
-
-  if (TargetType != EInteractiveType::Any)
-  {
-    EffectInforamtion += UEnum::GetValueAsString(TargetType).RightChop(LengthOfInteractiveTypeName) + " ";
-  }
-
   return EffectInforamtion;
+}
+
+void UEffectData::ResolveOn(AInteractiveObject* TargetObject)
+{
+
 }

@@ -187,4 +187,15 @@ public:
 
     return FoundNodes;
   }
+
+  TArray<Object*> GetAllObjects() const
+  {
+    TArray<Object*> AllObjects;
+    for (const TPair<CT, std::shared_ptr<NodeType>>& MapPair : CTToNodeMap)
+    {
+      AllObjects.Add(MapPair.Value->Origin);
+    }
+
+    return AllObjects;
+  }
 };

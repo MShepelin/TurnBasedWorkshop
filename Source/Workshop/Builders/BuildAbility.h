@@ -8,7 +8,6 @@
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
 #include "Workshop/Types/Effects/AdvantageEffectData.h"
 #include "Workshop/Types/Effects/ChangeStatEffectData.h"
-#include "Workshop/Types/Effects/SpawnEffectData.h"
 #include "BuildAbility.generated.h"
 
 
@@ -24,9 +23,7 @@ public:
   // General manipulations //
   // --------------------- //
 
-  UFUNCTION(BlueprintCallable)
-  AInteractiveObject* AddEffectToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability, int32 EffectIndex);
-
+  // Adds all effects of ability without 
   UFUNCTION(BlueprintCallable)
   AInteractiveObject* AddAllEffectsToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability);
 };

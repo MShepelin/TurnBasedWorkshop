@@ -35,6 +35,8 @@ void AInteractiveObject::PostInitProperties()
 void AInteractiveObject::BeginPlay()
 {
 	Super::BeginPlay();
+
+  InteractivityIcon->Hide();
 }
 
 void AInteractiveObject::Tick(float DeltaTime)
@@ -82,12 +84,14 @@ FString AInteractiveObject::GatherInformation() const
 
 void AInteractiveObject::ShowInfluences() const
 {
+#if WITH_EDITOR
   // Show what objects are influenced by this object
   for (AInteractiveObject* DependentObject : InfluencesArray)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), DependentObject->GetActorLocation(),
       DebugColor, false, DebugTime);
   }
+#endif
 }
 
 void AInteractiveObject::ClearInflunces()
@@ -121,17 +125,6 @@ ARegistrationManager* AInteractiveObject::GetManager() const
   return MainManager;
 }
 
-void AInteractiveObject::SetManager(ARegistrationManager* NewManager)
-{
-  if (MainManager && NewManager)
-  {
-    UE_LOG(LogTemp, Error, TEXT("Manager is already set, this object should be disconnected first"));
-    return;
-  }
-
-  MainManager = NewManager;
-}
-
 void AInteractiveObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
   if (NodeForCT)
@@ -140,7 +133,7 @@ void AInteractiveObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
   }
 }
 
-EInteractiveType AInteractiveObject::GetInteractiveType()
+EInteractiveType AInteractiveObject::GetInteractiveType() const
 {
   return InteractiveType;
 }
@@ -153,4 +146,103 @@ FName AInteractiveObject::GetInteractiveObjectName() const
 void AInteractiveObject::SetTurn(ETurnPhase TurnPhase)
 {
 
+}
+
+void AInteractiveObject::RemoveEffectByIndex(int32 EffectIndex)
+{
+  AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
+  AccumulatedEffects.Pop();
+}
+
+void AInteractiveObject::ConnectToManager(ARegistrationManager* NewManager)
+{
+  if (MainManager)
+  {
+    MainManager->CTsSystem.RemoveObject(this);
+  }
+
+  MainManager = NewManager;
+
+  MainManager->CTsSystem.AddObject(this);
+}
+
+void AInteractiveObject::PickedAsCentral()
+{
+  check(MainManager != nullptr);
+
+  MainManager->CentralObject = this;
+
+  //++++ add info to hud
+}
+
+void AInteractiveObject::UnpickedAsCentral()
+{
+  check(MainManager != nullptr);
+
+  MainManager->CentralObject = nullptr;
+
+  //++++ remove info from hud
+}
+
+void AInteractiveObject::PickedAsTarget()
+{
+  check(MainManager != nullptr);
+
+  MainManager->CentralObject->AddInfluenceOn(this);
+
+  InteractivityIcon->SetAvailability(false);
+}
+
+void AInteractiveObject::UnpickedAsTarget()
+{
+  check(MainManager != nullptr);
+
+  RemoveDependenceFrom(MainManager->CentralObject);
+
+  InteractivityIcon->SetAvailability(true);
+}
+
+void AInteractiveObject::ShowIconsDependingOnInfluence(TArray<AInteractiveObject*>& Objects)
+{
+  for (AInteractiveObject* Object : Objects)
+  {
+    Object->InteractivityIcon->Show();
+
+    if (InfluencesArray.Find(Object))
+    {
+      Object->InteractivityIcon->SetAvailability(false);
+    }
+    else
+    {
+      Object->InteractivityIcon->SetAvailability(true);
+    }
+  }
+}
+
+void AInteractiveObject::HideIconsOfDependent()
+{
+  for (AInteractiveObject* DependingObject : InfluencesArray)
+  {
+    DependingObject->InteractivityIcon->Hide();
+  }
+}
+
+TArray<FString> AInteractiveObject::GetCTsNamesOfObject() const
+{
+  check(MainManager != nullptr);
+
+  TArray<FString> CTsNames;
+
+  for (int32 ObjectCT : *GetCTs())
+  {
+    CTsNames.Add(MainManager->GetCTName(ObjectCT));
+  }
+
+  return CTsNames;
+}
+
+bool AInteractiveObject::IsCentral()
+{
+  check(MainManager);
+  return MainManager->CentralObject == this;
 }

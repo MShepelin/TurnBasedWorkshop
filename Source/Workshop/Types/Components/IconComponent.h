@@ -47,5 +47,5 @@ public:
   void SetAvailability(bool bNewAvailability);
 
   UFUNCTION(BlueprintCallable)
-  bool IsAvailable();
+  bool IsAvailable() const;
 };

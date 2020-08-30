@@ -6,10 +6,11 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Actor.h"
 #include "Components/BillboardComponent.h"
-#include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
+#include "Workshop/Types/Nonblueprintable/CTsSystem.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "RegistrationManager.generated.h"
 
+class AInteractiveObject;
 
 // Manager connects Interactive objects, provides search by CTs, serves as setup for gameplay events.
 UCLASS()
@@ -23,14 +24,23 @@ protected:
   UBillboardComponent* ManagerIcon;
 
   // Here are all CTs available in this manager.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings", meta = (ClampMin = "1"));
   TMap<int32, FString> CTsToNameMap;
+
+  TArray<int32> NecessaryCTs = 
+  { 
+    PlayerControlledCharacterCT, 
+    CharacterOutOfControlCT,
+  };
 
   // Here are all stats available in this manager.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
-  TMap<int32, FString> StatIDToNameMap;
+  TMap<int32, FString> StatIDToNameMap =
+  {
+    {ObjectNameStatID, "Name"}
+  };
 
-  // System of CTs.
+  // Used for search by CTs.
   CTsGraph<int32, AInteractiveObject> CTsSystem;
 
   // This object is in current focus of manager, all found connections will be sent to it.
@@ -54,19 +64,6 @@ public:
 
   void PostInitProperties() override;
 
-  // ------------------------------- //
-  // Actions with Interactive object //
-  // ------------------------------- //
-
-  UFUNCTION(BlueprintCallable)
-  void ConnectObjectToManager(AInteractiveObject* ObjectToAdd);
-
-  UFUNCTION(BlueprintCallable)
-  void DisconnectObjectFromManager(AInteractiveObject* ObjectToRemove);
-
-  UFUNCTION(BlueprintCallable)
-  void SetCentralInteractiveObject(AInteractiveObject* Object);
-
   //---------- //
   // CTs usage //
   //---------- //
@@ -74,12 +71,12 @@ public:
   UFUNCTION(BlueprintCallable)
   TArray<AInteractiveObject*> FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs) const;
 
-  UFUNCTION(BlueprintCallable)
-  void FindObjectsAndShow(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs);
-
   // ----------------------------- //
   // Access to Manager information //
   // ----------------------------- //
+
+  UFUNCTION(BlueprintCallable)
+  TArray<AInteractiveObject*> GetAllConnectedObjects() const;
 
   UFUNCTION(BlueprintCallable)
   FString GetCTName(int32 CTIdentifier) const;
@@ -88,5 +85,7 @@ public:
   FString GetStatNameByID(int32 StatIdentifier) const;
 
   UFUNCTION(BlueprintCallable)
-  TArray<FString> GetCTsNamesOfObject(AInteractiveObject* Object) const;
+  bool HasCentralObject() const;
+
+  friend class AInteractiveObject;
 };

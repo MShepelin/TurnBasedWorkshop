@@ -6,19 +6,20 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Actor.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
-#include "Workshop/Types/Nonblueprintable/CTsSystem.h"
 #include "Workshop/Types/Components/IconComponent.h"
+#include "Workshop/Types/Effects/EffectData.h"
 #include "Workshop/Types/InteractiveType.h"
 #include "Workshop/Types/TurnPhase.h"
 #include "InteractiveObject.generated.h"
 
 
 class UBuildAbility;
-class UEffectData;
-class ARegistrationManager;
+class UChangeStatEffectData;
+class UAdvantageEffectData;
 
 
-// Interactive object supports CTs classification and dependecy from other Interactive objects.
+// Interactive object are paired with Managers to support turn-based actions 
+// and exchange information between other Interactive objects
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveObject : public AActor
 {
@@ -38,6 +39,10 @@ protected:
 
   UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
   UIconComponent* InteractivityIcon;
+
+  void ShowIconsDependingOnInfluence(TArray<AInteractiveObject*>& Objects);
+
+  void HideIconsOfDependent();
 
   // ------------------ //
   // Object Statisctics //
@@ -66,18 +71,20 @@ protected:
   // (For multiple CT systems object-wrapper should be used).
   std::shared_ptr<Node<AInteractiveObject>> NodeForCT = nullptr;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | CTs")
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | CTs", meta = (ClampMin = "1"));
   TArray<int32> CTsOfObject;
+
+  // -------------------- //
+  // Turn-based mechanics //
+  // -------------------- //
 
   // Array of effects which are applied in the current state.
   UPROPERTY() TArray<UEffectData*> AccumulatedEffects;
 
-  // Used to search fro advantages in all effects.
-  UPROPERTY() TSet<UEffectData*> SetOfAdvantages;
-
-protected:
   // Called when the game starts or when spawned.
   virtual void BeginPlay() override;
+
+  void RemoveEffectByIndex(int32 EffectIndex);
 
 public:
   AInteractiveObject();
@@ -103,7 +110,23 @@ public:
   UFUNCTION(BlueprintCallable)
   ARegistrationManager* GetManager() const;
 
-  void SetManager(ARegistrationManager* NewManager);
+  UFUNCTION(BlueprintCallable)
+  void ConnectToManager(ARegistrationManager* NewManager);
+
+  UFUNCTION(BlueprintCallable)
+  virtual void PickedAsCentral();
+
+  UFUNCTION(BlueprintCallable)
+  bool IsCentral();
+
+  UFUNCTION(BlueprintCallable)
+  virtual void UnpickedAsCentral();
+
+  UFUNCTION(BlueprintCallable)
+  virtual void PickedAsTarget();
+
+  UFUNCTION(BlueprintCallable)
+  virtual void UnpickedAsTarget();
 
   // --------------------------- //
   // Influences and dependencies //
@@ -136,7 +159,20 @@ public:
   // --------------- //
 
   UFUNCTION(BlueprintCallable)
-  EInteractiveType GetInteractiveType();
+  EInteractiveType GetInteractiveType() const;
+
+  UFUNCTION(BlueprintCallable)
+  FName GetInteractiveObjectName() const;
+
+  UFUNCTION(BlueprintCallable)
+  TArray<FString> GetCTsNamesOfObject() const;
+
+  // Happens when player chooses this object.
+  UFUNCTION(BlueprintCallable)
+  virtual FString GatherInformation() const;
+
+  // Visual interpretation of connections.
+  virtual void ShowInfluences() const;
 
   // ------------------ //
   // Turn-based actions //
@@ -149,19 +185,15 @@ public:
   // Others //
   // ------ //
 
-  // Happens when player chooses this object.
-  UFUNCTION(BlueprintCallable)
-  virtual FString GatherInformation() const;
+  friend class AInteractiveObject;
+  //???? change to friend void AddInfluenceOn(AInteractiveObject*);
+  //???? and friend void RemoveDependenceFrom(AInteractiveObject*);
+  friend class CTsGraph<int32, AInteractiveObject>;
+  friend class UBuildAbility;
 
-  // Visual interpretation of connections.
-  virtual void ShowInfluences() const;
-
-  UFUNCTION(BlueprintCallable)
-  FName GetInteractiveObjectName() const;
-
-  friend void AddInfluenceOn(AInteractiveObject*);
-  friend void RemoveInfluenceFrom(AInteractiveObject*);
-  friend class CTsGraph<int32, AInteractiveObject>; // for optimisation purposes
-  friend class UBuildAbility;                       // for optimisation purposes
-  friend class ARegistrationManager;                // to prevent "undefined type" error
+  // Effects are gameplay mechanics so they should be able to modify InteractiveObject
+  friend class UEffectData;
+  friend class UAdvantageEffectData;
+  friend class UChangeStatEffectData;
 };
+

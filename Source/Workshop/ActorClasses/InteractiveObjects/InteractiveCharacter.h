@@ -6,10 +6,12 @@
 #include "PaperSpriteComponent.h"
 #include "PaperFlipbookComponent.h"
 #include "Workshop/Types/Effects/EffectData.h"
+#include "InteractiveObject.h"
 #include "InteractiveCharacter.generated.h"
 
 
 class AInteractiveAbility;
+
 
 // Interactive characters have visual represenation, abilities, types, 
 // they are able to take actions in turn-based events and connected to 
@@ -29,11 +31,11 @@ protected:
   UPaperFlipbookComponent* CharacterPresentation;
 
   // Abilities which Interactive character can use.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings | AbilitiesControl")
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
   TArray<TSubclassOf<AInteractiveAbility>> Abilities;
 
-private:
-  void RemoveEffectByIndex(int32 EffectIndex);
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings", meta = (Bitmask, BitmaskEnum = "EEffectSpecifiers"))
+  int32 ProtectionFrom = 0;
 
 public:
   AInteractiveCharacter();
@@ -52,17 +54,24 @@ public:
   void PlayAnimation(int32 AnimationID);
 
   // ----------------------- //
-  // Applied effects changes //
+  // Connection with Manager //
   // ----------------------- //
 
-  // Effect would be removed if any flag of mask is met.
-  void RemoveEffectsBySpecifiersMask(int32 mask);
+  virtual void PickedAsCentral() override;
+
+  virtual void UnpickedAsCentral() override;
 
   // ------------------ //
   // Turn-based actions //
   // ------------------ //
 
   virtual void SetTurn(ETurnPhase TurnPhase) override;
+
+  // ----------------------//
+  // Character Information //
+  // --------------------- //
+
+  int32 GetProtectionFromMask() const;
 
   // ------ //
   // Others //
