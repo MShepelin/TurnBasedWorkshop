@@ -25,7 +25,7 @@ AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* Tar
     UEffectData* DublicatedEffect = DuplicateObject(Effect, TargetObject);
     DublicatedEffect->bIsBonusEffect = true;
 
-    if (TargetObject->InteractiveType == EInteractiveType::Ability && Effect->bIsAmbiguous)
+    if ((TargetObject->InteractiveType == static_cast<int32>(EInteractiveType::Ability)) && Effect->bIsAmbiguous)
     {
       Cast<AInteractiveAbility>(TargetObject)->UsedEffects.Add(DublicatedEffect);
     }

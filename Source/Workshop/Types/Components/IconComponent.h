@@ -14,8 +14,8 @@ class WORKSHOP_API UIconComponent : public USceneComponent
 	GENERATED_BODY()
 
 protected:
-  bool bIsAvailable;
-  bool bIsShown;
+  UPROPERTY() bool bIsAvailable;
+  UPROPERTY() bool bIsShown;
 
   UPaperFlipbookComponent* SpriteOfIcon;
 

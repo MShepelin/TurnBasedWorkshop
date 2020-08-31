@@ -31,13 +31,29 @@ void UIconComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+void UIconComponent::SetAvailability(bool bNewAvailability)
+{
+  bIsAvailable = bNewAvailability;
+  if (bIsAvailable)
+  {
+    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfAvailable);
+  }
+  else
+  {
+    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfUnavailable);
+  }
+}
+
 void UIconComponent::Initialize()
 {
-  SpriteOfIcon->SetRelativeScale3D(FVector(
-    IconProperties.Scale, IconProperties.Scale, IconProperties.Scale));
+  if (!IsTemplate())
+  {
+    SpriteOfIcon->SetRelativeScale3D(FVector(
+      IconProperties.Scale, IconProperties.Scale, IconProperties.Scale));
 
-  SetAvailability(false);
-  Show();
+    SetAvailability(true);
+    Show();
+  }
 }
 
 void UIconComponent::Show()
@@ -50,19 +66,6 @@ void UIconComponent::Hide()
 {
   bIsShown = false;
   SpriteOfIcon->SetVisibility(false, true);
-}
-
-void UIconComponent::SetAvailability(bool bNewAvailability)
-{
-  bIsAvailable = bNewAvailability;
-  if (bIsAvailable)
-  {
-    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfAvailable);
-  }
-  else
-  {
-    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfUnavailable);
-  }
 }
 
 bool UIconComponent::IsAvailable() const

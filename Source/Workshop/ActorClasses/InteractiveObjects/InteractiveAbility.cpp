@@ -55,7 +55,7 @@ void AInteractiveAbility::ShowInfluences() const
 
 AInteractiveAbility::AInteractiveAbility()
 {
-  InteractiveType = EInteractiveType::Ability;
+  InteractiveType = static_cast<int32>(EInteractiveType::Ability);
 }
 
 AInteractiveAbility::AInteractiveAbility(
@@ -103,17 +103,28 @@ void AInteractiveAbility::PickedAsCentral()
   Super::PickedAsCentral();
 
   MainManager->FindObjectsByCTs(CTsToAffect, 1);
+  TArray<AInteractiveObject*>& FoundObjects = MainManager->FoundObjects;
+  AInteractiveObject* SelfPointer = Cast<AInteractiveObject>(this);
 
-  for (size_t ObjectIndex = 0; ObjectIndex < MainManager->FoundObjects.Num(); ObjectIndex++)
+  int32 AtLeastOneMask = TargetTypeMask & 7;
+  int32 NecessaryMask = TargetTypeMask & ~7;
+
+  for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num(); ObjectIndex++)
   {
-    AInteractiveObject* FoundObject = MainManager->FoundObjects[ObjectIndex];
+    AInteractiveObject* FoundObject = FoundObjects[ObjectIndex];
+    int32 AtLeastOneMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & InteractiveTypeSeparator;
+    int32 NecessaryMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & ~InteractiveTypeSeparator;
 
-    if ((FoundObject->GetInteractiveType() & TargetTypeMask) != TargetTypeMask)
+    if ((AtLeastOneMaskTarget & AtLeastOneMask) && ((NecessaryMaskTarget & NecessaryMask) == NecessaryMask) && SelfPointer != FoundObject)
     {
-      MainManager->FoundObjects.Swap(ObjectIndex, FoundObjects.Num() - 1);
-      MainManager->FoundObjects.Pop();
+      continue;
     }
+
+    FoundObjects.Swap(ObjectIndex, FoundObjects.Num() - 1);
+    FoundObjects.Pop();
   }
+
+  UE_LOG(LogTemp, Warning, TEXT("%d targets found"), FoundObjects.Num());
 
 #if WITH_EDITOR
   // Show what objects were found
@@ -147,4 +158,50 @@ void AInteractiveAbility::UnpickedAsTarget()
 int32 AInteractiveAbility::GetTargetTypeMask() const
 {
   return TargetTypeMask;
+}
+
+void AInteractiveAbility::SetTurn(ETurnPhase TurnPhase)
+{
+  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
+  {
+    UEffectData* ChosenEffect = AccumulatedEffects[EffectIndex];
+
+    if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
+    {
+      continue;
+    }
+
+    ChosenEffect->ResolveOn(this);
+    ChosenEffect->DecreaseDuration();
+
+    // Remove effect if it is no longer present
+    if (!ChosenEffect->Duration)
+    {
+      RemoveEffectByIndex(EffectIndex);
+    }
+  }
+
+  for (size_t EffectIndex = UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
+  {
+    UEffectData* ChosenEffect = UsedEffects[EffectIndex];
+
+    if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
+    {
+      continue;
+    }
+
+    if (!ChosenEffect->bIsBonusEffect)
+    {
+      break;
+    }
+
+    ChosenEffect->DecreaseDuration();
+
+    // Remove effect if it is no longer present
+    if (!ChosenEffect->Duration)
+    {
+      UsedEffects.Swap(EffectIndex, UsedEffects.Num() - 1);
+      UsedEffects.Pop();
+    }
+  }
 }

@@ -5,7 +5,7 @@
 
 AInteractiveCharacter::AInteractiveCharacter()
 {
-  InteractiveType = EInteractiveType::Character;
+  InteractiveType = static_cast<int32>(EInteractiveType::Character);
 
   CharacterPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
   CharacterPresentation->SetupAttachment(RootComponent);

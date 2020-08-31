@@ -34,7 +34,7 @@ protected:
 
   // Target on which this affect is applicable.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings", meta = (Bitmask, BitmaskEnum = "EInteractiveType"))
-  int32 TargetTypeMask = EInteractiveType::Character;
+  int32 TargetTypeMask = static_cast<int32>(EInteractiveType::Character);
 
   // Number of objects which can be chosen.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings", meta = (ClampMin = "1"))
@@ -82,7 +82,15 @@ public:
   void CustomEffect(AInteractiveObject* TargetObject);
   virtual void CustomEffect_Implementation(AInteractiveObject* TargetObject);
 
+  // Uses CustomEffect on every Influenced Object
+  UFUNCTION(BlueprintCallable)
   void ResolveAbility();
+
+  // ------------------ //
+  // Turn-based actions //
+  // ------------------ //
+
+  virtual void SetTurn(ETurnPhase TurnPhase) override;
 
   // --------------------- //
   // Ability's information //
@@ -100,8 +108,3 @@ public:
 
   friend class UBuildAbility; // for optimisation purposes
 };
-
-// TURN-BASED
-//++++ add decrease duration for BonusEffects in used effects
-//++++ add effect affect like for character (may be move to inter object)
-//++++ change affect mask to int

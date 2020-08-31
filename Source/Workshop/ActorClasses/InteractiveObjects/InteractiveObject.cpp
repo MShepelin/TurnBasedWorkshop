@@ -148,7 +148,7 @@ void AInteractiveObject::SetTurn(ETurnPhase TurnPhase)
 
 }
 
-void AInteractiveObject::RemoveEffectByIndex(int32 EffectIndex)
+void AInteractiveObject::RemoveEffectByIndex(int32 EffectIndex) //???? add inline?
 {
   AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
   AccumulatedEffects.Pop();
@@ -249,5 +249,30 @@ bool AInteractiveObject::IsCentral()
 
 void AInteractiveObject::Pick()
 {
+  if (!MainManager->HasCentralObject())
+  {
+    PickedAsCentral();
+    return;
+  }
 
+  if (IsCentral())
+  {
+    UnpickedAsCentral();
+    return;
+  }
+
+  if (!InteractivityIcon->IsShown())
+  {
+    return;
+  }
+
+  if (InteractivityIcon->IsAvailable())
+  {
+    PickedAsTarget();
+    return;
+  }
+  else
+  {
+    UnpickedAsTarget();
+  }
 }
