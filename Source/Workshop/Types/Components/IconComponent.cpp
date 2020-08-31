@@ -33,22 +33,22 @@ void UIconComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 void UIconComponent::Initialize()
 {
-  bIsAvailable = false;
-
-  SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfAvailable);
   SpriteOfIcon->SetRelativeScale3D(FVector(
     IconProperties.Scale, IconProperties.Scale, IconProperties.Scale));
 
+  SetAvailability(false);
   Show();
 }
 
 void UIconComponent::Show()
 {
+  bIsShown = true;
   SpriteOfIcon->SetVisibility(true, true);
 }
 
 void UIconComponent::Hide()
 {
+  bIsShown = false;
   SpriteOfIcon->SetVisibility(false, true);
 }
 
@@ -65,7 +65,12 @@ void UIconComponent::SetAvailability(bool bNewAvailability)
   }
 }
 
-bool UIconComponent::IsAvailable()
+bool UIconComponent::IsAvailable() const
 {
   return bIsAvailable;
+}
+
+bool UIconComponent::IsShown() const
+{
+  return bIsShown;
 }

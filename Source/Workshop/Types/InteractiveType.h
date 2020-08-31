@@ -6,8 +6,8 @@
 #include "InteractiveType.generated.h"
 
 
-UENUM(BlueprintType, meta = (Bitflags))
-enum class EInteractiveType : uint8
+UENUM(meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
+enum class EInteractiveType : int32
 {
   Nothing   = 0,
   Ability   = 1,

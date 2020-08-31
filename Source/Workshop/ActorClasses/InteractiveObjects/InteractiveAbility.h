@@ -34,7 +34,7 @@ protected:
 
   // Target on which this affect is applicable.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings", meta = (Bitmask, BitmaskEnum = "EInteractiveType"))
-  EInteractiveType TargetTypeMask = EInteractiveType::Character;
+  int32 TargetTypeMask = EInteractiveType::Character;
 
   // Number of objects which can be chosen.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings", meta = (ClampMin = "1"))
@@ -88,7 +88,7 @@ public:
   // Ability's information //
   // --------------------- //
 
-  EInteractiveType GetTargetTypeMask() const;
+  int32 GetTargetTypeMask() const;
 
   // ------ //
   // Others //

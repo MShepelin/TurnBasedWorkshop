@@ -102,36 +102,36 @@ void AInteractiveAbility::PickedAsCentral()
 {
   Super::PickedAsCentral();
 
-  TArray<AInteractiveObject*> FoundObjects = MainManager->FindObjectsByCTs(CTsToAffect, 1);
+  MainManager->FindObjectsByCTs(CTsToAffect, 1);
 
-  for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num(); ObjectIndex++)
+  for (size_t ObjectIndex = 0; ObjectIndex < MainManager->FoundObjects.Num(); ObjectIndex++)
   {
-    AInteractiveObject* FoundObject = FoundObjects[ObjectIndex];
+    AInteractiveObject* FoundObject = MainManager->FoundObjects[ObjectIndex];
 
-    if ((FoundObject->GetInteractiveType() & TargetTypeMask) == EInteractiveType::Nothing)
+    if ((FoundObject->GetInteractiveType() & TargetTypeMask) != TargetTypeMask)
     {
-      FoundObjects.Swap(ObjectIndex, FoundObjects.Num() - 1);
-      FoundObjects.Pop();
+      MainManager->FoundObjects.Swap(ObjectIndex, FoundObjects.Num() - 1);
+      MainManager->FoundObjects.Pop();
     }
   }
 
 #if WITH_EDITOR
   // Show what objects were found
-  for (AInteractiveObject* FoundObject : FoundObjects)
+  for (AInteractiveObject* FoundObject : MainManager->FoundObjects)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), FoundObject->GetActorLocation(),
       DebugColor, false, DebugTime);
   }
 #endif
 
-  ShowIconsDependingOnInfluence(FoundObjects);
+  ShowIconsDependingOnInfluence();
 }
 
 void AInteractiveAbility::UnpickedAsCentral()
 {
   Super::UnpickedAsCentral();
 
-  HideIconsOfDependent();
+  HideDisplayedIcons();
 }
 
 void AInteractiveAbility::PickedAsTarget()
@@ -144,7 +144,7 @@ void AInteractiveAbility::UnpickedAsTarget()
   Super::UnpickedAsTarget();
 }
 
-EInteractiveType AInteractiveAbility::GetTargetTypeMask() const
+int32 AInteractiveAbility::GetTargetTypeMask() const
 {
   return TargetTypeMask;
 }

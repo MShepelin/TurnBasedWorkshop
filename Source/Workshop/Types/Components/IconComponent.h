@@ -15,6 +15,7 @@ class WORKSHOP_API UIconComponent : public USceneComponent
 
 protected:
   bool bIsAvailable;
+  bool bIsShown;
 
   UPaperFlipbookComponent* SpriteOfIcon;
 
@@ -42,6 +43,9 @@ public:
 
   UFUNCTION(BlueprintCallable)
   void Hide();
+
+  UFUNCTION(BlueprintCallable)
+  bool IsShown() const;
   
   UFUNCTION(BlueprintCallable)
   void SetAvailability(bool bNewAvailability);

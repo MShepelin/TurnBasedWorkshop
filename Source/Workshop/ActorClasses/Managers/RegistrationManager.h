@@ -11,6 +11,7 @@
 #include "RegistrationManager.generated.h"
 
 class AInteractiveObject;
+class AInteractiveAbility;
 
 // Manager connects Interactive objects, provides search by CTs, serves as setup for gameplay events.
 UCLASS()
@@ -27,11 +28,8 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings", meta = (ClampMin = "1"));
   TMap<int32, FString> CTsToNameMap;
 
-  TArray<int32> NecessaryCTs = 
-  { 
-    PlayerControlledCharacterCT, 
-    CharacterOutOfControlCT,
-  };
+  // Used to save what Interactive objects are displayed after one of them was picked.
+  UPROPERTY() TArray<AInteractiveObject*> FoundObjects;
 
   // Here are all stats available in this manager.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
@@ -69,7 +67,7 @@ public:
   //---------- //
 
   UFUNCTION(BlueprintCallable)
-  TArray<AInteractiveObject*> FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs) const;
+  void FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs);
 
   // ----------------------------- //
   // Access to Manager information //
@@ -88,4 +86,5 @@ public:
   bool HasCentralObject() const;
 
   friend class AInteractiveObject;
+  friend class AInteractiveAbility;
 };

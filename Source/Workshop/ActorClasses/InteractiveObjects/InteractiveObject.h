@@ -26,7 +26,7 @@ class WORKSHOP_API AInteractiveObject : public AActor
 	GENERATED_BODY()
 
 protected:
-  EInteractiveType InteractiveType = EInteractiveType::Nothing;
+  UPROPERTY() int32 InteractiveType = static_cast<int32>(EInteractiveType::Nothing);
 
   TSet<AInteractiveObject*> DependenciesArray;
   TSet<AInteractiveObject*> InfluencesArray;
@@ -40,9 +40,11 @@ protected:
   UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
   UIconComponent* InteractivityIcon;
 
-  void ShowIconsDependingOnInfluence(TArray<AInteractiveObject*>& Objects);
+  // If object in array is influenced by this object it will be shown unavailable.
+  // Otherwise it will be shown available.
+  void ShowIconsDependingOnInfluence();
 
-  void HideIconsOfDependent();
+  void HideDisplayedIcons();
 
   // ------------------ //
   // Object Statisctics //
@@ -128,6 +130,9 @@ public:
   UFUNCTION(BlueprintCallable)
   virtual void UnpickedAsTarget();
 
+  UFUNCTION(BlueprintCallable)
+  void Pick();
+
   // --------------------------- //
   // Influences and dependencies //
   // --------------------------- //
@@ -159,7 +164,7 @@ public:
   // --------------- //
 
   UFUNCTION(BlueprintCallable)
-  EInteractiveType GetInteractiveType() const;
+  int32 GetInteractiveType() const;
 
   UFUNCTION(BlueprintCallable)
   FName GetInteractiveObjectName() const;
@@ -196,4 +201,3 @@ public:
   friend class UAdvantageEffectData;
   friend class UChangeStatEffectData;
 };
-

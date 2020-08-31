@@ -133,7 +133,7 @@ void AInteractiveObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
   }
 }
 
-EInteractiveType AInteractiveObject::GetInteractiveType() const
+int32 AInteractiveObject::GetInteractiveType() const
 {
   return InteractiveType;
 }
@@ -202,9 +202,9 @@ void AInteractiveObject::UnpickedAsTarget()
   InteractivityIcon->SetAvailability(true);
 }
 
-void AInteractiveObject::ShowIconsDependingOnInfluence(TArray<AInteractiveObject*>& Objects)
+void AInteractiveObject::ShowIconsDependingOnInfluence()
 {
-  for (AInteractiveObject* Object : Objects)
+  for (AInteractiveObject* Object : MainManager->FoundObjects)
   {
     Object->InteractivityIcon->Show();
 
@@ -219,11 +219,11 @@ void AInteractiveObject::ShowIconsDependingOnInfluence(TArray<AInteractiveObject
   }
 }
 
-void AInteractiveObject::HideIconsOfDependent()
+void AInteractiveObject::HideDisplayedIcons()
 {
-  for (AInteractiveObject* DependingObject : InfluencesArray)
+  for (AInteractiveObject* DisplayedObject : MainManager->FoundObjects)
   {
-    DependingObject->InteractivityIcon->Hide();
+    DisplayedObject->InteractivityIcon->Hide();
   }
 }
 
@@ -245,4 +245,9 @@ bool AInteractiveObject::IsCentral()
 {
   check(MainManager);
   return MainManager->CentralObject == this;
+}
+
+void AInteractiveObject::Pick()
+{
+
 }

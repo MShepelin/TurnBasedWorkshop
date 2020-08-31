@@ -29,14 +29,6 @@ void ARegistrationManager::PostInitProperties()
     CTsSystem.AddCT(CT.Key);
   }
 
-  for (int32 CT : NecessaryCTs)
-  {
-    CTsSystem.AddCT(CT);
-  }
-
-  NecessaryCTs.Empty();
-  
-
   //Check if all must-have properties are present
   for (int32 NecessaryStat : {ObjectNameStatID})
   {
@@ -47,11 +39,9 @@ void ARegistrationManager::PostInitProperties()
   }
 }
 
-TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs) const
+void ARegistrationManager::FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs)
 {
-  TArray<AInteractiveObject*> FoundObjects = CTsSystem.FindByCTs(CTsArray, EnoughNumberOfCTs);
-
-  return FoundObjects;
+  FoundObjects = CTsSystem.FindByCTs(CTsArray, EnoughNumberOfCTs);
 }
 
 TArray<AInteractiveObject*> ARegistrationManager::GetAllConnectedObjects() const
