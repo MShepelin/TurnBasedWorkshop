@@ -58,9 +58,9 @@ AInteractiveAbility::AInteractiveAbility()
   InteractiveType = static_cast<int32>(EInteractiveType::Ability);
 
   AbilityPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("AbilitySprite"));
-  RootComponent = AbilityPresentation;
+  AbilityPresentation->SetupAttachment(RootComponent);
 
-  AbilityPresentation->SetFlipbook(IconScene);
+  AbilityPresentation->SetRelativeLocation(FVector(0, -1, 0)); // y-order
 }
 
 AInteractiveAbility::AInteractiveAbility(
@@ -93,6 +93,11 @@ void AInteractiveAbility::ResolveAbility()
 void AInteractiveAbility::PostInitProperties()
 {
   Super::PostInitProperties();
+
+  if (IconScene)
+  {
+    AbilityPresentation->SetFlipbook(IconScene);
+  }
 }
 
 void AInteractiveAbility::EndPlay(const EEndPlayReason::Type EndPlayReason)

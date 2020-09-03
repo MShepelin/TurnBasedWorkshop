@@ -30,7 +30,8 @@ protected:
 
   //???? add state machine support functions
 
-  UPROPERTY() UPaperFlipbookComponent* CharacterPresentation;
+  UPROPERTY(VisibleDefaultsOnly) 
+  UPaperFlipbookComponent* CharacterPresentation;
 
   // Abilities which Interactive character can use.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")

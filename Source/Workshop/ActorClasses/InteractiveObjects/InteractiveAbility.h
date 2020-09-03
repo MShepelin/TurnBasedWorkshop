@@ -51,7 +51,8 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconOnScene"))
   UPaperFlipbook* IconScene;
 
-  UPROPERTY() UPaperFlipbookComponent* AbilityPresentation;
+  UPROPERTY(VisibleDefaultsOnly) 
+  UPaperFlipbookComponent* AbilityPresentation;
 
 public:
   AInteractiveAbility();

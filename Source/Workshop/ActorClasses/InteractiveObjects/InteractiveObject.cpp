@@ -9,11 +9,10 @@ AInteractiveObject::AInteractiveObject()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-  RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("MainScene"));
-  RootComponent = RootScene;
+  RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("MainScene"));;
 
   InteractivityIcon = CreateDefaultSubobject<UIconComponent>(TEXT("TouchIcon"));
-  InteractivityIcon->SetupAttachment(RootScene);
+  InteractivityIcon->SetupAttachment(RootComponent);
 }
 
 void AInteractiveObject::OnConstruction(const FTransform & Transform)

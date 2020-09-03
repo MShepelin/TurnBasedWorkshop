@@ -35,8 +35,6 @@ protected:
   // Visualisation //
   // ------------- //
 
-  UPROPERTY() USceneComponent* RootScene;
-
   UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
   UIconComponent* InteractivityIcon;
 
