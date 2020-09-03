@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "InteractiveAbility.h"
-
+#include "Workshop/Builders/BuildAbility.h"
 
 FString AInteractiveAbility::GatherInformation() const
 {
@@ -56,21 +56,28 @@ void AInteractiveAbility::ShowInfluences() const
 AInteractiveAbility::AInteractiveAbility()
 {
   InteractiveType = static_cast<int32>(EInteractiveType::Ability);
+
+  AbilityPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("AbilitySprite"));
+  RootComponent = AbilityPresentation;
+
+  AbilityPresentation->SetFlipbook(IconScene);
 }
 
 AInteractiveAbility::AInteractiveAbility(
   AInteractiveCharacter* Owner) : CharacterOwner(Owner)
 {
-
+  AInteractiveAbility::AInteractiveAbility();
 }
 
 void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* TargetObject)
 {
-  UE_LOG(LogTemp, Warning, TEXT("Ability has no implementation, change CustomEffect to add it"));
+  UBuildAbility::AddAllEffectsToObject(TargetObject, this);
 }
 
 void AInteractiveAbility::ResolveAbility()
 {
+  check(CharacterOwner != nullptr)
+
   CharacterOwner->PlayAnimation(AbilityAnimationId);
   
   //++++ apply movememt

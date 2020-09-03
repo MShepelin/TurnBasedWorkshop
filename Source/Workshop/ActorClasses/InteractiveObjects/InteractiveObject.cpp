@@ -263,6 +263,7 @@ void AInteractiveObject::Pick()
 
   if (!InteractivityIcon->IsShown())
   {
+    PickedAsCentral();
     return;
   }
 

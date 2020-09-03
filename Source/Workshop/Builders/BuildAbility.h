@@ -25,5 +25,5 @@ public:
 
   // Adds all effects of ability without 
   UFUNCTION(BlueprintCallable)
-  AInteractiveObject* AddAllEffectsToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability);
+  static AInteractiveObject* AddAllEffectsToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability);
 };

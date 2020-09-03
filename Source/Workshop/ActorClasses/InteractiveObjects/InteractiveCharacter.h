@@ -11,6 +11,8 @@
 
 
 class AInteractiveAbility;
+class UAbilitiesWidget;
+class UInformationWidget;
 
 
 // Interactive characters have visual represenation, abilities, types, 
@@ -28,11 +30,13 @@ protected:
 
   //???? add state machine support functions
 
-  UPaperFlipbookComponent* CharacterPresentation;
+  UPROPERTY() UPaperFlipbookComponent* CharacterPresentation;
 
   // Abilities which Interactive character can use.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
-  TArray<TSubclassOf<AInteractiveAbility>> Abilities;
+  TArray<TSubclassOf<AInteractiveAbility>> AbilitiesClasses;
+
+  UPROPERTY() TArray<AInteractiveAbility*> Abilities;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings", meta = (Bitmask, BitmaskEnum = "EEffectSpecifiers"))
   int32 ProtectionFrom = 0;
@@ -45,6 +49,8 @@ public:
   // ------------------------ //
 
   virtual void PostInitProperties() override;
+
+  virtual void BeginPlay() override;
 
   // ---------- //
   // Animations //
@@ -72,6 +78,12 @@ public:
   // --------------------- //
 
   int32 GetProtectionFromMask() const;
+
+  // ----------------- //
+  // UI with abilities //
+  // ----------------- //
+
+
 
   // ------ //
   // Others //

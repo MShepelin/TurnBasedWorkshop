@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "InteractiveCharacter.h"
+#include "Workshop/UI/TurnBasedEvent/InformationWidget.h"
+#include "Workshop/UI/TurnBasedEvent/AbilitiesWidget.h"
+#include "InteractiveAbility.h"
 
 
 AInteractiveCharacter::AInteractiveCharacter()
@@ -113,4 +116,14 @@ void AInteractiveCharacter::PickedAsCentral()
 void AInteractiveCharacter::UnpickedAsCentral()
 {
   Super::UnpickedAsCentral();
+}
+
+void AInteractiveCharacter::BeginPlay()
+{
+  Super::BeginPlay();
+  
+  for (TSubclassOf<AInteractiveAbility> AbilityClass : AbilitiesClasses)
+  {
+    Abilities.Add(NewObject<AInteractiveAbility>(this, AbilityClass));
+  }
 }

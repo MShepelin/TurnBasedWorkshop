@@ -26,6 +26,10 @@ const int32 LengthOfInteractiveTypeName = 18;
 const int32 LengthOfAdvantageTypeName = 16;
 const int32 InteractiveTypeSeparator = 7;
 
+// 4. UI
+const float MaxIconSize = 512.0;
+const float MinIconSize = 256.0;
+
 // Some used difinitions:
 // Interactive with capital I is a name of class and not this word itself
 // CT - custom tag (CTs - custom tags), always int32
