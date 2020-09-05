@@ -3,10 +3,17 @@
 #include "AbilitySlot.h"
 #include "Blueprint/WidgetTree.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
+#include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
 
-FVector2D UAbilitySlot::GetIconCenterPosition() const
+void UAbilitySlot::AbilityClicked()
 {
-  return FVector2D();
+  if (!ChosenAbility)
+  {
+    return;
+  }
+
+  ChosenAbility->Pick();
+  ChosenAbility->CenterInOwner();
 }
 
 void UAbilitySlot::SetMaxSize(float IconMaxSize, float IconMinSize)
@@ -17,23 +24,41 @@ void UAbilitySlot::SetMaxSize(float IconMaxSize, float IconMinSize)
   IconSizeBox->MaxDesiredHeight = IconMaxSize;
 }
 
+void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility)
+{
+  ChosenAbility = NewAbility;
+}
+
 void UAbilitySlot::NativeConstruct()
 {
-  Super::NativeConstruct();
-  
   UPanelWidget* RootWidget = Cast<UPanelWidget>(GetRootWidget());
 
-  UScaleBox* ScaleBox = WidgetTree->ConstructWidget<UScaleBox>(UScaleBox::StaticClass(), TEXT("ScaleBox"));
-  ScaleBox->StretchDirection = EStretchDirection::Type::DownOnly;
-  RootWidget->AddChild(ScaleBox);
+  if (!RootWidget)
+  {
+    return;
+  }
 
-  IconSizeBox = WidgetTree->ConstructWidget<USizeBox>(USizeBox::StaticClass(), TEXT("SizeBox"));
-  IconSizeBox->MinDesiredWidth = MinIconSize;
-  IconSizeBox->MinDesiredHeight = MinIconSize;
-  IconSizeBox->MaxDesiredWidth = MaxIconSize;
-  IconSizeBox->MaxDesiredHeight = MaxIconSize;
-  ScaleBox->AddChild(IconSizeBox);
+  //ScaleBox = WidgetTree->ConstructWidget<UScaleBox>(UScaleBox::StaticClass(), TEXT("ScaleBox"));
+  //ScaleBox->StretchDirection = EStretchDirection::Type::DownOnly;
+  //RootWidget->AddChild(ScaleBox);
+  
+  //IconSizeBox = WidgetTree->ConstructWidget<USizeBox>(USizeBox::StaticClass(), TEXT("SizeBox"));
+  //IconSizeBox->MinDesiredWidth = MinIconSize;
+  //IconSizeBox->MinDesiredHeight = MinIconSize;
+  //IconSizeBox->MaxDesiredWidth = MaxIconSize;
+  //IconSizeBox->MaxDesiredHeight = MaxIconSize;
+  //ScaleBox->AddChild(IconSizeBox);
 
-  AbilityIcon = WidgetTree->ConstructWidget<UImage>(UImage::StaticClass(), TEXT("AbilityIcon"));
-  IconSizeBox->AddChild(AbilityIcon);
+  //AbilityButton = WidgetTree->ConstructWidget<UButton>(UButton::StaticClass(), TEXT("AbilityButton"));
+ // AbilityButton->ColorAndOpacity = FLinearColor(0, 0, 0, 0);
+  if (AbilityButton)
+  {
+    AbilityButton->OnClicked.AddDynamic(this, &UAbilitySlot::AbilityClicked);
+  }
+  //IconSizeBox->AddChild(AbilityButton);
+ 
+  //AbilityIcon = WidgetTree->ConstructWidget<UImage>(UImage::StaticClass(), TEXT("AbilityIcon"));
+  //AbilityButton->AddChild(AbilityIcon);
+
+  Super::NativeConstruct();
 }

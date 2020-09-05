@@ -217,3 +217,8 @@ void AInteractiveAbility::SetTurn(ETurnPhase TurnPhase)
     }
   }
 }
+
+void AInteractiveAbility::CenterInOwner()
+{
+  CharacterOwner->SetCentralAbility(this);
+}

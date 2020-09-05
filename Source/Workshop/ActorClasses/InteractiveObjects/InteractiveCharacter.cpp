@@ -3,8 +3,8 @@
 #include "InteractiveCharacter.h"
 #include "Workshop/UI/TurnBasedEvent/InformationWidget.h"
 #include "Workshop/UI/TurnBasedEvent/AbilitiesWidget.h"
+#include "Workshop/UI/AbilitySlot.h"
 #include "InteractiveAbility.h"
-
 
 AInteractiveCharacter::AInteractiveCharacter()
 {
@@ -12,6 +12,9 @@ AInteractiveCharacter::AInteractiveCharacter()
 
   CharacterPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
   CharacterPresentation->SetupAttachment(RootComponent);
+
+  CentralAbilityWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("CentralAbility"));
+  CentralAbilityWidgetComponent->SetupAttachment(RootComponent);
 
   //???? set first default animation?
 
@@ -80,6 +83,8 @@ void AInteractiveCharacter::PostInitProperties()
 {
   Super::PostInitProperties();
 
+  CentralAbilityWidgetComponent->SetWidgetClass(AbilityWidgetClass);
+
 #if WITH_EDITOR
   bool bPlayerControlledCTFound = false;
   bool bOutOfControlCTFound = false;
@@ -126,4 +131,19 @@ void AInteractiveCharacter::BeginPlay()
   {
     Abilities.Add(NewObject<AInteractiveAbility>(this, AbilityClass));
   }
+}
+
+void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability) 
+{
+  CentralAbility = Ability;
+}
+
+void AInteractiveCharacter::HideCentralWidget()
+{
+  //CentralAbilityWidget->Hide()
+}
+
+void AInteractiveCharacter::ShowCentralWidget()
+{
+  //CentralAbilityWidget->Show()
 }

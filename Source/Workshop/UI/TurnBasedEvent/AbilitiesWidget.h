@@ -18,5 +18,5 @@ protected:
   TArray<UOverlay*> AbilitiesSpots;
 
   UPROPERTY()
-    UHorizontalBox* AbilitiesBox;
+  UHorizontalBox* AbilitiesBox;
 };

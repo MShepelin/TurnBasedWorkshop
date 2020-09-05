@@ -6,21 +6,31 @@
 #include "Components/ScaleBox.h"
 #include "Components/Image.h"
 #include "Components/PanelWidget.h"
+#include "Components/Button.h"
 #include "AbilitySlot.generated.h"
 
-UCLASS()
+
+class AInteractiveAbility;
+
+
+UCLASS(Abstract)
 class WORKSHOP_API UAbilitySlot : public UUserWidget
 {
   GENERATED_BODY()
 
 private:
-  UPROPERTY() UImage* AbilityIcon;
-  UPROPERTY() USizeBox* IconSizeBox;
+  UPROPERTY(meta = (BindWidget)) UImage* AbilityIcon;
+  UPROPERTY(meta = (BindWidget)) UScaleBox* IconScaleBox;
+  UPROPERTY(meta = (BindWidget)) USizeBox* IconSizeBox;
+  UPROPERTY(meta = (BindWidget)) UButton* AbilityButton;
+  UPROPERTY() AInteractiveAbility* ChosenAbility;
 
 public:
   void SetMaxSize(float IconMaxSize, float IconMinSize);
 
-  FVector2D GetIconCenterPosition() const;
+  void SetChosenAbility(AInteractiveAbility* NewAbility);
+
+  UFUNCTION() void AbilityClicked();
 
   virtual void NativeConstruct() override;
 };

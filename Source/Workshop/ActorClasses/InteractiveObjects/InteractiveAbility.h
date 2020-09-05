@@ -89,6 +89,8 @@ public:
   UFUNCTION(BlueprintCallable)
   void ResolveAbility();
 
+  void CenterInOwner();
+
   // ------------------ //
   // Turn-based actions //
   // ------------------ //

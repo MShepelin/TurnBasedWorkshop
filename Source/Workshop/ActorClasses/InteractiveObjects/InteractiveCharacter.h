@@ -6,6 +6,7 @@
 #include "PaperSpriteComponent.h"
 #include "PaperFlipbookComponent.h"
 #include "Workshop/Types/Effects/EffectData.h"
+#include "Components/WidgetComponent.h"
 #include "InteractiveObject.h"
 #include "InteractiveCharacter.generated.h"
 
@@ -13,6 +14,7 @@
 class AInteractiveAbility;
 class UAbilitiesWidget;
 class UInformationWidget;
+class UAbilitySlot;
 
 
 // Interactive characters have visual represenation, abilities, types, 
@@ -38,6 +40,9 @@ protected:
   TArray<TSubclassOf<AInteractiveAbility>> AbilitiesClasses;
 
   UPROPERTY() TArray<AInteractiveAbility*> Abilities;
+  UPROPERTY() AInteractiveAbility* CentralAbility;
+  UPROPERTY() TSubclassOf<UAbilitySlot> AbilityWidgetClass;
+  UPROPERTY() UWidgetComponent* CentralAbilityWidgetComponent; //edit WidgetClass only
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings", meta = (Bitmask, BitmaskEnum = "EEffectSpecifiers"))
   int32 ProtectionFrom = 0;
@@ -84,7 +89,13 @@ public:
   // UI with abilities //
   // ----------------- //
 
+  void SetCentralAbility(AInteractiveAbility* Ability);
 
+  UFUNCTION(BlueprintCallable)
+  void HideCentralWidget();
+
+  UFUNCTION(BlueprintCallable)
+  void ShowCentralWidget();
 
   // ------ //
   // Others //
