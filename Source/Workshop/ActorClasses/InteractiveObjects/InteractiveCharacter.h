@@ -8,6 +8,7 @@
 #include "Workshop/Types/Effects/EffectData.h"
 #include "Components/WidgetComponent.h"
 #include "InteractiveObject.h"
+#include "Components/BoxComponent.h"
 #include "InteractiveCharacter.generated.h"
 
 
@@ -26,26 +27,42 @@ class WORKSHOP_API AInteractiveCharacter : public AInteractiveObject
 	GENERATED_BODY()
 
 protected:
-  // Map of animations with their integer identifiers.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-  TMap<int32, UPaperFlipbook*> AnimationsMap;
-
-  //???? add state machine support functions
-
-  UPROPERTY(VisibleDefaultsOnly) 
-  UPaperFlipbookComponent* CharacterPresentation;
+  // --------- //
+  // Abilities //
+  // --------- //
 
   // Abilities which Interactive character can use.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
   TArray<TSubclassOf<AInteractiveAbility>> AbilitiesClasses;
-
   UPROPERTY() TArray<AInteractiveAbility*> Abilities;
-  UPROPERTY() AInteractiveAbility* CentralAbility;
-  UPROPERTY() TSubclassOf<UAbilitySlot> AbilityWidgetClass;
-  UPROPERTY() UWidgetComponent* CentralAbilityWidgetComponent; //edit WidgetClass only
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings", meta = (Bitmask, BitmaskEnum = "EEffectSpecifiers"))
   int32 ProtectionFrom = 0;
+
+  // ------- //
+  // Visuals //
+  // ------- //
+
+  // Map of animations with their integer identifiers.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
+  TMap<int32, UPaperFlipbook*> AnimationsMap;
+
+  //???? add state machine support functions
+
+  UPROPERTY(VisibleDefaultsOnly)
+  UPaperFlipbookComponent* CharacterPresentation;
+
+  UPROPERTY() AInteractiveAbility* CentralAbility;
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings") 
+  UWidgetComponent* CentralAbilityWidgetComponent;
+
+  // Changes made in CentralAbilityWidgetComponent's Widget Class will not be applied
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
+  TSubclassOf<UAbilitySlot> CentralAbilityWidgetClass;
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
+  UBoxComponent* CollisionBox;
 
 public:
   AInteractiveCharacter();
@@ -57,6 +74,10 @@ public:
   virtual void PostInitProperties() override;
 
   virtual void BeginPlay() override;
+
+  virtual void OnConstruction(const FTransform & Transform) override;
+
+  virtual void PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent);
 
   // ---------- //
   // Animations //

@@ -25,6 +25,7 @@ const FName DebugString("Hello, world!");
 const int32 LengthOfInteractiveTypeName = 18;
 const int32 LengthOfAdvantageTypeName = 16;
 const int32 InteractiveTypeSeparator = 7;
+const float CollisionBoxWidth = 4;
 
 // 4. UI
 const float MaxIconSize = 512.0;

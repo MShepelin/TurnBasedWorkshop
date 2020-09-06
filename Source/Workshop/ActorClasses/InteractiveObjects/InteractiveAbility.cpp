@@ -118,8 +118,8 @@ void AInteractiveAbility::PickedAsCentral()
   TArray<AInteractiveObject*>& FoundObjects = MainManager->FoundObjects;
   AInteractiveObject* SelfPointer = Cast<AInteractiveObject>(this);
 
-  int32 AtLeastOneMask = TargetTypeMask & 7;
-  int32 NecessaryMask = TargetTypeMask & ~7;
+  int32 AtLeastOneMask = TargetTypeMask & InteractiveTypeSeparator;
+  int32 NecessaryMask = TargetTypeMask & ~InteractiveTypeSeparator;
 
   for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num(); ObjectIndex++)
   {

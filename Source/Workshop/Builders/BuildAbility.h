@@ -23,7 +23,7 @@ public:
   // General manipulations //
   // --------------------- //
 
-  // Adds all effects of ability without 
+  // Adds all effects of ability without checking if ability is applicable.
   UFUNCTION(BlueprintCallable)
   static AInteractiveObject* AddAllEffectsToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability);
 };

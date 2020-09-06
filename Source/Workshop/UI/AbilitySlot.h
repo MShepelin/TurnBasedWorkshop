@@ -13,7 +13,7 @@
 class AInteractiveAbility;
 
 
-UCLASS(Abstract)
+UCLASS() //Abstract)
 class WORKSHOP_API UAbilitySlot : public UUserWidget
 {
   GENERATED_BODY()

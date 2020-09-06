@@ -19,7 +19,7 @@ class UAdvantageEffectData;
 
 
 // Interactive object are paired with Managers to support turn-based actions 
-// and exchange information between other Interactive objects
+// and exchange information between other Interactive objects.
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveObject : public AActor
 {

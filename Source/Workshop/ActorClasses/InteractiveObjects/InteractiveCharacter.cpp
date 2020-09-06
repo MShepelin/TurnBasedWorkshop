@@ -12,9 +12,17 @@ AInteractiveCharacter::AInteractiveCharacter()
 
   CharacterPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
   CharacterPresentation->SetupAttachment(RootComponent);
+  CharacterPresentation->SetRelativeLocation(FVector(0, -1, 0)); // y-order
+
+  CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
+  CollisionBox->SetupAttachment(RootComponent);
 
   CentralAbilityWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("CentralAbility"));
-  CentralAbilityWidgetComponent->SetupAttachment(RootComponent);
+  CentralAbilityWidgetComponent->SetupAttachment(CollisionBox);
+
+  // Arrange components
+  FVector UnscaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
+  CentralAbilityWidgetComponent->SetRelativeLocation(FVector(0, 0, UnscaledBoxExtent[0]));
 
   //???? set first default animation?
 
@@ -83,8 +91,6 @@ void AInteractiveCharacter::PostInitProperties()
 {
   Super::PostInitProperties();
 
-  CentralAbilityWidgetComponent->SetWidgetClass(AbilityWidgetClass);
-
 #if WITH_EDITOR
   bool bPlayerControlledCTFound = false;
   bool bOutOfControlCTFound = false;
@@ -106,6 +112,29 @@ void AInteractiveCharacter::PostInitProperties()
     UE_LOG(LogTemp, Error, TEXT("Every character must be either controlled by player or not, which must be shown in CTs"));
   }
 #endif
+}
+
+void AInteractiveCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent)
+{
+  /*
+  FName PropertyName = (ChangeEvent.Property != nullptr) ? ChangeEvent.Property->GetFName() : NAME_None;
+  if (PropertyName == GET_MEMBER_NAME_CHECKED(AInteractiveCharacter, WidgetClass))
+  {
+    UE_LOG(LogTemp, Warning, TEXT("gotcha"));
+  }
+  */
+  Super::PostEditChangeProperty(ChangeEvent);
+}
+
+void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
+{
+  Super::OnConstruction(Transform);
+
+  CentralAbilityWidgetComponent->SetWidgetClass(CentralAbilityWidgetClass);
+  CentralAbilityWidgetComponent->SetRelativeRotation(FRotator(0, 90, 0));
+
+  FVector ScaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
+  CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], CollisionBoxWidth, ScaledBoxExtent[2]));
 }
 
 int32 AInteractiveCharacter::GetProtectionFromMask() const
