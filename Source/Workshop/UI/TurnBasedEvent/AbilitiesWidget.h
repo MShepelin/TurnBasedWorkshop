@@ -20,3 +20,7 @@ protected:
   UPROPERTY()
   UHorizontalBox* AbilitiesBox;
 };
+
+//++++ add function to set abilities of new character:
+// for each ability spot (add/remove some if needed) setchosenability
+//???? add hud to store this widget

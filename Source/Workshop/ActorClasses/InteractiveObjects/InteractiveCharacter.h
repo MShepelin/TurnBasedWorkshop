@@ -52,17 +52,17 @@ protected:
   UPROPERTY(VisibleDefaultsOnly)
   UPaperFlipbookComponent* CharacterPresentation;
 
-  UPROPERTY() AInteractiveAbility* CentralAbility;
+  UPROPERTY() AInteractiveAbility* CentralAbility = nullptr;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings") 
-  UWidgetComponent* CentralAbilityWidgetComponent;
-
-  // Changes made in CentralAbilityWidgetComponent's Widget Class will not be applied
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
-  TSubclassOf<UAbilitySlot> CentralAbilityWidgetClass;
-
+  // Used for receiving player's input and set object's world transform.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
   UBoxComponent* CollisionBox;
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
+  FVector CentralAbilityRelativePosition = FVector(0, 0, 0);
+
+  UPROPERTY()
+  UBillboardComponent* CentralAbilityPositionVisual;
 
 public:
   AInteractiveCharacter();
@@ -110,13 +110,10 @@ public:
   // UI with abilities //
   // ----------------- //
 
+  UFUNCTION(BlueprintCallable)
+  void SetCentralAbilityVisibility(bool bIsVisible);
+
   void SetCentralAbility(AInteractiveAbility* Ability);
-
-  UFUNCTION(BlueprintCallable)
-  void HideCentralWidget();
-
-  UFUNCTION(BlueprintCallable)
-  void ShowCentralWidget();
 
   // ------ //
   // Others //

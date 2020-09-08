@@ -88,3 +88,5 @@ public:
   friend class AInteractiveObject;
   friend class AInteractiveAbility;
 };
+
+//++++ get rid of friends and implement adequate functionality

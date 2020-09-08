@@ -3,6 +3,7 @@
 #include "InteractiveCharacter.h"
 #include "Workshop/UI/TurnBasedEvent/InformationWidget.h"
 #include "Workshop/UI/TurnBasedEvent/AbilitiesWidget.h"
+#include "Components/BillboardComponent.h"
 #include "Workshop/UI/AbilitySlot.h"
 #include "InteractiveAbility.h"
 
@@ -17,12 +18,13 @@ AInteractiveCharacter::AInteractiveCharacter()
   CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
   CollisionBox->SetupAttachment(RootComponent);
 
-  CentralAbilityWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("CentralAbility"));
-  CentralAbilityWidgetComponent->SetupAttachment(CollisionBox);
+  CentralAbilityPositionVisual = CreateDefaultSubobject<UBillboardComponent>(TEXT("CentralAbility"));
+  CentralAbilityPositionVisual->SetupAttachment(CollisionBox);
 
   // Arrange components
   FVector UnscaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
-  CentralAbilityWidgetComponent->SetRelativeLocation(FVector(0, 0, UnscaledBoxExtent[0]));
+  CentralAbilityRelativePosition = FVector(0, 0, UnscaledBoxExtent[0]);
+  CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
 
   //???? set first default animation?
 
@@ -116,13 +118,6 @@ void AInteractiveCharacter::PostInitProperties()
 
 void AInteractiveCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent)
 {
-  /*
-  FName PropertyName = (ChangeEvent.Property != nullptr) ? ChangeEvent.Property->GetFName() : NAME_None;
-  if (PropertyName == GET_MEMBER_NAME_CHECKED(AInteractiveCharacter, WidgetClass))
-  {
-    UE_LOG(LogTemp, Warning, TEXT("gotcha"));
-  }
-  */
   Super::PostEditChangeProperty(ChangeEvent);
 }
 
@@ -130,8 +125,7 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
 {
   Super::OnConstruction(Transform);
 
-  CentralAbilityWidgetComponent->SetWidgetClass(CentralAbilityWidgetClass);
-  CentralAbilityWidgetComponent->SetRelativeRotation(FRotator(0, 90, 0));
+  CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
 
   FVector ScaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
   CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], CollisionBoxWidth, ScaledBoxExtent[2]));
@@ -145,11 +139,15 @@ int32 AInteractiveCharacter::GetProtectionFromMask() const
 void AInteractiveCharacter::PickedAsCentral()
 {
   Super::PickedAsCentral();
+
+  //++++ add list of abilities to hud
 }
 
 void AInteractiveCharacter::UnpickedAsCentral()
 {
   Super::UnpickedAsCentral();
+
+  //++++ remove list of abilities from hud
 }
 
 void AInteractiveCharacter::BeginPlay()
@@ -158,21 +156,27 @@ void AInteractiveCharacter::BeginPlay()
   
   for (TSubclassOf<AInteractiveAbility> AbilityClass : AbilitiesClasses)
   {
-    Abilities.Add(NewObject<AInteractiveAbility>(this, AbilityClass));
+    AInteractiveAbility* AbilityObject = NewObject<AInteractiveAbility>(this, AbilityClass);
+    AbilityObject->SetActorLocation(FVector(0, 0, 0)); // get controller -> get abilities save location
+    AbilityObject->SetOwner(this);
+    Abilities.Add(AbilityObject);
   }
 }
 
 void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability) 
 {
+  if (CentralAbility)
+  {
+    SetCentralAbilityVisibility(false);
+    CentralAbility->SetActorLocation(FVector(0, 0, 0)); // get controller -> get abilities save location
+  }
+
   CentralAbility = Ability;
+  CentralAbility->SetActorRelativeLocation(CentralAbilityRelativePosition);
 }
 
-void AInteractiveCharacter::HideCentralWidget()
+void AInteractiveCharacter::SetCentralAbilityVisibility(bool bIsVisible)
 {
-  //CentralAbilityWidget->Hide()
-}
-
-void AInteractiveCharacter::ShowCentralWidget()
-{
-  //CentralAbilityWidget->Show()
+  check(CentralAbility != nullptr);
+  CentralAbility->SetActorHiddenInGame(bIsVisible);
 }

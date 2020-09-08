@@ -27,6 +27,7 @@ void UAbilitySlot::SetMaxSize(float IconMaxSize, float IconMinSize)
 void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility)
 {
   ChosenAbility = NewAbility;
+  //++++ update visuals: AbilityIcon-> set image ( get ability inslot image)
 }
 
 void UAbilitySlot::NativeConstruct()
@@ -38,27 +39,7 @@ void UAbilitySlot::NativeConstruct()
     return;
   }
 
-  //ScaleBox = WidgetTree->ConstructWidget<UScaleBox>(UScaleBox::StaticClass(), TEXT("ScaleBox"));
-  //ScaleBox->StretchDirection = EStretchDirection::Type::DownOnly;
-  //RootWidget->AddChild(ScaleBox);
-  
-  //IconSizeBox = WidgetTree->ConstructWidget<USizeBox>(USizeBox::StaticClass(), TEXT("SizeBox"));
-  //IconSizeBox->MinDesiredWidth = MinIconSize;
-  //IconSizeBox->MinDesiredHeight = MinIconSize;
-  //IconSizeBox->MaxDesiredWidth = MaxIconSize;
-  //IconSizeBox->MaxDesiredHeight = MaxIconSize;
-  //ScaleBox->AddChild(IconSizeBox);
-
-  //AbilityButton = WidgetTree->ConstructWidget<UButton>(UButton::StaticClass(), TEXT("AbilityButton"));
- // AbilityButton->ColorAndOpacity = FLinearColor(0, 0, 0, 0);
-  if (AbilityButton)
-  {
-    AbilityButton->OnClicked.AddDynamic(this, &UAbilitySlot::AbilityClicked);
-  }
-  //IconSizeBox->AddChild(AbilityButton);
- 
-  //AbilityIcon = WidgetTree->ConstructWidget<UImage>(UImage::StaticClass(), TEXT("AbilityIcon"));
-  //AbilityButton->AddChild(AbilityIcon);
-
+  AbilityButton->OnClicked.AddDynamic(this, &UAbilitySlot::AbilityClicked);
+  AbilityButton->SetColorAndOpacity(FLinearColor(0, 0, 0, 0)); // for now - only image matters
   Super::NativeConstruct();
 }

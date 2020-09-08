@@ -63,10 +63,15 @@ AInteractiveAbility::AInteractiveAbility()
   AbilityPresentation->SetRelativeLocation(FVector(0, -1, 0)); // y-order
 }
 
-AInteractiveAbility::AInteractiveAbility(
-  AInteractiveCharacter* Owner) : CharacterOwner(Owner)
+void AInteractiveAbility::SetCharacterOwner(AInteractiveCharacter* NewCharacterOwner)
 {
-  AInteractiveAbility::AInteractiveAbility();
+  if (CharacterOwner)
+  {
+    UE_LOG(LogTemp, Error, TEXT("Owner can be initialised only once!"));
+    return;
+  }
+
+  CharacterOwner = NewCharacterOwner;
 }
 
 void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* TargetObject)
@@ -220,5 +225,7 @@ void AInteractiveAbility::SetTurn(ETurnPhase TurnPhase)
 
 void AInteractiveAbility::CenterInOwner()
 {
+  check(CharacterOwner != nullptr);
   CharacterOwner->SetCentralAbility(this);
+  CharacterOwner->SetCentralAbilityVisibility(true);
 }

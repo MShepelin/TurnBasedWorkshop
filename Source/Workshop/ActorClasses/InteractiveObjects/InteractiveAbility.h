@@ -39,7 +39,7 @@ protected:
   // Number of objects which can be chosen.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings", meta = (ClampMin = "1"))
   int32 NumOfTargets = 1;
-  //++++ add num limit for picking actions
+  //++++ add num limit for ability to add influenced objects
 
   // ------- //
   // Visuals //
@@ -57,7 +57,8 @@ protected:
 public:
   AInteractiveAbility();
 
-  AInteractiveAbility(AInteractiveCharacter* Owner);
+  // Used to initialise character-owner.
+  void SetCharacterOwner(AInteractiveCharacter* NewCharacterOwner);
 
   virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
 
