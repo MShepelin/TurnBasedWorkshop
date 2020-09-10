@@ -11,9 +11,10 @@ void UAbilitySlot::AbilityClicked()
   {
     return;
   }
-
-  ChosenAbility->Pick();
+ 
   ChosenAbility->CenterInOwner();
+  // ChosenAbility->Pick();
+  //++++ add usage of EmptySlot texture
 }
 
 void UAbilitySlot::SetMaxSize(float IconMaxSize, float IconMinSize)
@@ -27,7 +28,7 @@ void UAbilitySlot::SetMaxSize(float IconMaxSize, float IconMinSize)
 void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility)
 {
   ChosenAbility = NewAbility;
-  //++++ update visuals: AbilityIcon-> set image ( get ability inslot image)
+  AbilityIcon->SetBrushFromTexture(ChosenAbility->GetIconUI());
 }
 
 void UAbilitySlot::NativeConstruct()

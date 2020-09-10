@@ -229,3 +229,8 @@ void AInteractiveAbility::CenterInOwner()
   CharacterOwner->SetCentralAbility(this);
   CharacterOwner->SetCentralAbilityVisibility(true);
 }
+
+UTexture2D* AInteractiveAbility::GetIconUI() const
+{
+  return IconUI;
+}

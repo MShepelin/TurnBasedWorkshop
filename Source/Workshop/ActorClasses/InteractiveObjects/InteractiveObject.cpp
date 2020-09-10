@@ -240,7 +240,7 @@ TArray<FString> AInteractiveObject::GetCTsNamesOfObject() const
   return CTsNames;
 }
 
-bool AInteractiveObject::IsCentral()
+bool AInteractiveObject::IsCentral() const
 {
   check(MainManager);
   return MainManager->CentralObject == this;

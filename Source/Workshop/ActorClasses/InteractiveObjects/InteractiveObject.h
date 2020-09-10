@@ -117,7 +117,7 @@ public:
   virtual void PickedAsCentral();
 
   UFUNCTION(BlueprintCallable)
-  bool IsCentral();
+  bool IsCentral() const;
 
   UFUNCTION(BlueprintCallable)
   virtual void UnpickedAsCentral();

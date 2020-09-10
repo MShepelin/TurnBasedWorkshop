@@ -167,6 +167,13 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
 {
   if (CentralAbility)
   {
+    if (CentralAbility->IsCentral())
+    {
+      CentralAbility->UnpickedAsCentral();
+    }
+
+    CentralAbility->ClearDependencies();
+    CentralAbility->ClearInflunces();
     SetCentralAbilityVisibility(false);
     CentralAbility->SetActorLocation(FVector(0, 0, 0)); // get controller -> get abilities save location
   }

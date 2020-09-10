@@ -29,7 +29,7 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Instanced, Category = "AbilitySettings")
   TArray<UEffectData*> UsedEffects;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings")
   TArray<int32> CTsToAffect;
 
   // Target on which this affect is applicable.
@@ -45,13 +45,15 @@ protected:
   // Visuals //
   // ------- //
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconInSlot"))
-  UPaperFlipbook* IconUI;
+  // Icon of Ability in UI.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
+  UTexture2D* IconUI;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings", meta = (OverrideNativeName = "AbilityIconOnScene"))
+  // Icon of Ability on scene.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   UPaperFlipbook* IconScene;
 
-  UPROPERTY(VisibleDefaultsOnly) 
+  UPROPERTY(VisibleDefaultsOnly)
   UPaperFlipbookComponent* AbilityPresentation;
 
 public:
@@ -98,11 +100,13 @@ public:
 
   virtual void SetTurn(ETurnPhase TurnPhase) override;
 
-  // --------------------- //
-  // Ability's information //
-  // --------------------- //
+  // ------------------- //
+  // Ability's variables //
+  // ------------------- //
 
   int32 GetTargetTypeMask() const;
+
+  UTexture2D* GetIconUI() const;
 
   // ------ //
   // Others //
