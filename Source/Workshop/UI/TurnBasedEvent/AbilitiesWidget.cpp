@@ -23,7 +23,7 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
     SlotsIndex++;
   }
 
-  for (size_t Counter = 0; Counter < VerticalBoxSlots.Num() - Abilities.Num(); Counter++)
+  while (VerticalBoxSlots.Num() > Abilities.Num())
   {
     RemoveAbilitySlot();
   }

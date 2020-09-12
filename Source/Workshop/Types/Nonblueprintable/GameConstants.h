@@ -14,6 +14,13 @@ const int32 ObjectNameStatID = -1;
 const int32 PlayerControlledCharacterCT = -1;
 const int32 CharacterOutOfControlCT = -2;
 
+// 1.4 Y-order of components
+const float MainSprite = 0;
+const float WidgetComponent = 1;
+
+// 1.5 Animation
+const int32 IdleAnimation = 1;
+
 // 2. Debug
 // Used for drawing lines, spheres and other shapes.
 

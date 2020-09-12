@@ -141,9 +141,9 @@ void AInteractiveAbility::PickedAsCentral()
     FoundObjects.Pop();
   }
 
+#if WITH_EDITOR
   UE_LOG(LogTemp, Warning, TEXT("%d targets found"), FoundObjects.Num());
 
-#if WITH_EDITOR
   // Show what objects were found
   for (AInteractiveObject* FoundObject : MainManager->FoundObjects)
   {
@@ -227,7 +227,7 @@ void AInteractiveAbility::CenterInOwner()
 {
   check(CharacterOwner != nullptr);
   CharacterOwner->SetCentralAbility(this);
-  CharacterOwner->SetCentralAbilityVisibility(true);
+  CharacterOwner->SetCentralAbilityVisibility(false);
 }
 
 UTexture2D* AInteractiveAbility::GetIconUI() const

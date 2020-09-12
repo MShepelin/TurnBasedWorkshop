@@ -26,7 +26,7 @@ protected:
   TSubclassOf<UAbilitySlot> AbilitySlotClass;
 
   UPROPERTY() TArray<UAbilitySlot*> VerticalBoxSlots;
-  UPROPERTY(meta = (BindWidget)) UVerticalBox* AbilitiesLayout; //, meta = (BindWidget)
+  UPROPERTY(meta = (BindWidget)) UVerticalBox* AbilitiesLayout;
 
 protected:
   void AddAbilitySlot();

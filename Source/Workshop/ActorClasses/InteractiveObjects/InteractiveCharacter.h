@@ -36,8 +36,8 @@ protected:
   TArray<TSubclassOf<AInteractiveAbility>> AbilitiesClasses;
   UPROPERTY() TArray<AInteractiveAbility*> Abilities;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings", meta = (Bitmask, BitmaskEnum = "EEffectSpecifiers"))
-  int32 ProtectionFrom = 0;
+  //UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings", meta = (Bitmask, BitmaskEnum = "EEffectSpecifiers"))
+  //int32 ProtectionFrom = 0;
 
   // ------- //
   // Visuals //
@@ -59,7 +59,9 @@ protected:
   UBoxComponent* CollisionBox;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
-  FVector CentralAbilityRelativePosition = FVector(0, 0, 0);
+  FVector2D CentralAbilityRelativePositionInput;
+
+  UPROPERTY() FVector CentralAbilityRelativePosition;
 
   UPROPERTY()
   UBillboardComponent* CentralAbilityPositionVisual;
@@ -104,14 +106,14 @@ public:
   // Character Information //
   // --------------------- //
 
-  int32 GetProtectionFromMask() const;
+  //int32 GetProtectionFromMask() const;
 
   // ----------------- //
   // UI with abilities //
   // ----------------- //
 
   UFUNCTION(BlueprintCallable)
-  void SetCentralAbilityVisibility(bool bIsVisible);
+  void SetCentralAbilityVisibility(bool bIsInvisible);
 
   void SetCentralAbility(AInteractiveAbility* Ability);
 

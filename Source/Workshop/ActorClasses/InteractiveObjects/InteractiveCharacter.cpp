@@ -5,7 +5,9 @@
 #include "Workshop/UI/TurnBasedEvent/AbilitiesWidget.h"
 #include "Components/BillboardComponent.h"
 #include "Workshop/UI/AbilitySlot.h"
+#include "Kismet/GameplayStatics.h"
 #include "InteractiveAbility.h"
+#include "Workshop/UI/TurnBasedEvent/TurnBasedHUD.h"
 
 AInteractiveCharacter::AInteractiveCharacter()
 {
@@ -23,10 +25,8 @@ AInteractiveCharacter::AInteractiveCharacter()
 
   // Arrange components
   FVector UnscaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
-  CentralAbilityRelativePosition = FVector(0, 0, UnscaledBoxExtent[0]);
-  CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
-
-  //???? set first default animation?
+  CentralAbilityRelativePositionInput = FVector2D(0, UnscaledBoxExtent[0]);
+  
 
   CTsOfObject.Add(CharacterOutOfControlCT);
 }
@@ -93,6 +93,12 @@ void AInteractiveCharacter::PostInitProperties()
 {
   Super::PostInitProperties();
 
+  if (!AnimationsMap.Find(IdleAnimation))
+  {
+    UE_LOG(LogTemp, Error, TEXT("%d animation id (IdleAnimation) must be set"), IdleAnimation);
+  }
+
+  /*
 #if WITH_EDITOR
   bool bPlayerControlledCTFound = false;
   bool bOutOfControlCTFound = false;
@@ -113,7 +119,7 @@ void AInteractiveCharacter::PostInitProperties()
   {
     UE_LOG(LogTemp, Error, TEXT("Every character must be either controlled by player or not, which must be shown in CTs"));
   }
-#endif
+#endif*/
 }
 
 void AInteractiveCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent)
@@ -125,40 +131,81 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
 {
   Super::OnConstruction(Transform);
 
-  CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
+  CentralAbilityRelativePosition = FVector(
+    CentralAbilityRelativePositionInput[0], WidgetComponent, CentralAbilityRelativePositionInput[1]);
+
+#if WITH_EDITOR
+  if (!AnimationsMap.Find(IdleAnimation))
+  {
+    return;
+  }
+#endif
+
+  CharacterPresentation->SetFlipbook(AnimationsMap[IdleAnimation]);
 
   FVector ScaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
   CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], CollisionBoxWidth, ScaledBoxExtent[2]));
+
+  // Set y-order
+  CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
+
+  FVector PresentationLocation = CharacterPresentation->GetRelativeLocation();
+  CharacterPresentation->SetRelativeLocation(FVector(
+    PresentationLocation[0], MainSprite, PresentationLocation[2]));
+
+  FVector BoxLocation = CollisionBox->GetRelativeLocation();
+  CollisionBox->SetRelativeLocation(FVector(
+    BoxLocation[0], MainSprite, BoxLocation[2]));
 }
 
-int32 AInteractiveCharacter::GetProtectionFromMask() const
-{
-  return ProtectionFrom;
-}
+//int32 AInteractiveCharacter::GetProtectionFromMask() const
+//{
+//  return ProtectionFrom;
+//}
 
 void AInteractiveCharacter::PickedAsCentral()
 {
   Super::PickedAsCentral();
 
-  //++++ add list of abilities to hud
+  // Add list of abilities to the HUD.
+  ATurnBasedHUD* HUD = Cast<ATurnBasedHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+  UAbilitiesWidget* AbilitiesWidget = HUD->GetAbilitiesWidget();
+  AbilitiesWidget->SetVisibility(ESlateVisibility::Visible);
+  if (AbilitiesWidget)
+  {
+    AbilitiesWidget->FillAbilitySlots(Abilities);
+  }
 }
 
 void AInteractiveCharacter::UnpickedAsCentral()
 {
   Super::UnpickedAsCentral();
 
-  //++++ remove list of abilities from hud
+  // Remove list of abilities from the HUD.
+  ATurnBasedHUD* HUD = Cast<ATurnBasedHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+  UAbilitiesWidget* AbilitiesWidget = HUD->GetAbilitiesWidget();
+  if (AbilitiesWidget)
+  {
+    AbilitiesWidget->SetVisibility(ESlateVisibility::Hidden);
+  }
 }
 
 void AInteractiveCharacter::BeginPlay()
 {
   Super::BeginPlay();
   
+  if (!GetWorld())
+  {
+    return;
+  }
+
   for (TSubclassOf<AInteractiveAbility> AbilityClass : AbilitiesClasses)
   {
-    AInteractiveAbility* AbilityObject = NewObject<AInteractiveAbility>(this, AbilityClass);
-    AbilityObject->SetActorLocation(FVector(0, 0, 0)); // get controller -> get abilities save location
-    AbilityObject->SetOwner(this);
+    AInteractiveAbility* AbilityObject = 
+      GetWorld()->SpawnActor<AInteractiveAbility>(
+        AbilityClass, FVector(0, 0, 0), FRotator(0, 0, 0)); // get controller -> get abilities save location
+    AbilityObject->SetCharacterOwner(this);
+    AbilityObject->SetActorHiddenInGame(true);
     Abilities.Add(AbilityObject);
   }
 }
@@ -174,16 +221,16 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
 
     CentralAbility->ClearDependencies();
     CentralAbility->ClearInflunces();
-    SetCentralAbilityVisibility(false);
+    SetCentralAbilityVisibility(true);
     CentralAbility->SetActorLocation(FVector(0, 0, 0)); // get controller -> get abilities save location
   }
 
   CentralAbility = Ability;
-  CentralAbility->SetActorRelativeLocation(CentralAbilityRelativePosition);
+  CentralAbility->SetActorLocation(CentralAbilityRelativePosition + CollisionBox->GetComponentLocation());
 }
 
-void AInteractiveCharacter::SetCentralAbilityVisibility(bool bIsVisible)
+void AInteractiveCharacter::SetCentralAbilityVisibility(bool bIsInvisible)
 {
   check(CentralAbility != nullptr);
-  CentralAbility->SetActorHiddenInGame(bIsVisible);
+  CentralAbility->SetActorHiddenInGame(bIsInvisible);
 }

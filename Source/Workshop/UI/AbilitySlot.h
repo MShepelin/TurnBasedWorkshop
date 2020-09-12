@@ -36,5 +36,5 @@ public:
 
   UFUNCTION() void AbilityClicked();
 
-  virtual void NativeConstruct() override;
+  virtual void NativePreConstruct() override;
 };

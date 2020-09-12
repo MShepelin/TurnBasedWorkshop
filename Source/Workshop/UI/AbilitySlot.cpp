@@ -31,16 +31,10 @@ void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility)
   AbilityIcon->SetBrushFromTexture(ChosenAbility->GetIconUI());
 }
 
-void UAbilitySlot::NativeConstruct()
+void UAbilitySlot::NativePreConstruct()
 {
-  UPanelWidget* RootWidget = Cast<UPanelWidget>(GetRootWidget());
-
-  if (!RootWidget)
-  {
-    return;
-  }
+  Super::NativePreConstruct();
 
   AbilityButton->OnClicked.AddDynamic(this, &UAbilitySlot::AbilityClicked);
-  AbilityButton->SetColorAndOpacity(FLinearColor(0, 0, 0, 0)); // for now - only image matters
-  Super::NativeConstruct();
+  AbilityButton->SetBackgroundColor(FLinearColor(0, 0, 0, 0.5)); // change to 0
 }

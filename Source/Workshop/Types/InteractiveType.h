@@ -13,7 +13,7 @@ enum class EInteractiveType : int32
   Ability             = 1,
   Character           = 2,
   Item                = 4,
-  PlayerControlled    = 8,
+  PlayerControlled    = 8, 
   NotPlayerControlled = 16
 };
 
