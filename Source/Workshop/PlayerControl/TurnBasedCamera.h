@@ -29,5 +29,5 @@ public:
   void OnCharacterResolvesAbility(AInteractiveCharacter* CurrentCharacter);
 
   UFUNCTION(BlueprintNativeEvent)
-  FVector GetHiddenAbilitiesPosition() const;
+  FVector GetHiddenAbilitiesPosition();
 };
