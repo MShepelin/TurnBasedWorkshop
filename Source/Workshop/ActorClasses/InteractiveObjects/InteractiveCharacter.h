@@ -36,9 +36,6 @@ protected:
   TArray<TSubclassOf<AInteractiveAbility>> AbilitiesClasses;
   UPROPERTY() TArray<AInteractiveAbility*> Abilities;
 
-  //UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings", meta = (Bitmask, BitmaskEnum = "EEffectSpecifiers"))
-  //int32 ProtectionFrom = 0;
-
   // ------- //
   // Visuals //
   // ------- //

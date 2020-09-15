@@ -7,6 +7,7 @@
 
 ATurnBasedController::ATurnBasedController()
 {
+
 }
 
 void ATurnBasedController::TryToInteract()
@@ -21,6 +22,8 @@ void ATurnBasedController::TryToInteract()
 void ATurnBasedController::BeginPlay()
 {
   Super::BeginPlay();
+
+  bShowMouseCursor = true;
 }
 
 void ATurnBasedController::ConnectToEvent(ARegistrationManager* NewManager)
@@ -44,6 +47,14 @@ void ATurnBasedController::SetPawn(APawn * InPawn)
 {
   Super::SetPawn(InPawn);
 
+  CurrentCamera = Cast<ASpryCamera>(InPawn);
+
+  if (!CurrentCamera)
+  {
+    UE_LOG(LogTemp, Error, TEXT("Pawn must be inherited from SpryCamera"));
+  }
+
+  /*
   if (InPawn->GetClass()->ImplementsInterface(UTurnBasedCamera::StaticClass()))
   {
     ITurnBasedCamera* CameraInterface = Cast<ITurnBasedCamera>(InPawn);
@@ -53,5 +64,10 @@ void ATurnBasedController::SetPawn(APawn * InPawn)
   else
   {
     UE_LOG(LogTemp, Error, TEXT("Pawn must implement TurnBasedCamera interface"));
-  }
+  }*/
+}
+
+ASpryCamera* ATurnBasedController::GetCurrentCamera() const
+{
+  return CurrentCamera;
 }

@@ -8,6 +8,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "InteractiveAbility.h"
 #include "Workshop/UI/TurnBasedEvent/TurnBasedHUD.h"
+#include "Workshop/PlayerControl/TurnBasedController.h"
+
 
 AInteractiveCharacter::AInteractiveCharacter()
 {
@@ -97,29 +99,6 @@ void AInteractiveCharacter::PostInitProperties()
   {
     UE_LOG(LogTemp, Error, TEXT("%d animation id (IdleAnimation) must be set"), IdleAnimation);
   }
-
-  /*
-#if WITH_EDITOR
-  bool bPlayerControlledCTFound = false;
-  bool bOutOfControlCTFound = false;
-
-  for (int32 CT : CTsOfObject)
-  {
-    if (CT == PlayerControlledCharacterCT)
-    {
-      bPlayerControlledCTFound = true;
-    }
-    else if (CT == CharacterOutOfControlCT)
-    {
-      bOutOfControlCTFound = true;
-    }
-  }
-
-  if (bOutOfControlCTFound == bPlayerControlledCTFound)
-  {
-    UE_LOG(LogTemp, Error, TEXT("Every character must be either controlled by player or not, which must be shown in CTs"));
-  }
-#endif*/
 }
 
 void AInteractiveCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent)
@@ -158,11 +137,6 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
     BoxLocation[0], MainSprite, BoxLocation[2]));
 }
 
-//int32 AInteractiveCharacter::GetProtectionFromMask() const
-//{
-//  return ProtectionFrom;
-//}
-
 void AInteractiveCharacter::PickedAsCentral()
 {
   Super::PickedAsCentral();
@@ -175,6 +149,8 @@ void AInteractiveCharacter::PickedAsCentral()
   {
     AbilitiesWidget->FillAbilitySlots(Abilities);
   }
+
+  //???? may be move to player controller?
 }
 
 void AInteractiveCharacter::UnpickedAsCentral()
@@ -201,9 +177,13 @@ void AInteractiveCharacter::BeginPlay()
 
   for (TSubclassOf<AInteractiveAbility> AbilityClass : AbilitiesClasses)
   {
+    ATurnBasedController* CurrentController = Cast<ATurnBasedController>(UGameplayStatics::GetPlayerController(this, 0));
+
+    FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation();
+
     AInteractiveAbility* AbilityObject = 
       GetWorld()->SpawnActor<AInteractiveAbility>(
-        AbilityClass, FVector(0, 0, 0), FRotator(0, 0, 0)); // get controller -> get abilities save location
+        AbilityClass, HiddenLocation, FRotator(0, 0, 0));
     AbilityObject->SetCharacterOwner(this);
     AbilityObject->SetActorHiddenInGame(true);
     Abilities.Add(AbilityObject);
