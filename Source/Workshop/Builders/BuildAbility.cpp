@@ -5,8 +5,7 @@
 
 AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability)
 {
-  //???? may be just if(!(TargetObject && Ability))
-  if (!IsValid(TargetObject) || !IsValid(Ability))
+  if (!(TargetObject && Ability))
   {
     UE_LOG(LogTemp, Error, TEXT("Invalid input for AddAllEffectsToObject function!"));
     return TargetObject;
@@ -25,7 +24,7 @@ AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* Tar
     UEffectData* DublicatedEffect = DuplicateObject(Effect, TargetObject);
     DublicatedEffect->bIsBonusEffect = true;
 
-    if ((TargetObject->InteractiveType == static_cast<int32>(EInteractiveType::Ability)) && Effect->bIsAmbiguous)
+    if ((TargetObject->InteractiveType & static_cast<int32>(EInteractiveType::Ability)) && Effect->bIsAmbiguous)
     {
       Cast<AInteractiveAbility>(TargetObject)->UsedEffects.Add(DublicatedEffect);
     }

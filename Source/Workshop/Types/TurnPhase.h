@@ -13,6 +13,4 @@ enum class ETurnPhase : uint8
   AbilitiesSetup = 1,
   AbilitiesEffect = 2,
   End = 3
-
-  //???? add update phases
 };

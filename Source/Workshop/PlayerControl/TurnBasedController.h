@@ -20,13 +20,14 @@ private:
   // UPROPERTY() TScriptInterface<ITurnBasedCamera> CurrentCamera = nullptr;
   UPROPERTY() ASpryCamera* CurrentCamera;
 
-  // Tries to pick an Interactive object
-  UFUNCTION() void TryToInteract();
-
 protected:
   UPROPERTY() FVector StoreLaction = FVector(0, 0, 0);
 
   UPROPERTY() ARegistrationManager* EventManager;
+
+  // Tries to pick an Interactive object
+  UFUNCTION() void TryToInteract();
+  UFUNCTION() void StopInteract();
 
 public:
   ATurnBasedController();
@@ -37,7 +38,8 @@ public:
 
   virtual void SetPawn(APawn * InPawn) override;
 
-  void ConnectToEvent(ARegistrationManager* NewManager);
+  // REMAKE
+  //void ConnectToEvent(ARegistrationManager* NewManager);
 
   ASpryCamera* GetCurrentCamera() const;
 };

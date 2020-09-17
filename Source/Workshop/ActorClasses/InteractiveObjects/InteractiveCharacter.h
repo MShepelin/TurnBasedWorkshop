@@ -6,7 +6,6 @@
 #include "PaperSpriteComponent.h"
 #include "PaperFlipbookComponent.h"
 #include "Workshop/Types/Effects/EffectData.h"
-#include "Components/WidgetComponent.h"
 #include "InteractiveObject.h"
 #include "Components/BoxComponent.h"
 #include "InteractiveCharacter.generated.h"
@@ -118,7 +117,8 @@ public:
   // Others //
   // ------ //
 
-  virtual FString GatherInformation() const override;
+  // REMAKE
+  // virtual FString GatherInformation() const override;
 
   void ShowInfluences() const override;
 

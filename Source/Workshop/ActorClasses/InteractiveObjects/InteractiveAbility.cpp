@@ -2,7 +2,9 @@
 
 #include "InteractiveAbility.h"
 #include "Workshop/Builders/BuildAbility.h"
+#include "InteractiveCharacter.h"
 
+/** REMAKE
 FString AInteractiveAbility::GatherInformation() const
 {
   FString AbilityInformation = Super::GatherInformation();
@@ -26,13 +28,13 @@ FString AInteractiveAbility::GatherInformation() const
     AbilityInformation += MainManager->GetCTName(CTsToAffect[CTsToAffect.Num() - 1]) + " ";
   }
 
-  /*
+  ////????
   if (TargetType != EInteractiveType::Any)
   {
     AbilityInformation += UEnum::GetValueAsString(TargetType).RightChop(LengthOfInteractiveTypeName) + " ";
   }
   //++++ add mask type support
-  */
+  ////????
 
   for (UEffectData* EffectObject : UsedEffects)
   {
@@ -47,6 +49,7 @@ FString AInteractiveAbility::GatherInformation() const
 
   return AbilityInformation;
 }
+**/
 
 void AInteractiveAbility::ShowInfluences() const
 {
@@ -119,47 +122,27 @@ void AInteractiveAbility::PickedAsCentral()
 {
   Super::PickedAsCentral();
 
-  MainManager->FindObjectsByCTs(CTsToAffect, 1);
-  TArray<AInteractiveObject*>& FoundObjects = MainManager->FoundObjects;
-  AInteractiveObject* SelfPointer = Cast<AInteractiveObject>(this);
-
-  int32 AtLeastOneMask = TargetTypeMask & InteractiveTypeSeparator;
-  int32 NecessaryMask = TargetTypeMask & ~InteractiveTypeSeparator;
-
-  for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num(); ObjectIndex++)
-  {
-    AInteractiveObject* FoundObject = FoundObjects[ObjectIndex];
-    int32 AtLeastOneMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & InteractiveTypeSeparator;
-    int32 NecessaryMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & ~InteractiveTypeSeparator;
-
-    if ((AtLeastOneMaskTarget & AtLeastOneMask) && ((NecessaryMaskTarget & NecessaryMask) == NecessaryMask) && SelfPointer != FoundObject)
-    {
-      continue;
-    }
-
-    FoundObjects.Swap(ObjectIndex, FoundObjects.Num() - 1);
-    FoundObjects.Pop();
-  }
+  TArray<AInteractiveObject*> FoundObjects = MainManager->FindObjectsByCTsWithMask(CTsToAffect, 1, TargetTypeMask);
 
 #if WITH_EDITOR
   UE_LOG(LogTemp, Warning, TEXT("%d targets found"), FoundObjects.Num());
 
   // Show what objects were found
-  for (AInteractiveObject* FoundObject : MainManager->FoundObjects)
+  for (AInteractiveObject* FoundObject : FoundObjects)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), FoundObject->GetActorLocation(),
       DebugColor, false, DebugTime);
   }
 #endif
 
-  ShowIconsDependingOnInfluence();
+  AwakeDependingOnInfluence(FoundObjects);
 }
 
 void AInteractiveAbility::UnpickedAsCentral()
 {
   Super::UnpickedAsCentral();
 
-  HideDisplayedIcons();
+  PutToSleepManagedObjects(MainManager);
 }
 
 void AInteractiveAbility::PickedAsTarget()

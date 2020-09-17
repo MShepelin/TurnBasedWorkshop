@@ -2,7 +2,9 @@
 
 
 #include "TurnBasedController.h"
-#include "Workshop/ACtorClasses/Managers/RegistrationManager.h"
+#include "Workshop/ActorClasses/Managers/RegistrationManager.h"
+#include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
+#include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
 
 
 ATurnBasedController::ATurnBasedController()
@@ -12,11 +14,54 @@ ATurnBasedController::ATurnBasedController()
 
 void ATurnBasedController::TryToInteract()
 {
-  // ray trace etc
-  // check if it's interactive object
-  // send info to hud
+  if (CurrentCamera)
+  {
+    CurrentCamera->PlayerPressedClick();
+  }
 
-  return;
+  ASpryCamera* CameraPawn = Cast<ASpryCamera>(GetPawn());
+
+  if (!(CameraPawn && GetWorld()))
+  {
+    return;
+  }
+
+  FVector CameraLocation = CameraPawn->GetActorLocation();
+
+  FCollisionQueryParams CollisionParams;
+  FCollisionResponseParams ResponseParams;
+
+  FHitResult Hit;
+  bool bIsHit = GetWorld()->LineTraceSingleByChannel(
+    Hit,
+    CameraLocation,
+    CameraLocation + CameraPawn->GetCameraDirection() * RayCastLength,
+    ECollisionChannel::ECC_Visibility,
+    CollisionParams,
+    ResponseParams
+  );
+
+  if (!bIsHit)
+  {
+    return;
+  }
+
+  AInteractiveObject* InteractiveObject = Cast<AInteractiveObject>(Hit.Actor);
+
+  if (!InteractiveObject)
+  {
+    return;
+  }
+
+  InteractiveObject->Pick();
+}
+
+void ATurnBasedController::StopInteract()
+{
+  if (CurrentCamera)
+  {
+    CurrentCamera->PlayerReleasedClick();
+  }
 }
 
 void ATurnBasedController::BeginPlay()
@@ -26,21 +71,24 @@ void ATurnBasedController::BeginPlay()
   bShowMouseCursor = true;
 }
 
+/* REMAKE
 void ATurnBasedController::ConnectToEvent(ARegistrationManager* NewManager)
 {
   return;
 
-  // init EventManager if it's needed
   // get save data
   // load characters on screen
-  // start turnbased event
+  // get TurnWaiter
 }
+*/
 
 void ATurnBasedController::SetupInputComponent()
 {
   Super::SetupInputComponent();
 
   InputComponent->BindAction("Interact", IE_Pressed, this, &ATurnBasedController::TryToInteract);
+
+  InputComponent->BindAction("Interact", IE_Released, this, &ATurnBasedController::StopInteract);
 }
 
 void ATurnBasedController::SetPawn(APawn * InPawn)
@@ -53,18 +101,6 @@ void ATurnBasedController::SetPawn(APawn * InPawn)
   {
     UE_LOG(LogTemp, Error, TEXT("Pawn must be inherited from SpryCamera"));
   }
-
-  /*
-  if (InPawn->GetClass()->ImplementsInterface(UTurnBasedCamera::StaticClass()))
-  {
-    ITurnBasedCamera* CameraInterface = Cast<ITurnBasedCamera>(InPawn);
-    CurrentCamera.SetInterface(CameraInterface);
-    CurrentCamera.SetObject(InPawn);
-  }
-  else
-  {
-    UE_LOG(LogTemp, Error, TEXT("Pawn must implement TurnBasedCamera interface"));
-  }*/
 }
 
 ASpryCamera* ATurnBasedController::GetCurrentCamera() const

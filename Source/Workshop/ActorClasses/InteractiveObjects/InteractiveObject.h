@@ -40,9 +40,10 @@ protected:
 
   // If object in array is influenced by this object it will be shown unavailable.
   // Otherwise it will be shown available.
-  void ShowIconsDependingOnInfluence();
+  void AwakeDependingOnInfluence(TArray<AInteractiveObject*>& Objects);
 
-  void HideDisplayedIcons();
+  // Static - because this function relate to class, but not concrete object.
+  static void PutToSleepManagedObjects(ARegistrationManager* Manager);
 
   // ------------------ //
   // Object Statisctics //
@@ -114,19 +115,12 @@ public:
   void ConnectToManager(ARegistrationManager* NewManager);
 
   UFUNCTION(BlueprintCallable)
-  virtual void PickedAsCentral();
-
-  UFUNCTION(BlueprintCallable)
   bool IsCentral() const;
 
-  UFUNCTION(BlueprintCallable)
-  virtual void UnpickedAsCentral();
-
-  UFUNCTION(BlueprintCallable)
-  virtual void PickedAsTarget();
-
-  UFUNCTION(BlueprintCallable)
-  virtual void UnpickedAsTarget();
+  UFUNCTION() virtual void PickedAsCentral();
+  UFUNCTION() virtual void UnpickedAsCentral();
+  UFUNCTION() virtual void PickedAsTarget();
+  UFUNCTION() virtual void UnpickedAsTarget();
 
   UFUNCTION(BlueprintCallable)
   void Pick();
@@ -170,9 +164,10 @@ public:
   UFUNCTION(BlueprintCallable)
   TArray<FString> GetCTsNamesOfObject() const;
 
+  // REMAKE
   // Happens when player chooses this object.
-  UFUNCTION(BlueprintCallable)
-  virtual FString GatherInformation() const;
+  // UFUNCTION(BlueprintCallable)
+  // virtual FString GatherInformation() const;
 
   // Visual interpretation of connections.
   virtual void ShowInfluences() const;
@@ -188,13 +183,18 @@ public:
   // Others //
   // ------ //
 
+  // Interactive objects often exchange information, 
+  // so friend status is used for optimisation and code clearness.
   friend class AInteractiveObject;
-  //???? change to friend void AddInfluenceOn(AInteractiveObject*);
-  //???? and friend void RemoveDependenceFrom(AInteractiveObject*);
-  friend class CTsGraph<int32, AInteractiveObject>;
-  friend class UBuildAbility;
 
-  // Effects are gameplay mechanics so they should be able to modify InteractiveObject
+  // CTsGraph is build to be fast tool to search large number of Interactive objects,
+  // so this is used to optimise access to needed information
+  friend class CTsGraph<int32, AInteractiveObject>;
+  //++++ remove functions as CTsGraph has access to protected members
+
+  // Effects and functions from UBuildAbility create gameplay mechanics 
+  // so they should be able to modify InteractiveObject
+  friend class UBuildAbility;
   friend class UEffectData;
   friend class UAdvantageEffectData;
   friend class UChangeStatEffectData;

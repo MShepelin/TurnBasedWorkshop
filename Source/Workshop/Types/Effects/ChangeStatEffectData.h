@@ -20,7 +20,8 @@ public:
 
   UChangeStatEffectData();
 
-  virtual FString GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const override;
+  // REMAKE
+  //virtual FString GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const override;
 
   virtual void ResolveOn(AInteractiveObject* TargetObject) override;
 };

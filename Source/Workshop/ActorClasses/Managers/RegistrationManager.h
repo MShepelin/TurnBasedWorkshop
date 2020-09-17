@@ -5,15 +5,18 @@
 #include "CoreMinimal.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Actor.h"
+#include "Containers/Queue.h"
 #include "Components/BillboardComponent.h"
 #include "Workshop/Types/Nonblueprintable/CTsSystem.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "RegistrationManager.generated.h"
 
+
 class AInteractiveObject;
 class AInteractiveAbility;
 
-// Manager connects Interactive objects, provides search by CTs, serves as setup for gameplay events.
+
+// Provides search by CTs for connected Interactive objects, stores awaken Interactive objects.
 UCLASS()
 class WORKSHOP_API ARegistrationManager : public AActor
 {
@@ -28,8 +31,10 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings", meta = (ClampMin = "1"));
   TMap<int32, FString> CTsToNameMap;
 
-  // Used to save what Interactive objects are displayed after one of them was picked.
-  UPROPERTY() TArray<AInteractiveObject*> FoundObjects;
+  // Used to store managed InteractiveObjects.
+  // Agreement: changed only by Awake/PutToSleep functions of InteractiveObjects.
+  TArray<AInteractiveObject*, TInlineAllocator<AverageManagedObjects>> AwakenObjects;
+  // It's a TQueue because only operations Add and Clear are needed.
 
   // Here are all stats available in this manager.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
@@ -39,7 +44,7 @@ protected:
   };
 
   // Used for search by CTs.
-  CTsGraph<int32, AInteractiveObject> CTsSystem;
+  CTsGraph<int32, AInteractiveObject>* CTsSystem;
 
   // This object is in current focus of manager, all found connections will be sent to it.
   UPROPERTY() AInteractiveObject* CentralObject = nullptr;
@@ -67,7 +72,12 @@ public:
   //---------- //
 
   UFUNCTION(BlueprintCallable)
-  void FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs);
+  TArray<AInteractiveObject*> FindObjectsByCTs(
+    const TArray<int32> CTsArray, int32 EnoughNumberOfCTs);
+
+  UFUNCTION() //???? make callable
+  TArray<AInteractiveObject*> FindObjectsByCTsWithMask(
+    const TArray<int32> CTsArray, int32 EnoughNumberOfCTs, int32 TargetTypeMask);
 
   // ----------------------------- //
   // Access to Manager information //
@@ -85,8 +95,7 @@ public:
   UFUNCTION(BlueprintCallable)
   bool HasCentralObject() const;
 
+  // Agreement: AInteractiveObject is the only class, 
+  // which can change Manager's CentralObject and CTsSystem
   friend class AInteractiveObject;
-  friend class AInteractiveAbility;
 };
-
-//++++ get rid of friends and implement adequate functionality

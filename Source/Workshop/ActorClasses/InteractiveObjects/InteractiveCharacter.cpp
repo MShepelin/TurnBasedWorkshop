@@ -9,6 +9,7 @@
 #include "InteractiveAbility.h"
 #include "Workshop/UI/TurnBasedEvent/TurnBasedHUD.h"
 #include "Workshop/PlayerControl/TurnBasedController.h"
+#include "InteractiveAbility.h"
 
 
 AInteractiveCharacter::AInteractiveCharacter()
@@ -33,6 +34,7 @@ AInteractiveCharacter::AInteractiveCharacter()
   CTsOfObject.Add(CharacterOutOfControlCT);
 }
 
+/* REMAKE
 FString AInteractiveCharacter::GatherInformation() const
 {
   FString CharacterInformation = Super::GatherInformation();
@@ -49,6 +51,7 @@ FString AInteractiveCharacter::GatherInformation() const
 
   return CharacterInformation + "\n";
 }
+*/
 
 void AInteractiveCharacter::ShowInfluences() const
 {
@@ -111,7 +114,7 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
   Super::OnConstruction(Transform);
 
   CentralAbilityRelativePosition = FVector(
-    CentralAbilityRelativePositionInput[0], WidgetComponent, CentralAbilityRelativePositionInput[1]);
+    CentralAbilityRelativePositionInput[0], WidgetComponentYOrder, CentralAbilityRelativePositionInput[1]);
 
 #if WITH_EDITOR
   if (!AnimationsMap.Find(IdleAnimation))
@@ -130,11 +133,11 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
 
   FVector PresentationLocation = CharacterPresentation->GetRelativeLocation();
   CharacterPresentation->SetRelativeLocation(FVector(
-    PresentationLocation[0], MainSprite, PresentationLocation[2]));
+    PresentationLocation[0], MainSpriteYOrder, PresentationLocation[2]));
 
   FVector BoxLocation = CollisionBox->GetRelativeLocation();
   CollisionBox->SetRelativeLocation(FVector(
-    BoxLocation[0], MainSprite, BoxLocation[2]));
+    BoxLocation[0], MainSpriteYOrder, BoxLocation[2]));
 }
 
 void AInteractiveCharacter::PickedAsCentral()

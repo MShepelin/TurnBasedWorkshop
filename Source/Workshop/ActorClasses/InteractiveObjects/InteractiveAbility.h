@@ -8,6 +8,10 @@
 #include "InteractiveCharacter.h"
 #include "InteractiveAbility.generated.h"
 
+
+class AInteractiveCharacter;
+
+
 // Represenatation of character's gameplay possibilities on game scene.
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
@@ -112,7 +116,8 @@ public:
   // Others //
   // ------ //
 
-  virtual FString GatherInformation() const override;
+  // REMAKE
+  // virtual FString GatherInformation() const override;
 
   void ShowInfluences() const override;
 

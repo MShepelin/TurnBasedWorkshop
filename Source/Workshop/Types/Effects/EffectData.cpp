@@ -36,6 +36,7 @@ void UEffectData::DecreaseDuration()
   DecreaseDuration(1);
 }
 
+/* REMAKE
 FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const
 {
   if (!bIsAbilityInfo)
@@ -53,6 +54,7 @@ FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager
 
   return EffectInforamtion;
 }
+*/
 
 void UEffectData::ResolveOn(AInteractiveObject* TargetObject)
 {

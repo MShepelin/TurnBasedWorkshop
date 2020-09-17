@@ -8,6 +8,7 @@ UChangeStatEffectData::UChangeStatEffectData()
 
 }
 
+/* REMAKE
 FString UChangeStatEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const
 {
   FString EffectInforamtion = Super::GatherInformation(bIsAbilityInfo, Manager);
@@ -23,6 +24,7 @@ FString UChangeStatEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrat
   
   return EffectInforamtion + "\n";
 }
+*/
 
 void UChangeStatEffectData::ResolveOn(AInteractiveObject* TargetObject)
 {

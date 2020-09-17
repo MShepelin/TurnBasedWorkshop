@@ -15,8 +15,8 @@ const int32 PlayerControlledCharacterCT = -1;
 const int32 CharacterOutOfControlCT = -2;
 
 // 1.4 Y-order of components
-const float MainSprite = 0;
-const float WidgetComponent = 1;
+const float MainSpriteYOrder = 0;
+const float WidgetComponentYOrder = 1;
 
 // 1.5 Animation
 const int32 IdleAnimation = 1;
@@ -34,6 +34,9 @@ const int32 LengthOfAdvantageTypeName = 16;
 const int32 InteractiveTypeSeparator = 7;
 const float CollisionBoxWidth = 4;
 const size_t DefaultNumberOfSlots = 4;
+const float MaxActorSize = 1000;
+const float RayCastLength = 1000;
+#define AverageManagedObjects 12
 
 // 4. UI
 const float MaxIconSize = 512.0;

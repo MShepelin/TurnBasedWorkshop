@@ -10,6 +10,7 @@
 //++++ more tests to verify correctness
 //++++ a way to clear vectors' memory after a lot of objects has been removed
 //++++ add function to add array of Objects
+//++++ change TArray return type to TQueue<Object*, EQueueMode::Spsc>
 //???? may be RemoveObject doesn't work in the most effective way
 
 

@@ -69,6 +69,7 @@ void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
   }
 }
 
+/* REMAKE
 FString AInteractiveObject::GatherInformation() const
 {
   if (!MainManager)
@@ -80,6 +81,7 @@ FString AInteractiveObject::GatherInformation() const
   return "";
   //return StringStats[ObjectNameStatID].ToString() + "\n";
 }
+*/
 
 void AInteractiveObject::ShowInfluences() const
 {
@@ -157,12 +159,17 @@ void AInteractiveObject::ConnectToManager(ARegistrationManager* NewManager)
 {
   if (MainManager)
   {
-    MainManager->CTsSystem.RemoveObject(this);
+    MainManager->CTsSystem->RemoveObject(this);
+
+    if (MainManager->CentralObject == this)
+    {
+      UnpickedAsCentral();
+    }
   }
 
   MainManager = NewManager;
 
-  MainManager->CTsSystem.AddObject(this);
+  MainManager->CTsSystem->AddObject(this);
 }
 
 void AInteractiveObject::PickedAsCentral()
@@ -201,10 +208,13 @@ void AInteractiveObject::UnpickedAsTarget()
   InteractivityIcon->SetAvailability(true);
 }
 
-void AInteractiveObject::ShowIconsDependingOnInfluence()
+void AInteractiveObject::AwakeDependingOnInfluence(TArray<AInteractiveObject*>& Objects)
 {
-  for (AInteractiveObject* Object : MainManager->FoundObjects)
+  for (AInteractiveObject* Object : Objects)
   {
+    //???? change every used in this case tarray to tarray with TInlineAllocator
+    MainManager->AwakenObjects.Add(Object);
+
     Object->InteractivityIcon->Show();
 
     if (InfluencesArray.Find(Object))
@@ -218,11 +228,13 @@ void AInteractiveObject::ShowIconsDependingOnInfluence()
   }
 }
 
-void AInteractiveObject::HideDisplayedIcons()
+void AInteractiveObject::PutToSleepManagedObjects(ARegistrationManager* Manager)
 {
-  for (AInteractiveObject* DisplayedObject : MainManager->FoundObjects)
+  TArray<AInteractiveObject*, TInlineAllocator<AverageManagedObjects>>& AwakenObjects = Manager->AwakenObjects;
+
+  while (AwakenObjects.Num())
   {
-    DisplayedObject->InteractivityIcon->Hide();
+    AwakenObjects.Pop()->InteractivityIcon->Hide();
   }
 }
 
