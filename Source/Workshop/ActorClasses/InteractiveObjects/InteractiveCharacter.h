@@ -92,12 +92,6 @@ public:
 
   virtual void UnpickedAsCentral() override;
 
-  // ------------------ //
-  // Turn-based actions //
-  // ------------------ //
-
-  virtual void SetTurn(ETurnPhase TurnPhase) override;
-
   // ----------------------//
   // Character Information //
   // --------------------- //

@@ -46,12 +46,12 @@ void ARegistrationManager::PostInitProperties()
 }
 
 // Find objects with respect to chosen CentralObject.
-TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs)
+TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<int32>& CTsArray, int32 EnoughNumberOfCTs)
 {
   return CTsSystem->FindByCTs(CTsArray, EnoughNumberOfCTs);
 }
 
-TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTsWithMask(const TArray<int32> CTsArray, int32 EnoughNumberOfCTs, int32 TargetTypeMask)
+TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTsWithMask(const TArray<int32>& CTsArray, int32 EnoughNumberOfCTs, int32 TargetTypeMask)
 {
   TArray<AInteractiveObject*> FoundObjects = CTsSystem->FindByCTs(CTsArray, EnoughNumberOfCTs);
 
@@ -114,4 +114,51 @@ void ARegistrationManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 bool ARegistrationManager::HasCentralObject() const
 {
   return CentralObject != nullptr;
+}
+
+void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
+{
+  ARegistrationManager*& ObjectsManager = Object->MainManager;
+
+  if (ObjectsManager)
+  {
+    ObjectsManager->CTsSystem->RemoveObject(Object);
+
+    if (ObjectsManager->CentralObject == Object)
+    {
+      Object->UnpickedAsCentral();
+    }
+  }
+
+  ObjectsManager = this;
+
+  CTsSystem->AddObject(Object);
+}
+
+void ARegistrationManager::PutToSleepManagedObjects(ARegistrationManager* Manager)
+{
+  while (AwakenObjects.Num())
+  {
+    AwakenObjects.Pop()->InteractivityIcon->Hide();
+  }
+}
+
+void ARegistrationManager::AwakeByCenterObject(TArray<AInteractiveObject*>& Objects)
+{
+  for (AInteractiveObject* Object : Objects)
+  {
+    AwakenObjects.Add(Object);
+
+    // Using friend status not to add new functions
+    Object->InteractivityIcon->Show();
+
+    if (CentralObject->InfluencesSet.Find(Object))
+    {
+      Object->InteractivityIcon->SetAvailability(false);
+    }
+    else
+    {
+      Object->InteractivityIcon->SetAvailability(true);
+    }
+  }
 }

@@ -8,7 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "InteractiveAbility.h"
 #include "Workshop/UI/TurnBasedEvent/TurnBasedHUD.h"
-#include "Workshop/PlayerControl/TurnBasedController.h"
+#include "Workshop/PlayerControl/InteractController.h"
 #include "InteractiveAbility.h"
 
 
@@ -56,28 +56,6 @@ FString AInteractiveCharacter::GatherInformation() const
 void AInteractiveCharacter::ShowInfluences() const
 {
   Super::ShowInfluences();
-}
-
-void AInteractiveCharacter::SetTurn(ETurnPhase TurnPhase)
-{
-  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
-  {
-    UEffectData* ChosenEffect = AccumulatedEffects[EffectIndex];
-
-    if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
-    {
-      continue;
-    }
-
-    ChosenEffect->ResolveOn(this);
-    ChosenEffect->DecreaseDuration();
-
-    // Remove effect if it is no longer present
-    if (!ChosenEffect->Duration)
-    {
-      RemoveEffectByIndex(EffectIndex);
-    }
-  }
 }
 
 void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
@@ -180,7 +158,7 @@ void AInteractiveCharacter::BeginPlay()
 
   for (TSubclassOf<AInteractiveAbility> AbilityClass : AbilitiesClasses)
   {
-    ATurnBasedController* CurrentController = Cast<ATurnBasedController>(UGameplayStatics::GetPlayerController(this, 0));
+    AInteractController* CurrentController = Cast<AInteractController>(UGameplayStatics::GetPlayerController(this, 0));
 
     FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation();
 

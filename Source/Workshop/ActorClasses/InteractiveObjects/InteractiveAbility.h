@@ -92,17 +92,15 @@ public:
   void CustomEffect(AInteractiveObject* TargetObject);
   virtual void CustomEffect_Implementation(AInteractiveObject* TargetObject);
 
-  // Uses CustomEffect on every Influenced Object
+  // Used when all targets are chosen and effects should be transfered.
   UFUNCTION(BlueprintCallable)
   void ResolveAbility();
 
-  void CenterInOwner();
+  UFUNCTION() void CenterInCharacterOwner();
 
-  // ------------------ //
-  // Turn-based actions //
-  // ------------------ //
-
-  virtual void SetTurn(ETurnPhase TurnPhase) override;
+  // Decrease duration of temporary effects depending on their resolve phase.
+  UFUNCTION(BlueprintCallable)
+  void UpdateEffects(ETurnPhase TurnPhase);
 
   // ------------------- //
   // Ability's variables //

@@ -12,7 +12,7 @@ void UAbilitySlot::AbilityClicked()
     return;
   }
  
-  ChosenAbility->CenterInOwner();
+  ChosenAbility->CenterInCharacterOwner();
   // ChosenAbility->Pick();
   //++++ add usage of EmptySlot texture
 }

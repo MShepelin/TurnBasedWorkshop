@@ -1,18 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TurnBasedController.h"
+#include "InteractController.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
 #include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
 
 
-ATurnBasedController::ATurnBasedController()
+AInteractController::AInteractController()
 {
 
 }
 
-void ATurnBasedController::TryToInteract()
+void AInteractController::StartInteract()
 {
   if (CurrentCamera)
   {
@@ -53,10 +53,13 @@ void ATurnBasedController::TryToInteract()
     return;
   }
 
+  //++++ make two functions: one for rmb, other for lmb, 
+  //     so that player can pick just to look info (without target choosing)
+  //     also make basic function to ray cast for InteractiveObject
   InteractiveObject->Pick();
 }
 
-void ATurnBasedController::StopInteract()
+void AInteractController::StopInteract()
 {
   if (CurrentCamera)
   {
@@ -64,7 +67,7 @@ void ATurnBasedController::StopInteract()
   }
 }
 
-void ATurnBasedController::BeginPlay()
+void AInteractController::BeginPlay()
 {
   Super::BeginPlay();
 
@@ -72,7 +75,7 @@ void ATurnBasedController::BeginPlay()
 }
 
 /* REMAKE
-void ATurnBasedController::ConnectToEvent(ARegistrationManager* NewManager)
+void AInteractController::ConnectToEvent(ARegistrationManager* NewManager)
 {
   return;
 
@@ -82,16 +85,16 @@ void ATurnBasedController::ConnectToEvent(ARegistrationManager* NewManager)
 }
 */
 
-void ATurnBasedController::SetupInputComponent()
+void AInteractController::SetupInputComponent()
 {
   Super::SetupInputComponent();
 
-  InputComponent->BindAction("Interact", IE_Pressed, this, &ATurnBasedController::TryToInteract);
+  InputComponent->BindAction("Interact", IE_Pressed, this, &AInteractController::StartInteract);
 
-  InputComponent->BindAction("Interact", IE_Released, this, &ATurnBasedController::StopInteract);
+  InputComponent->BindAction("Interact", IE_Released, this, &AInteractController::StopInteract);
 }
 
-void ATurnBasedController::SetPawn(APawn * InPawn)
+void AInteractController::SetPawn(APawn * InPawn)
 {
   Super::SetPawn(InPawn);
 
@@ -103,7 +106,7 @@ void ATurnBasedController::SetPawn(APawn * InPawn)
   }
 }
 
-ASpryCamera* ATurnBasedController::GetCurrentCamera() const
+ASpryCamera* AInteractController::GetCurrentCamera() const
 {
   return CurrentCamera;
 }

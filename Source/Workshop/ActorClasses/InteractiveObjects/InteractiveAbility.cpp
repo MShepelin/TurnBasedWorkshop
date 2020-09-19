@@ -90,7 +90,7 @@ void AInteractiveAbility::ResolveAbility()
   
   //++++ apply movememt
 
-  for (AInteractiveObject* DependentObject : InfluencesArray)
+  for (AInteractiveObject* DependentObject : InfluencesSet)
   {
     CustomEffect(DependentObject);
   }
@@ -135,14 +135,14 @@ void AInteractiveAbility::PickedAsCentral()
   }
 #endif
 
-  AwakeDependingOnInfluence(FoundObjects);
+  MainManager->AwakeByCenterObject(FoundObjects);
 }
 
 void AInteractiveAbility::UnpickedAsCentral()
 {
   Super::UnpickedAsCentral();
 
-  PutToSleepManagedObjects(MainManager);
+  MainManager->PutToSleepManagedObjects(MainManager);
 }
 
 void AInteractiveAbility::PickedAsTarget()
@@ -160,27 +160,8 @@ int32 AInteractiveAbility::GetTargetTypeMask() const
   return TargetTypeMask;
 }
 
-void AInteractiveAbility::SetTurn(ETurnPhase TurnPhase)
+void AInteractiveAbility::UpdateEffects(ETurnPhase TurnPhase)
 {
-  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
-  {
-    UEffectData* ChosenEffect = AccumulatedEffects[EffectIndex];
-
-    if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
-    {
-      continue;
-    }
-
-    ChosenEffect->ResolveOn(this);
-    ChosenEffect->DecreaseDuration();
-
-    // Remove effect if it is no longer present
-    if (!ChosenEffect->Duration)
-    {
-      RemoveEffectByIndex(EffectIndex);
-    }
-  }
-
   for (size_t EffectIndex = UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
   {
     UEffectData* ChosenEffect = UsedEffects[EffectIndex];
@@ -192,6 +173,7 @@ void AInteractiveAbility::SetTurn(ETurnPhase TurnPhase)
 
     if (!ChosenEffect->bIsBonusEffect)
     {
+      // BonusEffects always go after basic effects.
       break;
     }
 
@@ -206,7 +188,7 @@ void AInteractiveAbility::SetTurn(ETurnPhase TurnPhase)
   }
 }
 
-void AInteractiveAbility::CenterInOwner()
+void AInteractiveAbility::CenterInCharacterOwner()
 {
   check(CharacterOwner != nullptr);
   CharacterOwner->SetCentralAbility(this);

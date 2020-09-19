@@ -20,6 +20,7 @@ class UAdvantageEffectData;
 
 // Interactive object are paired with Managers to support turn-based actions 
 // and exchange information between other Interactive objects.
+// Has conditions of being awake or asleep, and being available or unavailable.
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractiveObject : public AActor
 {
@@ -28,8 +29,8 @@ class WORKSHOP_API AInteractiveObject : public AActor
 protected:
   UPROPERTY() int32 InteractiveType = static_cast<int32>(EInteractiveType::Nothing);
 
-  TSet<AInteractiveObject*> DependenciesArray;
-  TSet<AInteractiveObject*> InfluencesArray;
+  TSet<AInteractiveObject*> DependenciesSet;
+  TSet<AInteractiveObject*> InfluencesSet;
 
   // ------------- //
   // Visualisation //
@@ -37,28 +38,6 @@ protected:
 
   UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
   UIconComponent* InteractivityIcon;
-
-  // If object in array is influenced by this object it will be shown unavailable.
-  // Otherwise it will be shown available.
-  void AwakeDependingOnInfluence(TArray<AInteractiveObject*>& Objects);
-
-  // Static - because this function relate to class, but not concrete object.
-  static void PutToSleepManagedObjects(ARegistrationManager* Manager);
-
-  // ------------------ //
-  // Object Statisctics //
-  // ------------------ //
-
-  // Statisctics in form of strings
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | Statistics")
-  TMap<int32, FName> StringStats =
-  {
-    {ObjectNameStatID, DefaultStringValue},
-  };
-
-  // Statisctics in form of integers
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | Statistics")
-  TMap<int32, int32> IntegerStats;
 
   // ------------------ //
   // CTs System Support //
@@ -75,17 +54,38 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | CTs", meta = (ClampMin = "1"));
   TArray<int32> CTsOfObject;
 
-  // -------------------- //
-  // Turn-based mechanics //
-  // -------------------- //
+  // Called when the game starts or when spawned.
+  virtual void BeginPlay() override;
+
+  inline void RemoveEffectByIndex(int32 EffectIndex);
+
+public:
+  // ----------------- //
+  // Object Statistics //
+  // ----------------- //
+
+  // Statisctics in form of strings
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | Statistics")
+    TMap<int32, FName> StringStats =
+  {
+    {ObjectNameStatID, DefaultStringValue},
+  };
+
+  // Statisctics in form of integers
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | Statistics")
+    TMap<int32, int32> IntegerStats;
 
   // Array of effects which are applied in the current state.
   UPROPERTY() TArray<UEffectData*> AccumulatedEffects;
 
-  // Called when the game starts or when spawned.
-  virtual void BeginPlay() override;
+private:
+  // -------- //
+  // CT usage //
+  // -------- //
 
-  void RemoveEffectByIndex(int32 EffectIndex);
+  std::shared_ptr<Node<AInteractiveObject>>& GetNodeForCT();
+
+  const TArray<int32>* GetCTs() const;
 
 public:
   AInteractiveObject();
@@ -104,15 +104,12 @@ public:
 
   virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-  // ----------------------- //
-  // Connection with Manager //
-  // ----------------------- //
+  // ------------------ //
+  // Manager Connection //
+  // ------------------ //
 
   UFUNCTION(BlueprintCallable)
   ARegistrationManager* GetManager() const;
-
-  UFUNCTION(BlueprintCallable)
-  void ConnectToManager(ARegistrationManager* NewManager);
 
   UFUNCTION(BlueprintCallable)
   bool IsCentral() const;
@@ -122,6 +119,7 @@ public:
   UFUNCTION() virtual void PickedAsTarget();
   UFUNCTION() virtual void UnpickedAsTarget();
 
+  // Picked by controller with aim to choose targets to influence on.
   UFUNCTION(BlueprintCallable)
   void Pick();
 
@@ -129,28 +127,13 @@ public:
   // Influences and dependencies //
   // --------------------------- //
 
-  UFUNCTION(BlueprintCallable)
-  void AddInfluenceOn(AInteractiveObject* object);
+  UFUNCTION() void AddInfluenceOn(AInteractiveObject* object);
+  UFUNCTION() void RemoveDependenceFrom(AInteractiveObject * object);
+  UFUNCTION() void ClearInflunces();
+  UFUNCTION() void ClearDependencies();
 
-  UFUNCTION(BlueprintCallable)
-  void RemoveDependenceFrom(AInteractiveObject * object);
+  // These 4 functions above don't change appearence of connections.
 
-  UFUNCTION(BlueprintCallable)
-  void ClearInflunces();
-
-  UFUNCTION(BlueprintCallable)
-  void ClearDependencies();
-
-protected:
-  // -------- //
-  // CT usage //
-  // -------- //
-
-  std::shared_ptr<Node<AInteractiveObject>>& GetNodeForCT();
-
-  const TArray<int32>* GetCTs() const;
-
-public:
   // --------------- //
   // Get information //
   // --------------- //
@@ -158,34 +141,36 @@ public:
   UFUNCTION(BlueprintCallable)
   int32 GetInteractiveType() const;
 
-  UFUNCTION(BlueprintCallable)
-  FName GetInteractiveObjectName() const;
+  //UFUNCTION(BlueprintCallable)
+  //FName GetInteractiveObjectName() const;
 
-  UFUNCTION(BlueprintCallable)
-  TArray<FString> GetCTsNamesOfObject() const;
+  //UFUNCTION(BlueprintCallable)
+  //TArray<FString> GetCTsNamesOfObject() const;
 
   // REMAKE
   // Happens when player chooses this object.
   // UFUNCTION(BlueprintCallable)
   // virtual FString GatherInformation() const;
 
-  // Visual interpretation of connections.
-  virtual void ShowInfluences() const;
-
-  // ------------------ //
-  // Turn-based actions //
-  // ------------------ //
-
-  UFUNCTION(BlueprintCallable)
-  virtual void SetTurn(ETurnPhase TurnPhase);
-
   // ------ //
   // Others //
   // ------ //
 
+  // Resolve effects depeding on their resolve phase.
+  UFUNCTION() void ResolveAccumulatedEffects(ETurnPhase TurnPhase);
+
+#if WITH_EDITOR
+  // Visual interpretation of connections.
+  UFUNCTION() virtual void ShowInfluences() const;
+#endif
+
   // Interactive objects often exchange information, 
   // so friend status is used for optimisation and code clearness.
   friend class AInteractiveObject;
+
+  // Agreement: ARegistrationManager is the only class, 
+  // which can change MainManager.
+  friend class ARegistrationManager;
 
   // CTsGraph is build to be fast tool to search large number of Interactive objects,
   // so this is used to optimise access to needed information
@@ -194,8 +179,9 @@ public:
 
   // Effects and functions from UBuildAbility create gameplay mechanics 
   // so they should be able to modify InteractiveObject
-  friend class UBuildAbility;
-  friend class UEffectData;
-  friend class UAdvantageEffectData;
-  friend class UChangeStatEffectData;
+  //friend class UBuildAbility;
+  //friend class UEffectData;
+
+  //???? make class which can process gathering information about this class
+  //     to present it for hud
 };

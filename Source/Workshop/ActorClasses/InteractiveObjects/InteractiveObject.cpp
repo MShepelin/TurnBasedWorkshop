@@ -45,10 +45,10 @@ void AInteractiveObject::Tick(float DeltaTime)
 
 void AInteractiveObject::AddInfluenceOn(AInteractiveObject * TargetObject)
 {
-  if (!InfluencesArray.Find(TargetObject))
+  if (!InfluencesSet.Find(TargetObject))
   {
-    InfluencesArray.Add(TargetObject);
-    TargetObject->DependenciesArray.Add(this);
+    InfluencesSet.Add(TargetObject);
+    TargetObject->DependenciesSet.Add(this);
   }
   else
   {
@@ -58,10 +58,10 @@ void AInteractiveObject::AddInfluenceOn(AInteractiveObject * TargetObject)
 
 void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
 {
-  if (DependenciesArray.Find(this))
+  if (DependenciesSet.Find(this))
   {
-    TargetObject->InfluencesArray.Remove(this);
-    DependenciesArray.Remove(TargetObject);
+    TargetObject->InfluencesSet.Remove(this);
+    DependenciesSet.Remove(TargetObject);
   }
   else
   {
@@ -83,21 +83,21 @@ FString AInteractiveObject::GatherInformation() const
 }
 */
 
+#if WITH_EDITOR
 void AInteractiveObject::ShowInfluences() const
 {
-#if WITH_EDITOR
   // Show what objects are influenced by this object
-  for (AInteractiveObject* DependentObject : InfluencesArray)
+  for (AInteractiveObject* DependentObject : InfluencesSet)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), DependentObject->GetActorLocation(),
       DebugColor, false, DebugTime);
   }
-#endif
 }
+#endif
 
 void AInteractiveObject::ClearInflunces()
 {
-  for (AInteractiveObject* DependingObject : InfluencesArray)
+  for (AInteractiveObject* DependingObject : InfluencesSet)
   {
     DependingObject->RemoveDependenceFrom(this);
   }
@@ -105,7 +105,7 @@ void AInteractiveObject::ClearInflunces()
 
 void AInteractiveObject::ClearDependencies()
 {
-  for (AInteractiveObject* InfluencingObject : DependenciesArray)
+  for (AInteractiveObject* InfluencingObject : DependenciesSet)
   {
     RemoveDependenceFrom(InfluencingObject);
   }
@@ -139,37 +139,17 @@ int32 AInteractiveObject::GetInteractiveType() const
   return InteractiveType;
 }
 
+/*
 FName AInteractiveObject::GetInteractiveObjectName() const
 {
   return StringStats[ObjectNameStatID];
 }
-
-void AInteractiveObject::SetTurn(ETurnPhase TurnPhase)
-{
-
-}
+*/
 
 void AInteractiveObject::RemoveEffectByIndex(int32 EffectIndex) //???? add inline?
 {
   AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
   AccumulatedEffects.Pop();
-}
-
-void AInteractiveObject::ConnectToManager(ARegistrationManager* NewManager)
-{
-  if (MainManager)
-  {
-    MainManager->CTsSystem->RemoveObject(this);
-
-    if (MainManager->CentralObject == this)
-    {
-      UnpickedAsCentral();
-    }
-  }
-
-  MainManager = NewManager;
-
-  MainManager->CTsSystem->AddObject(this);
 }
 
 void AInteractiveObject::PickedAsCentral()
@@ -178,7 +158,7 @@ void AInteractiveObject::PickedAsCentral()
 
   MainManager->CentralObject = this;
 
-  //++++ add info to hud
+  //++++ add hint to hud that object was picked
 }
 
 void AInteractiveObject::UnpickedAsCentral()
@@ -186,8 +166,6 @@ void AInteractiveObject::UnpickedAsCentral()
   check(MainManager != nullptr);
 
   MainManager->CentralObject = nullptr;
-
-  //++++ remove info from hud
 }
 
 void AInteractiveObject::PickedAsTarget()
@@ -208,36 +186,7 @@ void AInteractiveObject::UnpickedAsTarget()
   InteractivityIcon->SetAvailability(true);
 }
 
-void AInteractiveObject::AwakeDependingOnInfluence(TArray<AInteractiveObject*>& Objects)
-{
-  for (AInteractiveObject* Object : Objects)
-  {
-    //???? change every used in this case tarray to tarray with TInlineAllocator
-    MainManager->AwakenObjects.Add(Object);
-
-    Object->InteractivityIcon->Show();
-
-    if (InfluencesArray.Find(Object))
-    {
-      Object->InteractivityIcon->SetAvailability(false);
-    }
-    else
-    {
-      Object->InteractivityIcon->SetAvailability(true);
-    }
-  }
-}
-
-void AInteractiveObject::PutToSleepManagedObjects(ARegistrationManager* Manager)
-{
-  TArray<AInteractiveObject*, TInlineAllocator<AverageManagedObjects>>& AwakenObjects = Manager->AwakenObjects;
-
-  while (AwakenObjects.Num())
-  {
-    AwakenObjects.Pop()->InteractivityIcon->Hide();
-  }
-}
-
+/*
 TArray<FString> AInteractiveObject::GetCTsNamesOfObject() const
 {
   check(MainManager != nullptr);
@@ -251,6 +200,7 @@ TArray<FString> AInteractiveObject::GetCTsNamesOfObject() const
 
   return CTsNames;
 }
+*/
 
 bool AInteractiveObject::IsCentral() const
 {
@@ -287,5 +237,27 @@ void AInteractiveObject::Pick()
   else
   {
     UnpickedAsTarget();
+  }
+}
+
+void AInteractiveObject::ResolveAccumulatedEffects(ETurnPhase TurnPhase)
+{
+  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
+  {
+    UEffectData* ChosenEffect = AccumulatedEffects[EffectIndex];
+
+    if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
+    {
+      continue;
+    }
+
+    ChosenEffect->ResolveOn(this);
+    ChosenEffect->DecreaseDuration();
+
+    // Remove effect if it is no longer present
+    if (!ChosenEffect->Duration)
+    {
+      RemoveEffectByIndex(EffectIndex);
+    }
   }
 }

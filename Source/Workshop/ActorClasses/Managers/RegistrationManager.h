@@ -34,7 +34,8 @@ protected:
   // Used to store managed InteractiveObjects.
   // Agreement: changed only by Awake/PutToSleep functions of InteractiveObjects.
   TArray<AInteractiveObject*, TInlineAllocator<AverageManagedObjects>> AwakenObjects;
-  // It's a TQueue because only operations Add and Clear are needed.
+  //???? change every used in this case tarray to tarray with TInlineAllocator
+  //???? use TQueue?
 
   // Here are all stats available in this manager.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
@@ -71,13 +72,28 @@ public:
   // CTs usage //
   //---------- //
 
+  // Finds all suitable InteractiveObjects.
   UFUNCTION(BlueprintCallable)
   TArray<AInteractiveObject*> FindObjectsByCTs(
-    const TArray<int32> CTsArray, int32 EnoughNumberOfCTs);
+    const TArray<int32>& CTsArray, int32 EnoughNumberOfCTs);
 
-  UFUNCTION() //???? make callable
+  // Finds all suitable InteractiveObjects excluding Manager's central object.
+  UFUNCTION(BlueprintCallable)
   TArray<AInteractiveObject*> FindObjectsByCTsWithMask(
-    const TArray<int32> CTsArray, int32 EnoughNumberOfCTs, int32 TargetTypeMask);
+    const TArray<int32>& CTsArray, int32 EnoughNumberOfCTs, int32 TargetTypeMask);
+
+  // ---------- //
+  // Connection //
+  // ---------- //
+
+  UFUNCTION() virtual void ConnectObject(AInteractiveObject* Object);
+
+  // The way to change status of InteractiveObjects to asleep.
+  UFUNCTION() void PutToSleepManagedObjects(ARegistrationManager* Manager);
+
+  // If object in array is influenced by central object it will be shown unavailable.
+  // Otherwise it will be shown available.
+  UFUNCTION() void AwakeByCenterObject(TArray<AInteractiveObject*>& Objects);
 
   // ----------------------------- //
   // Access to Manager information //
@@ -98,4 +114,7 @@ public:
   // Agreement: AInteractiveObject is the only class, 
   // which can change Manager's CentralObject and CTsSystem
   friend class AInteractiveObject;
+
+  // Managers are allowed to take objects from each other.
+  friend class ARegistrationManager;
 };

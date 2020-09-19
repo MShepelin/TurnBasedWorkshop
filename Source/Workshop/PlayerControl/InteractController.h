@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
-#include "TurnBasedController.generated.h"
+#include "InteractController.generated.h"
 
 
 class ARegistrationManager;
 
 
 UCLASS(Blueprintable)
-class WORKSHOP_API ATurnBasedController : public APlayerController
+class WORKSHOP_API AInteractController : public APlayerController
 {
 	GENERATED_BODY()
 
@@ -26,11 +26,11 @@ protected:
   UPROPERTY() ARegistrationManager* EventManager;
 
   // Tries to pick an Interactive object
-  UFUNCTION() void TryToInteract();
+  UFUNCTION() void StartInteract();
   UFUNCTION() void StopInteract();
 
 public:
-  ATurnBasedController();
+  AInteractController();
 
   void BeginPlay() override;
 
@@ -39,7 +39,10 @@ public:
   virtual void SetPawn(APawn * InPawn) override;
 
   // REMAKE
-  //void ConnectToEvent(ARegistrationManager* NewManager);
+  // void ConnectToEvent(ARegistrationManager* NewManager);
 
   ASpryCamera* GetCurrentCamera() const;
 };
+
+//???? may be make a basic class, which considers only 
+//     TurnBasedController and isn't connected with InteractiveObjects of any kind
