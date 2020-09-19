@@ -21,7 +21,7 @@ private:
   UPROPERTY() ASpryCamera* CurrentCamera;
 
 protected:
-  UPROPERTY() FVector StoreLaction = FVector(0, 0, 0);
+  UPROPERTY() FVector StoreLocation = FVector(0, 0, 0);
 
   UPROPERTY() ARegistrationManager* EventManager;
 

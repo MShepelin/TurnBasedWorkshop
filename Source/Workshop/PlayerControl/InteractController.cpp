@@ -14,6 +14,8 @@ AInteractController::AInteractController()
 
 void AInteractController::StartInteract()
 {
+  UE_LOG(LogTemp, Warning, TEXT("GOt you!"));
+
   if (CurrentCamera)
   {
     CurrentCamera->PlayerPressedClick();
@@ -32,7 +34,7 @@ void AInteractController::StartInteract()
   FCollisionResponseParams ResponseParams;
 
   FHitResult Hit;
-  bool bIsHit = GetWorld()->LineTraceSingleByChannel(
+  GetWorld()->LineTraceSingleByChannel(
     Hit,
     CameraLocation,
     CameraLocation + CameraPawn->GetCameraDirection() * RayCastLength,
@@ -40,11 +42,15 @@ void AInteractController::StartInteract()
     CollisionParams,
     ResponseParams
   );
-
-  if (!bIsHit)
-  {
-    return;
-  }
+  /*
+  DrawDebugLine(
+    GetWorld(),
+    CameraLocation,
+    CameraLocation + CameraPawn->GetCameraDirection() * RayCastLength,
+    FColor(255, 0, 0),
+    false, 5, 0,
+    12.333
+  );*/
 
   AInteractiveObject* InteractiveObject = Cast<AInteractiveObject>(Hit.Actor);
 

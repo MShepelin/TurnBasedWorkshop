@@ -3,6 +3,7 @@
 #include "SpryCamera.h"
 #include "../InteractiveObjects/InteractiveCharacter.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 ASpryCamera::ASpryCamera()
@@ -14,7 +15,11 @@ ASpryCamera::ASpryCamera()
 
   WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
 
-  WidgetInteraction->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+  WidgetInteraction->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+  // for test:
+  //FVector CameraDirection = Camera->GetRelativeRotation().Vector();
+  //HiddenLocation = -CameraDirection * MaxActorSize;
 }
 
 void ASpryCamera::OnCharacterResolvesAbility_Implementation(AInteractiveCharacter* CurrentCharacter)
@@ -24,7 +29,7 @@ void ASpryCamera::OnCharacterResolvesAbility_Implementation(AInteractiveCharacte
 
 FVector ASpryCamera::GetHiddenLocation() const
 {
-  return HiddenLocation;
+  return UKismetMathLibrary::TransformLocation(GetActorTransform(), HiddenLocation);
 }
 
 void ASpryCamera::OnConstruction(const FTransform & Transform)
@@ -74,7 +79,7 @@ void ASpryCamera::Tick(float DeltaSeconds)
 
 FVector ASpryCamera::GetCameraDirection() const
 {
-  return Camera->GetComponentRotation().Vector();
+  return WidgetInteraction->GetComponentRotation().Vector();
 }
 
 void ASpryCamera::PlayerPressedClick()

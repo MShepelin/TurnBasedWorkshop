@@ -175,7 +175,7 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
 {
   if (CentralAbility)
   {
-    if (CentralAbility->IsCentral())
+    if (CentralAbility->IsCentral()) //++++ sounds ambiguous, change termins!
     {
       CentralAbility->UnpickedAsCentral();
     }
@@ -183,14 +183,17 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
     CentralAbility->ClearDependencies();
     CentralAbility->ClearInflunces();
     SetCentralAbilityVisibility(true);
-    CentralAbility->SetActorLocation(FVector(0, 0, 0)); // get controller -> get abilities save location
+
+    AInteractController* CurrentController = Cast<AInteractController>(UGameplayStatics::GetPlayerController(this, 0));
+    FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation(); //???? may be save hidden location somewhere
+    CentralAbility->SetActorLocation(HiddenLocation);
   }
 
   CentralAbility = Ability;
   CentralAbility->SetActorLocation(CentralAbilityRelativePosition + CollisionBox->GetComponentLocation());
 }
 
-void AInteractiveCharacter::SetCentralAbilityVisibility(bool bIsInvisible)
+void AInteractiveCharacter::SetCentralAbilityVisibility(bool bIsInvisible) //++++ change name
 {
   check(CentralAbility != nullptr);
   CentralAbility->SetActorHiddenInGame(bIsInvisible);

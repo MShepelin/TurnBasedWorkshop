@@ -99,16 +99,18 @@ void AInteractiveObject::ClearInflunces()
 {
   for (AInteractiveObject* DependingObject : InfluencesSet)
   {
-    DependingObject->RemoveDependenceFrom(this);
+    DependingObject->DependenciesSet.Remove(this);
   }
+  InfluencesSet.Empty();
 }
 
 void AInteractiveObject::ClearDependencies()
 {
   for (AInteractiveObject* InfluencingObject : DependenciesSet)
   {
-    RemoveDependenceFrom(InfluencingObject);
+    InfluencingObject->InfluencesSet.Remove(this);
   }
+  DependenciesSet.Empty();
 }
 
 std::shared_ptr<Node<AInteractiveObject>>& AInteractiveObject::GetNodeForCT()

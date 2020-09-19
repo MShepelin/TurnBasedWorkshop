@@ -86,7 +86,8 @@ public:
   // Connection //
   // ---------- //
 
-  UFUNCTION() virtual void ConnectObject(AInteractiveObject* Object);
+  UFUNCTION(BlueprintCallable) 
+  virtual void ConnectObject(AInteractiveObject* Object);
 
   // The way to change status of InteractiveObjects to asleep.
   UFUNCTION() void PutToSleepManagedObjects(ARegistrationManager* Manager);
