@@ -2,14 +2,30 @@
 
 
 #include "InteractController.h"
-#include "Workshop/ActorClasses/Managers/RegistrationManager.h"
+#include "Workshop/ActorClasses/Managers/TurnBasedManager.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
+#include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
 #include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
+#include "Kismet/GameplayStatics.h"
+#include "ProgressData.h"
 
 
 AInteractController::AInteractController()
 {
+  TurnControl = CreateDefaultSubobject<UTurnBasedComponent>(TEXT("TurnControl"));
+  AddOwnedComponent(TurnControl);
+  TurnControl->ConnectDelegate.BindUObject(this, &AInteractController::ConnectionHappened);
+}
 
+void AInteractController::ConnectionHappened()
+{
+  if (EventManager)
+  {
+    // exit previous event
+  }
+
+  EventManager = TurnControl->GetManager();
+  // enter new one, put actors, etc
 }
 
 void AInteractController::StartInteract()
@@ -78,6 +94,8 @@ void AInteractController::BeginPlay()
   Super::BeginPlay();
 
   bShowMouseCursor = true;
+
+  PlacableCharacters = Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters;
 }
 
 /* REMAKE

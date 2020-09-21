@@ -4,21 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
-#include "TurnBasedData.generated.h"
+#include "ProgressData.generated.h"
 
 
 class AInteractiveCharacter;
 
 
 UCLASS()
-class WORKSHOP_API UTurnBasedData : public USaveGame
+class WORKSHOP_API UProgressData : public USaveGame
 {
 	GENERATED_BODY()
 	
 public:
   UPROPERTY(VisibleAnywhere, Category = "BrigadeSetup")
-  TArray<AInteractiveCharacter*> ChosenCharacters;
+  TArray<AInteractiveCharacter*> AvailableCharacters;
 
   UPROPERTY(VisibleAnywhere, Category = "BrigadeSetup")
-  int32 TestIntValue;
+  int32 TimeCounter;
 };

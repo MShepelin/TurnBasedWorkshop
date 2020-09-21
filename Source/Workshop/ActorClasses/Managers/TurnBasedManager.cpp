@@ -18,6 +18,8 @@ void ATurnBasedManager::AddController(AController* NewController)
   TurnBasedComponent->bIsTurnControlled = JoinedControllers.Num() ? false : true;
 
   JoinedControllers.Add(TurnBasedComponent);
+
+  TurnBasedComponent->ConnectionHappened();
 }
 
 void ATurnBasedManager::RemoveController(AController* NewController)

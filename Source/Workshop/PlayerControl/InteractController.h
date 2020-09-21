@@ -5,10 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
+#include "Workshop/Types/Components/TurnBasedComponent.h"
+#include "ChoicesInstance.h"
 #include "InteractController.generated.h"
 
 
-class ARegistrationManager;
+class ATurnBasedManager;
+class AInteractiveCharacter;
 
 
 UCLASS(Blueprintable)
@@ -21,13 +24,16 @@ private:
   UPROPERTY() ASpryCamera* CurrentCamera;
 
 protected:
-  UPROPERTY() FVector StoreLocation = FVector(0, 0, 0);
+  UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
+  UPROPERTY() ATurnBasedManager* EventManager = nullptr;
 
-  UPROPERTY() ARegistrationManager* EventManager;
+  UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
 
   // Tries to pick an Interactive object
   UFUNCTION() void StartInteract();
   UFUNCTION() void StopInteract();
+
+  UFUNCTION() void ConnectionHappened();
 
 public:
   AInteractController();
