@@ -3,10 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/PlayerController.h"
-#include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
+#include "CameraController.h"
 #include "Workshop/Types/Components/TurnBasedComponent.h"
-#include "ChoicesInstance.h"
 #include "InteractController.generated.h"
 
 
@@ -15,13 +13,9 @@ class AInteractiveCharacter;
 
 
 UCLASS(Blueprintable)
-class WORKSHOP_API AInteractController : public APlayerController
+class WORKSHOP_API AInteractController : public ACameraController
 {
 	GENERATED_BODY()
-
-private:
-  // UPROPERTY() TScriptInterface<ITurnBasedCamera> CurrentCamera = nullptr;
-  UPROPERTY() ASpryCamera* CurrentCamera;
 
 protected:
   UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
@@ -41,14 +35,4 @@ public:
   void BeginPlay() override;
 
   void SetupInputComponent() override;
-
-  virtual void SetPawn(APawn * InPawn) override;
-
-  // REMAKE
-  // void ConnectToEvent(ARegistrationManager* NewManager);
-
-  ASpryCamera* GetCurrentCamera() const;
 };
-
-//???? may be make a basic class, which considers only 
-//     TurnBasedController and isn't connected with InteractiveObjects of any kind

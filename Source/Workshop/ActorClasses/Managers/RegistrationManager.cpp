@@ -10,8 +10,9 @@ ARegistrationManager::ARegistrationManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+  RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("MainScene"));;
   ManagerIcon = CreateDefaultSubobject<UBillboardComponent>(TEXT("ManagerIcon"));
-  RootComponent = ManagerIcon;
+  ManagerIcon->SetupAttachment(RootComponent);
 
   //++++ manage memory in other way, TWeakPtr<>
   CTsSystem = new CTsGraph<int32, AInteractiveObject>();

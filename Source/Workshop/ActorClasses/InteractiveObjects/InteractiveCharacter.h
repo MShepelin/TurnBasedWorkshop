@@ -20,7 +20,7 @@ class UAbilitySlot;
 // Interactive characters have visual represenation, abilities, types, 
 // they are able to take actions in turn-based events and connected to 
 // skill activations.
-UCLASS(Blueprintable)
+UCLASS(Abstract, Blueprintable)
 class WORKSHOP_API AInteractiveCharacter : public AInteractiveObject
 {
 	GENERATED_BODY()

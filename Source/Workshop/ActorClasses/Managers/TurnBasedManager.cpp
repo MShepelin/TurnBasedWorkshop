@@ -2,6 +2,7 @@
 
 #include "TurnBasedManager.h"
 #include "Workshop/Types/Components/TurnBasedComponent.h"
+#include "Components/TextRenderComponent.h"
 
 void ATurnBasedManager::AddController(AController* NewController)
 {
@@ -85,4 +86,26 @@ void ATurnBasedManager::NextPhase()
   {
     CurrentTurnPhase = static_cast<ETurnPhase>(static_cast<uint8>(CurrentTurnPhase) + 1);
   }
+}
+
+void ATurnBasedManager::OnConstruction(const FTransform & Transform)
+{
+  Super::OnConstruction(Transform);
+
+#if WITH_EDITOR
+  UInstancedStaticMeshComponent* SpawnLocations = NewObject<UInstancedStaticMeshComponent>(this, UInstancedStaticMeshComponent::StaticClass());
+  SpawnLocations->SetStaticMesh(LocationMesh);
+  SpawnLocations->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+  SpawnLocations->RegisterComponent();
+
+  for (FCameraLocation ControllerLocation : ControllerLocations)
+  {
+    SpawnLocations->AddInstance(FTransform(FRotator(0, 90, 0), ControllerLocation.CameraSelfLocation, FVector(1, 1, 1)));
+
+    for (FVector CharacterSpawnLocation : ControllerLocation.ParentLocations)
+    {
+      SpawnLocations->AddInstance(FTransform(FRotator(0, 90, 0), CharacterSpawnLocation, FVector(1, 1, 1)));
+    }
+  }
+#endif
 }

@@ -21,7 +21,7 @@ class UAdvantageEffectData;
 // Interactive object are paired with Managers to support turn-based actions 
 // and exchange information between other Interactive objects.
 // Has conditions of being awake or asleep, and being available or unavailable.
-UCLASS(Blueprintable)
+UCLASS(Abstract, Blueprintable)
 class WORKSHOP_API AInteractiveObject : public AActor
 {
 	GENERATED_BODY()

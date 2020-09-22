@@ -13,7 +13,7 @@ class AInteractiveCharacter;
 
 
 // Represenatation of character's gameplay possibilities on game scene.
-UCLASS(Blueprintable)
+UCLASS(Abstract, Blueprintable)
 class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
 {
   GENERATED_BODY()

@@ -8,7 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "InteractiveAbility.h"
 #include "Workshop/UI/TurnBasedEvent/TurnBasedHUD.h"
-#include "Workshop/PlayerControl/InteractController.h"
+#include "Workshop/GameControl/PlayerControllers/CameraController.h"
 #include "InteractiveAbility.h"
 
 
@@ -158,7 +158,7 @@ void AInteractiveCharacter::BeginPlay()
 
   for (TSubclassOf<AInteractiveAbility> AbilityClass : AbilitiesClasses)
   {
-    AInteractController* CurrentController = Cast<AInteractController>(UGameplayStatics::GetPlayerController(this, 0));
+    ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
 
     FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation();
 
@@ -184,7 +184,7 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
     CentralAbility->ClearInflunces();
     SetCentralAbilityVisibility(true);
 
-    AInteractController* CurrentController = Cast<AInteractController>(UGameplayStatics::GetPlayerController(this, 0));
+    ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
     FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation(); //???? may be save hidden location somewhere
     CentralAbility->SetActorLocation(HiddenLocation);
   }
