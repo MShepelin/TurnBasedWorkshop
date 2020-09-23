@@ -61,7 +61,17 @@ void AInteractController::BeginPlay()
 {
   Super::BeginPlay();
 
-  PlacableCharacters = Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters;
+  //PlacableCharacters = Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters;
+
+  /*
+  int32 Counter = 97;
+  for (AInteractiveCharacter* CharacterToPlace : PlacableCharacters)
+  {
+    CharacterToPlace->Rename((const TCHAR *)("Char" + Counter), GetWorld());
+    //GetWorld()->GetLevel(0)->Actors.Add(CharacterToPlace);
+    CharacterToPlace->SetActorLocation(FVector(0, 0, 0));
+    Counter++;
+  }*/
 }
 
 void AInteractController::SetupInputComponent()

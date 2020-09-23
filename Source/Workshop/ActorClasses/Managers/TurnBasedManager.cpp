@@ -4,6 +4,14 @@
 #include "Workshop/Types/Components/TurnBasedComponent.h"
 #include "Components/TextRenderComponent.h"
 
+
+ATurnBasedManager::ATurnBasedManager()
+{
+  SpawnLocations = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("ControllerLocations"));
+  SpawnLocations->SetupAttachment(RootComponent);
+  SpawnLocations->SetHiddenInGame(true, true);
+}
+
 void ATurnBasedManager::AddController(AController* NewController)
 {
   UActorComponent* NeededComponent = NewController->GetComponentByClass(UTurnBasedComponent::StaticClass());
@@ -13,7 +21,7 @@ void ATurnBasedManager::AddController(AController* NewController)
     return;
   }
 
-  UTurnBasedComponent* TurnBasedComponent = Cast< UTurnBasedComponent>(NeededComponent);
+  UTurnBasedComponent* TurnBasedComponent = Cast<UTurnBasedComponent>(NeededComponent);
 
   TurnBasedComponent->Manager = this;
   TurnBasedComponent->bIsTurnControlled = JoinedControllers.Num() ? false : true;
@@ -88,24 +96,13 @@ void ATurnBasedManager::NextPhase()
   }
 }
 
-void ATurnBasedManager::OnConstruction(const FTransform & Transform)
+void ATurnBasedManager::PostInitProperties()
 {
-  Super::OnConstruction(Transform);
+  Super::PostInitProperties();
 
-#if WITH_EDITOR
-  UInstancedStaticMeshComponent* SpawnLocations = NewObject<UInstancedStaticMeshComponent>(this, UInstancedStaticMeshComponent::StaticClass());
-  SpawnLocations->SetStaticMesh(LocationMesh);
-  SpawnLocations->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-  SpawnLocations->RegisterComponent();
-
-  for (FCameraLocation ControllerLocation : ControllerLocations)
+  ControllersLocations.Init(FTransform(), SpawnLocations->GetInstanceCount());
+  for (int32 Index = 0; Index < SpawnLocations->GetInstanceCount(); Index++)
   {
-    SpawnLocations->AddInstance(FTransform(FRotator(0, 90, 0), ControllerLocation.CameraSelfLocation, FVector(1, 1, 1)));
-
-    for (FVector CharacterSpawnLocation : ControllerLocation.ParentLocations)
-    {
-      SpawnLocations->AddInstance(FTransform(FRotator(0, 90, 0), CharacterSpawnLocation, FVector(1, 1, 1)));
-    }
+    SpawnLocations->GetInstanceTransform(Index, ControllersLocations[Index], true);
   }
-#endif
 }

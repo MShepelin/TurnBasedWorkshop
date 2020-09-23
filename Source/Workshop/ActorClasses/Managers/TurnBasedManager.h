@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "RegistrationManager.h"
 #include "Workshop/Types/TurnPhase.h"
-#include "Workshop/Types/CameraLocation.h"
 #include "TurnBasedManager.generated.h"
 
 
@@ -23,15 +22,13 @@ protected:
   UPROPERTY() int32 CurrentControllerIndex;
   UPROPERTY() ETurnPhase CurrentTurnPhase = ETurnPhase::Start;
 
-  UPROPERTY(EditAnywhere, Category = "TurnBased")
-  TArray<FCameraLocation> ControllerLocations;
-
-#if WITH_EDITOR
-  UPROPERTY(EditAnywhere, Category = "TurnBased")
-  UStaticMesh* LocationMesh;
-#endif
+  UPROPERTY(VisibleAnywhere, Category = "TurnBased")
+    UInstancedStaticMeshComponent* SpawnLocations;
+  UPROPERTY() TArray<FTransform> ControllersLocations;
   
 public:
+  ATurnBasedManager();
+
   // Expected to be called with by TurnBasedComponent, but can be called by other entities.
   UFUNCTION(BlueprintCallable) void NextPhase();
 
@@ -42,8 +39,9 @@ public:
   UFUNCTION(BlueprintCallable)
   void RemoveController(AController* NewController);
 
-  void OnConstruction(const FTransform & Transform) override;
+  void PostInitProperties() override;
 
   UFUNCTION(BlueprintCallable)
   ETurnPhase GetPhase() const;
 };
+
