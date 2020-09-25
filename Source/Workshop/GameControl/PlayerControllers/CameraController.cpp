@@ -43,7 +43,7 @@ AActor* ACameraController::GeneralRayCast()
     ResponseParams
   );
 
-  return Hit.Actor.Get();
+  return Hit.GetActor();
 }
 
 void ACameraController::BeginPlay()

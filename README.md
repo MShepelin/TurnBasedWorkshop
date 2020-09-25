@@ -8,10 +8,16 @@ For now a short description reads: "Journey about rethinking the values of life 
 
 ### Repository Structure
 
-**Source/Workshop** contains all needed code.
+**Source/Workshop** contains all needed code:
 
 - **ActorClasses** has all visually represented classes.
-- **Builders** contains functions which can help to build faster event's implementation in Blueprints.
+- **Builders** contains functions to compose events faster in Blueprint.
 - **PlayerControl** is responsible for player's input, saved data and other possible interaction with the game.
 - **Types** gathers structs, enums and classes with aim to transfer information between other objects.
 - **UI** holds Widgets and HUD apart from other classes because of unique parent classes.
+
+Used names:
+
+- **CT** stays for Custom Tag. It's used for search purposes (for example, you want to find all People and Flowers on the level). Expected to be used when there are a lot of CTs in general, but objects only have few.
+- **Interactive** refers to an often used class with some specifics such as connection to Manager, having influence on other Interactive objects,  (for example, in-game characters, items, but not UI).
+- **Core** (DataCore) is object's data which describes it regardless of other objects and current game situation and can travel through levels  (for example, rendered models and sprites, numbers and strings, but not pointers to any objects or transform).

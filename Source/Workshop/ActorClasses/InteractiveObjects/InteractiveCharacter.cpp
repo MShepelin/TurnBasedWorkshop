@@ -14,7 +14,7 @@
 
 AInteractiveCharacter::AInteractiveCharacter()
 {
-  InteractiveType = static_cast<int32>(EInteractiveType::Character);
+  InteractiveDataCore.InteractiveType = static_cast<int32>(EInteractiveType::Character);
 
   CharacterPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
   CharacterPresentation->SetupAttachment(RootComponent);
@@ -29,38 +29,11 @@ AInteractiveCharacter::AInteractiveCharacter()
   // Arrange components
   FVector UnscaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
   CentralAbilityRelativePositionInput = FVector2D(0, UnscaledBoxExtent[0]);
-  
-
-  CTsOfObject.Add(CharacterOutOfControlCT);
-}
-
-/* REMAKE
-FString AInteractiveCharacter::GatherInformation() const
-{
-  FString CharacterInformation = Super::GatherInformation();
-
-  for (TTuple<int32, int32> IntegerStatPair : IntegerStats)
-  {
-    CharacterInformation += MainManager->GetStatNameByID(IntegerStatPair.Key) + " " + FString::FromInt(IntegerStatPair.Value) + "\n";
-  }
-
-  for (TTuple<int32, FName> StringStatPair : StringStats)
-  {
-    CharacterInformation += MainManager->GetStatNameByID(StringStatPair.Key) + " " + StringStatPair.Value.ToString() + "\n";
-  }
-
-  return CharacterInformation + "\n";
-}
-*/
-
-void AInteractiveCharacter::ShowInfluences() const
-{
-  Super::ShowInfluences();
 }
 
 void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
 {
-  UPaperFlipbook** FoundFlipbook = AnimationsMap.Find(AnimationId);
+  UPaperFlipbook** FoundFlipbook = CharacterDataCore.AnimationsMap.Find(AnimationId);
 
   if (FoundFlipbook)
   {
@@ -76,7 +49,7 @@ void AInteractiveCharacter::PostInitProperties()
 {
   Super::PostInitProperties();
 
-  if (!AnimationsMap.Find(IdleAnimation))
+  if (!CharacterDataCore.AnimationsMap.Find(IdleAnimation))
   {
     UE_LOG(LogTemp, Error, TEXT("%d animation id (IdleAnimation) must be set"), IdleAnimation);
   }
@@ -94,28 +67,7 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
   CentralAbilityRelativePosition = FVector(
     CentralAbilityRelativePositionInput[0], WidgetComponentYOrder, CentralAbilityRelativePositionInput[1]);
 
-#if WITH_EDITOR
-  if (!AnimationsMap.Find(IdleAnimation))
-  {
-    return;
-  }
-#endif
-
-  CharacterPresentation->SetFlipbook(AnimationsMap[IdleAnimation]);
-
-  FVector ScaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
-  CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], CollisionBoxWidth, ScaledBoxExtent[2]));
-
-  // Set y-order
-  CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
-
-  FVector PresentationLocation = CharacterPresentation->GetRelativeLocation();
-  CharacterPresentation->SetRelativeLocation(FVector(
-    PresentationLocation[0], MainSpriteYOrder, PresentationLocation[2]));
-
-  FVector BoxLocation = CollisionBox->GetRelativeLocation();
-  CollisionBox->SetRelativeLocation(FVector(
-    BoxLocation[0], MainSpriteYOrder, BoxLocation[2]));
+  RefreshInteractive();
 }
 
 void AInteractiveCharacter::PickedAsCentral()
@@ -128,7 +80,7 @@ void AInteractiveCharacter::PickedAsCentral()
   AbilitiesWidget->SetVisibility(ESlateVisibility::Visible);
   if (AbilitiesWidget)
   {
-    AbilitiesWidget->FillAbilitySlots(Abilities);
+    AbilitiesWidget->FillAbilitySlots(CharacterDataCore.Abilities);
   }
 
   //???? may be move to player controller?
@@ -156,7 +108,7 @@ void AInteractiveCharacter::BeginPlay()
     return;
   }
 
-  for (TSubclassOf<AInteractiveAbility> AbilityClass : AbilitiesClasses)
+  for (TSubclassOf<AInteractiveAbility> AbilityClass : CharacterDataCore.AbilitiesClasses)
   {
     ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
 
@@ -167,7 +119,7 @@ void AInteractiveCharacter::BeginPlay()
         AbilityClass, HiddenLocation, FRotator(0, 0, 0));
     AbilityObject->SetCharacterOwner(this);
     AbilityObject->SetActorHiddenInGame(true);
-    Abilities.Add(AbilityObject);
+    CharacterDataCore.Abilities.Add(AbilityObject);
   }
 }
 
@@ -197,4 +149,28 @@ void AInteractiveCharacter::SetCentralAbilityVisibility(bool bIsInvisible) //+++
 {
   check(CentralAbility != nullptr);
   CentralAbility->SetActorHiddenInGame(bIsInvisible);
+}
+
+void AInteractiveCharacter::RefreshInteractive()
+{
+  if (!CharacterDataCore.AnimationsMap.Find(IdleAnimation))
+  {
+    return;
+  }
+
+  CharacterPresentation->SetFlipbook(CharacterDataCore.AnimationsMap[IdleAnimation]);
+
+  FVector ScaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
+  CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], CollisionBoxWidth, ScaledBoxExtent[2]));
+
+  // Set y-order
+  CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
+
+  FVector PresentationLocation = CharacterPresentation->GetRelativeLocation();
+  CharacterPresentation->SetRelativeLocation(FVector(
+    PresentationLocation[0], MainSpriteYOrder, PresentationLocation[2]));
+
+  FVector BoxLocation = CollisionBox->GetRelativeLocation();
+  CollisionBox->SetRelativeLocation(FVector(
+    BoxLocation[0], MainSpriteYOrder, BoxLocation[2]));
 }

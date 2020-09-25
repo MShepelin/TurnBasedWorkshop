@@ -5,14 +5,10 @@
 #include "CoreMinimal.h"
 #include "CameraController.h"
 #include "Stats/Stats.h"
-#include "Async/AsyncWork.h"
-#include "Kismet/GameplayStatics.h"
-#include "UObject/UObjectBaseUtility.h"
+#include "Workshop/Types/InteractiveObjectData/CharacterCore.h"
 #include "HubController.generated.h"
 
-
 class AInteractiveCharacter;
-
 
 UCLASS(Blueprintable)
 class WORKSHOP_API AHubController : public ACameraController

@@ -25,7 +25,7 @@ void AInteractiveObject::PostInitProperties()
 {
   Super::PostInitProperties();
 
-  if (!StringStats.Find(ObjectNameStatID))
+  if (!InteractiveDataCore.StringStats.Find(ObjectNameStatID))
   {
     UE_LOG(LogTemp, Error, TEXT("Incorrect object stats: a name stat is needed!"));
   }
@@ -69,20 +69,6 @@ void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
   }
 }
 
-/* REMAKE
-FString AInteractiveObject::GatherInformation() const
-{
-  if (!MainManager)
-  {
-    UE_LOG(LogTemp, Error, TEXT("Can't gather information without correct manager!"));
-    return "";
-  }
-
-  return "";
-  //return StringStats[ObjectNameStatID].ToString() + "\n";
-}
-*/
-
 #if WITH_EDITOR
 void AInteractiveObject::ShowInfluences() const
 {
@@ -120,7 +106,7 @@ std::shared_ptr<Node<AInteractiveObject>>& AInteractiveObject::GetNodeForCT()
 
 const TArray<int32>* AInteractiveObject::GetCTs() const
 {
-  return &CTsOfObject;
+  return &InteractiveDataCore.CTsOfObject;
 }
 
 ARegistrationManager* AInteractiveObject::GetManager() const
@@ -138,7 +124,7 @@ void AInteractiveObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 int32 AInteractiveObject::GetInteractiveType() const
 {
-  return InteractiveType;
+  return InteractiveDataCore.InteractiveType;
 }
 
 /*
@@ -150,8 +136,8 @@ FName AInteractiveObject::GetInteractiveObjectName() const
 
 void AInteractiveObject::RemoveEffectByIndex(int32 EffectIndex) //???? add inline?
 {
-  AccumulatedEffects.Swap(EffectIndex, AccumulatedEffects.Num() - 1);
-  AccumulatedEffects.Pop();
+  InteractiveDataCore.AccumulatedEffects.Swap(EffectIndex, InteractiveDataCore.AccumulatedEffects.Num() - 1);
+  InteractiveDataCore.AccumulatedEffects.Pop();
 }
 
 void AInteractiveObject::PickedAsCentral()
@@ -188,22 +174,6 @@ void AInteractiveObject::UnpickedAsTarget()
   InteractivityIcon->SetAvailability(true);
 }
 
-/*
-TArray<FString> AInteractiveObject::GetCTsNamesOfObject() const
-{
-  check(MainManager != nullptr);
-
-  TArray<FString> CTsNames;
-
-  for (int32 ObjectCT : *GetCTs())
-  {
-    CTsNames.Add(MainManager->GetCTName(ObjectCT));
-  }
-
-  return CTsNames;
-}
-*/
-
 bool AInteractiveObject::IsCentral() const
 {
   check(MainManager);
@@ -212,6 +182,12 @@ bool AInteractiveObject::IsCentral() const
 
 void AInteractiveObject::Pick()
 {
+  if (MainManager == nullptr)
+  {
+    UE_LOG(LogTemp, Error, TEXT("Object isn't connected to Manager!"));
+    return;
+  }
+
   if (!MainManager->HasCentralObject())
   {
     PickedAsCentral();
@@ -244,9 +220,9 @@ void AInteractiveObject::Pick()
 
 void AInteractiveObject::ResolveAccumulatedEffects(ETurnPhase TurnPhase)
 {
-  for (size_t EffectIndex = 0; EffectIndex < AccumulatedEffects.Num(); EffectIndex++)
+  for (size_t EffectIndex = 0; EffectIndex < InteractiveDataCore.AccumulatedEffects.Num(); EffectIndex++)
   {
-    UEffectData* ChosenEffect = AccumulatedEffects[EffectIndex];
+    UEffectData* ChosenEffect = InteractiveDataCore.AccumulatedEffects[EffectIndex];
 
     if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
     {
@@ -262,4 +238,9 @@ void AInteractiveObject::ResolveAccumulatedEffects(ETurnPhase TurnPhase)
       RemoveEffectByIndex(EffectIndex);
     }
   }
+}
+
+void AInteractiveObject::RefreshInteractive()
+{
+
 }

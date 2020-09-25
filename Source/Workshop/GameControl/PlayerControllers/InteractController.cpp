@@ -7,6 +7,10 @@
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
 #include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
 #include "Kismet/GameplayStatics.h"
+#include "UObject/UObjectBaseUtility.h"
+#include "Async/AsyncWork.h"
+#include "Kismet/GameplayStatics.h"
+#include "UnrealEd.h"
 #include "../ChoicesInstance.h"
 
 
@@ -61,17 +65,20 @@ void AInteractController::BeginPlay()
 {
   Super::BeginPlay();
 
-  //PlacableCharacters = Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters;
+  FActorSpawnParameters SpawnParams = FActorSpawnParameters();
 
-  /*
-  int32 Counter = 97;
-  for (AInteractiveCharacter* CharacterToPlace : PlacableCharacters)
+  SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+  for (TTuple<FCharacterCore, FInteractiveCore> CharacterData : Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters)
   {
-    CharacterToPlace->Rename((const TCHAR *)("Char" + Counter), GetWorld());
-    //GetWorld()->GetLevel(0)->Actors.Add(CharacterToPlace);
-    CharacterToPlace->SetActorLocation(FVector(0, 0, 0));
-    Counter++;
-  }*/
+    //GetWorld()->SpawnActor(AInteractiveCharacter::StaticClass(), GetCurrentCamera()->GetHiddenLocation(), )
+    check(SpawnCharacterClass != nullptr);
+    AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnCharacterClass, SpawnParams);
+    NewCharacter->CharacterDataCore = CharacterData.Get<0>();
+    NewCharacter->InteractiveDataCore = CharacterData.Get<1>();
+    NewCharacter->SetActorLocation(FVector(0, 0, 0));
+    NewCharacter->RefreshInteractive();
+  }
 }
 
 void AInteractController::SetupInputComponent()

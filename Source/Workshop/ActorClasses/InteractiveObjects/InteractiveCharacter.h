@@ -8,14 +8,13 @@
 #include "Workshop/Types/Effects/EffectData.h"
 #include "InteractiveObject.h"
 #include "Components/BoxComponent.h"
+#include "Workshop/Types/InteractiveObjectData/CharacterCore.h"
 #include "InteractiveCharacter.generated.h"
-
 
 class AInteractiveAbility;
 class UAbilitiesWidget;
 class UInformationWidget;
 class UAbilitySlot;
-
 
 // Interactive characters have visual represenation, abilities, types, 
 // they are able to take actions in turn-based events and connected to 
@@ -26,23 +25,6 @@ class WORKSHOP_API AInteractiveCharacter : public AInteractiveObject
 	GENERATED_BODY()
 
 protected:
-  // --------- //
-  // Abilities //
-  // --------- //
-
-  // Abilities which Interactive character can use.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
-  TArray<TSubclassOf<AInteractiveAbility>> AbilitiesClasses;
-  UPROPERTY() TArray<AInteractiveAbility*> Abilities;
-
-  // ------- //
-  // Visuals //
-  // ------- //
-
-  // Map of animations with their integer identifiers.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
-  TMap<int32, UPaperFlipbook*> AnimationsMap;
-
   //???? add state machine support functions
 
   UPROPERTY(VisibleDefaultsOnly)
@@ -63,6 +45,9 @@ protected:
   UBillboardComponent* CentralAbilityPositionVisual;
 
 public:
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+  FCharacterCore CharacterDataCore;
+
   AInteractiveCharacter();
 
   // ------------------------ //
@@ -111,10 +96,7 @@ public:
   // Others //
   // ------ //
 
-  // REMAKE
-  // virtual FString GatherInformation() const override;
-
-  void ShowInfluences() const override;
+  void RefreshInteractive() override;
 
   friend class UBuildAbility; // for optimisation purposes
 };

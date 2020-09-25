@@ -3,6 +3,9 @@
 
 #include "HubController.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
+#include "UObject/UObjectBaseUtility.h"
+#include "Async/AsyncWork.h"
+#include "Kismet/GameplayStatics.h"
 #include "../ChoicesInstance.h"
 
 
@@ -23,6 +26,7 @@ void AHubController::SetupInputComponent()
 void AHubController::ChooseCharacter()
 {
   AActor* ChosenObject = GeneralRayCast();
+
   if (!ChosenObject)
   {
     return;
@@ -36,8 +40,6 @@ void AHubController::ChooseCharacter()
   }
 
   ChosenCharacters.Add(InteractiveCharacter);
-
-  UE_LOG(LogTemp, Warning, TEXT("New character added!"));
 }
 
 void AHubController::ApplyChosenCharacters()
@@ -51,19 +53,14 @@ void AHubController::ApplyChosenCharacters()
     bStartedLevelLoading = true;
   }
 
-  //Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters = ChosenCharacters.Array();
-
-  /*
+  TArray<TTuple<FCharacterCore, FInteractiveCore>>& ChosenCharactersInGame = Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters;
   for (AInteractiveCharacter* ChosenCharacter : ChosenCharacters)
   {
-    ChosenCharacter->AddToRoot();
-    GetWorld()->RemoveActor(ChosenCharacter, true);
-  }*/
-
+    ChosenCharactersInGame.Add(TTuple<FCharacterCore,FInteractiveCore>(ChosenCharacter->CharacterDataCore, ChosenCharacter->InteractiveDataCore));
+  }
+  
   LoadPackageAsync(
-    FString("/Game/Experiments/FightMap"),    //nullptr,//PendingTravelGuid.IsValid() ? &PendingTravelGuid : NULL,
-    //NULL,
-    //FLoadPackageAsyncDelegate::CreateRaw(this, &AHubController::ReadyForNextLevel),
+    FString("/Game/Experiments/FightMap"),
     FLoadPackageAsyncDelegate::CreateLambda([=](const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result)
     {
       if (Result == EAsyncLoadingResult::Succeeded)

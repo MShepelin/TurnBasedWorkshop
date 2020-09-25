@@ -4,53 +4,6 @@
 #include "Workshop/Builders/BuildAbility.h"
 #include "InteractiveCharacter.h"
 
-/** REMAKE
-FString AInteractiveAbility::GatherInformation() const
-{
-  FString AbilityInformation = Super::GatherInformation();
-
-  for (int32 ArrayIndex = 0; ArrayIndex < CTsToAffect.Num() - 1; ArrayIndex++)
-  {
-    if (ArrayIndex)
-    {
-      AbilityInformation += ", ";
-    }
-    AbilityInformation += MainManager->GetCTName(CTsToAffect[ArrayIndex]);
-  }
-
-  if (CTsToAffect.Num() > 1)
-  {
-    AbilityInformation += " or ";
-  }
-
-  if (CTsToAffect.Num())
-  {
-    AbilityInformation += MainManager->GetCTName(CTsToAffect[CTsToAffect.Num() - 1]) + " ";
-  }
-
-  ////????
-  if (TargetType != EInteractiveType::Any)
-  {
-    AbilityInformation += UEnum::GetValueAsString(TargetType).RightChop(LengthOfInteractiveTypeName) + " ";
-  }
-  //++++ add mask type support
-  ////????
-
-  for (UEffectData* EffectObject : UsedEffects)
-  {
-    if (!EffectObject)
-    {
-      UE_LOG(LogTemp, Error, TEXT("Unknown error!"));
-      continue;
-    }
-    
-    AbilityInformation += EffectObject->GatherInformation(true, MainManager);
-  }
-
-  return AbilityInformation;
-}
-**/
-
 void AInteractiveAbility::ShowInfluences() const
 {
   Super::ShowInfluences();
@@ -58,12 +11,13 @@ void AInteractiveAbility::ShowInfluences() const
 
 AInteractiveAbility::AInteractiveAbility()
 {
-  InteractiveType = static_cast<int32>(EInteractiveType::Ability);
+  InteractiveDataCore.InteractiveType = static_cast<int32>(EInteractiveType::Ability);
 
   AbilityPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("AbilitySprite"));
   AbilityPresentation->SetupAttachment(RootComponent);
 
-  AbilityPresentation->SetRelativeLocation(FVector(0, -1, 0)); // y-order
+  // y-order
+  AbilityPresentation->SetRelativeLocation(FVector(0, -1, 0)); 
 }
 
 void AInteractiveAbility::SetCharacterOwner(AInteractiveCharacter* NewCharacterOwner)
@@ -86,7 +40,7 @@ void AInteractiveAbility::ResolveAbility()
 {
   check(CharacterOwner != nullptr)
 
-  CharacterOwner->PlayAnimation(AbilityAnimationId);
+  CharacterOwner->PlayAnimation(AbilityDataCore.AbilityAnimationId);
   
   //++++ apply movememt
 
@@ -102,9 +56,9 @@ void AInteractiveAbility::PostInitProperties()
 {
   Super::PostInitProperties();
 
-  if (IconScene)
+  if (AbilityDataCore.IconScene)
   {
-    AbilityPresentation->SetFlipbook(IconScene);
+    AbilityPresentation->SetFlipbook(AbilityDataCore.IconScene);
   }
 }
 
@@ -122,7 +76,7 @@ void AInteractiveAbility::PickedAsCentral()
 {
   Super::PickedAsCentral();
 
-  TArray<AInteractiveObject*> FoundObjects = MainManager->FindObjectsByCTsWithMask(CTsToAffect, 1, TargetTypeMask);
+  TArray<AInteractiveObject*> FoundObjects = MainManager->FindObjectsByCTsWithMask(AbilityDataCore.CTsToAffect, 1, AbilityDataCore.TargetTypeMask);
 
 #if WITH_EDITOR
   UE_LOG(LogTemp, Warning, TEXT("%d targets found"), FoundObjects.Num());
@@ -157,14 +111,14 @@ void AInteractiveAbility::UnpickedAsTarget()
 
 int32 AInteractiveAbility::GetTargetTypeMask() const
 {
-  return TargetTypeMask;
+  return AbilityDataCore.TargetTypeMask;
 }
 
 void AInteractiveAbility::UpdateEffects(ETurnPhase TurnPhase)
 {
-  for (size_t EffectIndex = UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
+  for (size_t EffectIndex = AbilityDataCore.UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
   {
-    UEffectData* ChosenEffect = UsedEffects[EffectIndex];
+    UEffectData* ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
 
     if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
     {
@@ -182,8 +136,8 @@ void AInteractiveAbility::UpdateEffects(ETurnPhase TurnPhase)
     // Remove effect if it is no longer present
     if (!ChosenEffect->Duration)
     {
-      UsedEffects.Swap(EffectIndex, UsedEffects.Num() - 1);
-      UsedEffects.Pop();
+      AbilityDataCore.UsedEffects.Swap(EffectIndex, AbilityDataCore.UsedEffects.Num() - 1);
+      AbilityDataCore.UsedEffects.Pop();
     }
   }
 }
@@ -197,5 +151,5 @@ void AInteractiveAbility::CenterInCharacterOwner()
 
 UTexture2D* AInteractiveAbility::GetIconUI() const
 {
-  return IconUI;
+  return AbilityDataCore.IconUI;
 }

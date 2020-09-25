@@ -6,7 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "FightGameMode.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class WORKSHOP_API AFightGameMode : public AGameModeBase
 {
   GENERATED_BODY()

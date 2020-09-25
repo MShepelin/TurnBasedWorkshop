@@ -11,7 +11,7 @@ AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* Tar
     return TargetObject;
   }
 
-  for (UEffectData* Effect : Ability->UsedEffects)
+  for (UEffectData* Effect : Ability->AbilityDataCore.UsedEffects)
   {
     // Apply instant effect
     if (!Effect->Duration)
@@ -26,11 +26,11 @@ AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* Tar
 
     if ((TargetObject->GetInteractiveType() & static_cast<int32>(EInteractiveType::Ability)) && Effect->bIsAmbiguous)
     {
-      Cast<AInteractiveAbility>(TargetObject)->UsedEffects.Add(DublicatedEffect);
+      Cast<AInteractiveAbility>(TargetObject)->AbilityDataCore.UsedEffects.Add(DublicatedEffect);
     }
     else
     {
-      TargetObject->AccumulatedEffects.Add(DublicatedEffect);
+      TargetObject->InteractiveDataCore.AccumulatedEffects.Add(DublicatedEffect);
     }
   }
 

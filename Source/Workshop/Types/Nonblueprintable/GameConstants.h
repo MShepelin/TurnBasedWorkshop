@@ -11,8 +11,7 @@ const FName DefaultStringValue = "Dude";
 const int32 ObjectNameStatID = -1;
 
 // 1.3 CTs
-const int32 PlayerControlledCharacterCT = -1;
-const int32 CharacterOutOfControlCT = -2;
+//...
 
 // 1.4 Y-order of components
 const float MainSpriteYOrder = 0;

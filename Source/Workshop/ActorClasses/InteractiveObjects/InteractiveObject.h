@@ -10,13 +10,12 @@
 #include "Workshop/Types/Effects/EffectData.h"
 #include "Workshop/Types/InteractiveType.h"
 #include "Workshop/Types/TurnPhase.h"
+#include "Workshop/Types/InteractiveObjectData/InteractiveCore.h"
 #include "InteractiveObject.generated.h"
-
 
 class UBuildAbility;
 class UChangeStatEffectData;
 class UAdvantageEffectData;
-
 
 // Interactive object are paired with Managers to support turn-based actions 
 // and exchange information between other Interactive objects.
@@ -27,7 +26,9 @@ class WORKSHOP_API AInteractiveObject : public AActor
 	GENERATED_BODY()
 
 protected:
-  UPROPERTY() int32 InteractiveType = static_cast<int32>(EInteractiveType::Nothing);
+  // ---------------------- //
+  // Interactive Properties //
+  // ---------------------- //
 
   TSet<AInteractiveObject*> DependenciesSet;
   TSet<AInteractiveObject*> InfluencesSet;
@@ -51,9 +52,6 @@ protected:
   // (For multiple CT systems object-wrapper should be used).
   std::shared_ptr<Node<AInteractiveObject>> NodeForCT = nullptr;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | CTs", meta = (ClampMin = "1"));
-  TArray<int32> CTsOfObject;
-
   // Called when the game starts or when spawned.
   virtual void BeginPlay() override;
 
@@ -64,19 +62,8 @@ public:
   // Object Statistics //
   // ----------------- //
 
-  // Statisctics in form of strings
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | Statistics")
-    TMap<int32, FName> StringStats =
-  {
-    {ObjectNameStatID, DefaultStringValue},
-  };
-
-  // Statisctics in form of integers
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractivitySettings | Statistics")
-    TMap<int32, int32> IntegerStats;
-
-  // Array of effects which are applied in the current state.
-  UPROPERTY() TArray<UEffectData*> AccumulatedEffects;
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+  FInteractiveCore InteractiveDataCore;
 
 private:
   // -------- //
@@ -141,20 +128,12 @@ public:
   UFUNCTION(BlueprintCallable)
   int32 GetInteractiveType() const;
 
-  //UFUNCTION(BlueprintCallable)
-  //FName GetInteractiveObjectName() const;
-
-  //UFUNCTION(BlueprintCallable)
-  //TArray<FString> GetCTsNamesOfObject() const;
-
-  // REMAKE
-  // Happens when player chooses this object.
-  // UFUNCTION(BlueprintCallable)
-  // virtual FString GatherInformation() const;
-
   // ------ //
   // Others //
   // ------ //
+
+  // Special function which should be called after any properties are changed in any unusual way.
+  UFUNCTION() virtual void RefreshInteractive();
 
   // Resolve effects depeding on their resolve phase.
   UFUNCTION() void ResolveAccumulatedEffects(ETurnPhase TurnPhase);
@@ -176,11 +155,6 @@ public:
   // so this is used to optimise access to needed information
   friend class CTsGraph<int32, AInteractiveObject>;
   //++++ remove functions as CTsGraph has access to protected members
-
-  // Effects and functions from UBuildAbility create gameplay mechanics 
-  // so they should be able to modify InteractiveObject
-  //friend class UBuildAbility;
-  //friend class UEffectData;
 
   //???? make class which can process gathering information about this class
   //     to present it for hud
