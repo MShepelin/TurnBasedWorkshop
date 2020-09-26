@@ -24,6 +24,7 @@ protected:
   UPROPERTY(EditDefaultsOnly) TSubclassOf<AInteractiveCharacter> SpawnCharacterClass = nullptr;
 
   UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
+  UPROPERTY(EditDefaultsOnly) FVector CharactersHiddenLocation; //??? may be move to the gamemode
 
   // Tries to pick an Interactive object
   UFUNCTION() void StartInteract();

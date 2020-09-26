@@ -14,12 +14,11 @@ ASpryCamera::ASpryCamera()
   Camera->SetupAttachment(RootComponent);
 
   WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
-
   WidgetInteraction->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
-  // for test:
-  //FVector CameraDirection = Camera->GetRelativeRotation().Vector();
-  //HiddenLocation = -CameraDirection * MaxActorSize;
+  SpawnLocations = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("ControllerLocations"));
+  SpawnLocations->SetupAttachment(RootComponent);
+  SpawnLocations->SetHiddenInGame(true, true);
 }
 
 void ASpryCamera::OnCharacterResolvesAbility_Implementation(AInteractiveCharacter* CurrentCharacter)
@@ -36,10 +35,8 @@ void ASpryCamera::OnConstruction(const FTransform & Transform)
 {
   Super::OnConstruction(Transform);
 
-  Camera->SetRelativeLocation(FVector(0, 0, 0));
-
   FVector CameraDirection = Camera->GetRelativeRotation().Vector();
-  HiddenLocation = -CameraDirection*MaxActorSize;
+  HiddenLocation = Camera->GetRelativeLocation() - CameraDirection*MaxActorSize;
 }
 
 void ASpryCamera::PossessedBy(AController * NewController)

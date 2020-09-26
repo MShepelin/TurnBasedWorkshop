@@ -20,11 +20,12 @@ class WORKSHOP_API ATurnBasedManager : public ARegistrationManager
 protected:
   UPROPERTY() TArray<UTurnBasedComponent*> JoinedControllers;
   UPROPERTY() int32 CurrentControllerIndex;
+  UPROPERTY() int32 AddedControllers;
   UPROPERTY() ETurnPhase CurrentTurnPhase = ETurnPhase::Start;
 
   UPROPERTY(VisibleAnywhere, Category = "TurnBased")
     UInstancedStaticMeshComponent* SpawnLocations;
-  UPROPERTY() TArray<FTransform> ControllersLocations;
+  TArray<FTransform> ControllersLocations;
   
 public:
   ATurnBasedManager();
@@ -39,9 +40,8 @@ public:
   UFUNCTION(BlueprintCallable)
   void RemoveController(AController* NewController);
 
-  void PostInitProperties() override;
+  void PostInitializeComponents() override;
 
   UFUNCTION(BlueprintCallable)
   ETurnPhase GetPhase() const;
 };
-

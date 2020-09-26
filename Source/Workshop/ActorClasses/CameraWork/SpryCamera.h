@@ -11,7 +11,7 @@
 class AInteractiveCharacter;
 
 
-UCLASS()
+UCLASS(Blueprintable)
 class WORKSHOP_API ASpryCamera : public APawn
 {
   GENERATED_BODY()
@@ -22,12 +22,15 @@ private:
   bool bIsPossesed = false;
 
 protected:
-  UPROPERTY(VisibleDefaultsOnly) UCameraComponent* Camera;
+  UPROPERTY(EditDefaultsOnly) UCameraComponent* Camera;
   UPROPERTY(VisibleDefaultsOnly) UWidgetInteractionComponent* WidgetInteraction;
 
   APlayerController* PlayerController = nullptr;
 
 public:
+  UPROPERTY(EditAnywhere, Category = "TurnBased")
+  UInstancedStaticMeshComponent* SpawnLocations;
+
   ASpryCamera();
 
   virtual void OnConstruction(const FTransform & Transform) override;

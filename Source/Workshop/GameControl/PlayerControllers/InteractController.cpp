@@ -25,11 +25,22 @@ void AInteractController::ConnectionHappened()
 {
   if (EventManager)
   {
-    // exit previous event
+    EventManager->RemoveController(this);
   }
 
   EventManager = TurnControl->GetManager();
-  // enter new one, put actors, etc
+
+  
+  int32 MaxLocations = GetCurrentCamera()->SpawnLocations->GetInstanceCount();
+  check(MaxLocations >= PlacableCharacters.Num());
+  FTransform CameraSpawnTransoform;
+  int32 LocationCounter = MaxLocations / 2 - PlacableCharacters.Num() / 2;
+  for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
+  {
+    GetCurrentCamera()->SpawnLocations->GetInstanceTransform(LocationCounter, CameraSpawnTransoform, true);
+    PlacableCharacter->SetActorLocation(CameraSpawnTransoform.GetLocation());
+    LocationCounter++;
+  }
 }
 
 void AInteractController::StartInteract()
@@ -71,13 +82,13 @@ void AInteractController::BeginPlay()
 
   for (TTuple<FCharacterCore, FInteractiveCore> CharacterData : Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters)
   {
-    //GetWorld()->SpawnActor(AInteractiveCharacter::StaticClass(), GetCurrentCamera()->GetHiddenLocation(), )
     check(SpawnCharacterClass != nullptr);
     AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnCharacterClass, SpawnParams);
     NewCharacter->CharacterDataCore = CharacterData.Get<0>();
     NewCharacter->InteractiveDataCore = CharacterData.Get<1>();
-    NewCharacter->SetActorLocation(FVector(0, 0, 0));
+    NewCharacter->SetActorLocation(CharactersHiddenLocation);
     NewCharacter->RefreshInteractive();
+    PlacableCharacters.Add(NewCharacter);
   }
 }
 
