@@ -1,12 +1,12 @@
 // ...
 
+#pragma once
+
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "TurnBasedComponent.generated.h"
 
-
 class ATurnBasedManager;
-
 
 DECLARE_DELEGATE(FStandartDelegateSignature)
 // Allows to connect with ATurnBasedManager and controll allocated turn

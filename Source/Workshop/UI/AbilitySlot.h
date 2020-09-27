@@ -1,5 +1,7 @@
 // ...
 
+#pragma once
+
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/SizeBox.h"
@@ -9,9 +11,7 @@
 #include "Components/Button.h"
 #include "AbilitySlot.generated.h"
 
-
 class AInteractiveAbility;
-
 
 UCLASS(Abstract)
 class WORKSHOP_API UAbilitySlot : public UUserWidget
