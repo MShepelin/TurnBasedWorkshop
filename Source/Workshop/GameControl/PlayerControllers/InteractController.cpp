@@ -38,7 +38,7 @@ void AInteractController::ConnectionHappened()
   for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
   {
     GetCurrentCamera()->SpawnLocations->GetInstanceTransform(LocationCounter, CameraSpawnTransoform, true);
-    PlacableCharacter->SetActorLocation(CameraSpawnTransoform.GetLocation());
+    PlacableCharacter->SetActorTransform(CameraSpawnTransoform);
     LocationCounter++;
   }
 }
