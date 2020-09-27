@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "InteractController.h"
 #include "Workshop/ActorClasses/Managers/TurnBasedManager.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
@@ -12,7 +11,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "UnrealEd.h"
 #include "../ChoicesInstance.h"
-
 
 AInteractController::AInteractController()
 {
@@ -30,7 +28,6 @@ void AInteractController::ConnectionHappened()
 
   EventManager = TurnControl->GetManager();
 
-  
   int32 MaxLocations = GetCurrentCamera()->SpawnLocations->GetInstanceCount();
   check(MaxLocations >= PlacableCharacters.Num());
   FTransform CameraSpawnTransoform;
@@ -40,6 +37,8 @@ void AInteractController::ConnectionHappened()
     GetCurrentCamera()->SpawnLocations->GetInstanceTransform(LocationCounter, CameraSpawnTransoform, true);
     PlacableCharacter->SetActorTransform(CameraSpawnTransoform);
     LocationCounter++;
+
+    EventManager->ConnectObject(PlacableCharacter);
   }
 }
 
