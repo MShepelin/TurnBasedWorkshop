@@ -85,7 +85,7 @@ void AInteractController::BeginPlay()
     AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnCharacterClass, SpawnParams);
     NewCharacter->CharacterDataCore = CharacterData.Get<0>();
     NewCharacter->InteractiveDataCore = CharacterData.Get<1>();
-    NewCharacter->SetActorLocation(CharactersHiddenLocation);
+    NewCharacter->SetActorLocation(GetCurrentCamera()->GetHiddenLocation());
     NewCharacter->RefreshInteractive();
     PlacableCharacters.Add(NewCharacter);
   }
