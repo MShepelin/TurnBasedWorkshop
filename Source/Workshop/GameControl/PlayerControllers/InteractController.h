@@ -23,6 +23,8 @@ protected:
 
   UPROPERTY(EditDefaultsOnly) TSubclassOf<AInteractiveCharacter> SpawnCharacterClass = nullptr;
 
+  UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
+
   // Tries to pick an Interactive object
   UFUNCTION() void StartInteract();
   UFUNCTION() void StopInteract();
