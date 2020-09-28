@@ -50,9 +50,9 @@ public:
 
   AInteractiveCharacter();
 
-  // ------------------------ //
-  // Actor functions overload //
-  // ------------------------ //
+  // ------------------------- //
+  // AActor functions overload //
+  // ------------------------- //
 
   virtual void PostInitProperties() override;
 

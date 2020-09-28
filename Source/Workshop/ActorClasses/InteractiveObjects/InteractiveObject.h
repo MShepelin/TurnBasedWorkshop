@@ -17,9 +17,9 @@ class UBuildAbility;
 class UChangeStatEffectData;
 class UAdvantageEffectData;
 
-// Interactive object are paired with Managers to support turn-based actions 
+// Interactive object is paired with Manager to support turn-based actions 
 // and exchange information between other Interactive objects.
-// Has conditions of being awake or asleep, and being available or unavailable.
+// Has states of being awake or asleep, and being available or unavailable.
 UCLASS(Abstract, Blueprintable)
 class WORKSHOP_API AInteractiveObject : public AActor
 {
@@ -49,7 +49,6 @@ protected:
 
   // Node for CT system.
   // Any object can be added only to one system of CTs
-  // (For multiple CT systems object-wrapper should be used).
   std::shared_ptr<Node<AInteractiveObject>> NodeForCT = nullptr;
 
   // Called when the game starts or when spawned.
@@ -106,7 +105,7 @@ public:
   UFUNCTION() virtual void PickedAsTarget();
   UFUNCTION() virtual void UnpickedAsTarget();
 
-  // Picked by controller with aim to choose targets to influence on.
+  // Picked by controller with purpose to choose targets to influence on.
   UFUNCTION(BlueprintCallable)
   void Pick();
 
@@ -119,11 +118,17 @@ public:
   UFUNCTION() void ClearInflunces();
   UFUNCTION() void ClearDependencies();
 
-  // These 4 functions above don't change appearence of connections.
+  // Attention: these 4 functions above don't change appearence of connections.
 
   // --------------- //
   // Get information //
   // --------------- //
+
+#if WITH_EDITOR
+  // Visual interpretation of connections.
+  UFUNCTION(BlueprintCallable) 
+  virtual void ShowInfluences() const;
+#endif
 
   UFUNCTION(BlueprintCallable)
   int32 GetInteractiveType() const;
@@ -137,11 +142,6 @@ public:
 
   // Resolve effects depeding on their resolve phase.
   UFUNCTION() void ResolveAccumulatedEffects(ETurnPhase TurnPhase);
-
-#if WITH_EDITOR
-  // Visual interpretation of connections.
-  UFUNCTION() virtual void ShowInfluences() const;
-#endif
 
   // Interactive objects often exchange information, 
   // so friend status is used for optimisation and code clearness.

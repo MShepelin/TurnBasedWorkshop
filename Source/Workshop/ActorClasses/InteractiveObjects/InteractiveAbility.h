@@ -15,17 +15,11 @@ class AInteractiveCharacter;
 UCLASS(Abstract, Blueprintable)
 class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
 {
+  //++++ add limit for ability's chosable objects
+
   GENERATED_BODY()
 
 protected:
-  // -------------------------- //
-  // Ability gameplay specifics //
-  // -------------------------- //
-
-  AInteractiveCharacter* CharacterOwner;
-
-  //++++ add num limit for ability to add influenced objects
-
   // ------- //
   // Visuals //
   // ------- //
@@ -33,20 +27,37 @@ protected:
   UPROPERTY(VisibleDefaultsOnly)
   UPaperFlipbookComponent* AbilityPresentation;
 
+  // ---------------- //
+  // Owning character //
+  // ---------------- //
+
+  AInteractiveCharacter* CharacterOwner;
+
 public:
+  // Variables which ability is using to affect objects.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
   FAbilityCore AbilityDataCore;
 
   AInteractiveAbility();
 
-  // Used to initialise character-owner.
-  void SetCharacterOwner(AInteractiveCharacter* NewCharacterOwner);
+  // ------------------------- //
+  // AActor functions overload //
+  // ------------------------- //
 
   virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
 
   virtual void PostInitProperties() override;
 
   virtual void BeginPlay() override;
+
+  // ---------------- //
+  // Owning character //
+  // ---------------- //
+
+  // Used to initialise character-owner.
+  void SetCharacterOwner(AInteractiveCharacter* NewCharacterOwner);
+
+  UFUNCTION() void CenterInCharacterOwner();
 
   // ----------------------- //
   // Connection with Manager //
@@ -72,7 +83,7 @@ public:
   UFUNCTION(BlueprintCallable)
   void ResolveAbility();
 
-  UFUNCTION() void CenterInCharacterOwner();
+  
 
   // Decrease duration of temporary effects depending on their resolve phase.
   UFUNCTION(BlueprintCallable)
