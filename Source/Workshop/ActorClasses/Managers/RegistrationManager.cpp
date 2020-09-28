@@ -134,6 +134,15 @@ void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
   ObjectsManager = this;
 
   CTsSystem->AddObject(Object);
+
+  AInteractiveCharacter* ObjectAsCharacter = Cast<AInteractiveCharacter>(Object);
+  if (ObjectAsCharacter)
+  {
+    for (AInteractiveAbility* CharactersAbility : ObjectAsCharacter->CharacterDataCore.Abilities)
+    {
+      ConnectObject(CharactersAbility);
+    }
+  }
 }
 
 void ARegistrationManager::PutToSleepManagedObjects(ARegistrationManager* Manager)
