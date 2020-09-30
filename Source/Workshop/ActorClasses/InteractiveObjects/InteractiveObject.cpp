@@ -127,13 +127,6 @@ int32 AInteractiveObject::GetInteractiveType() const
   return InteractiveDataCore.InteractiveType;
 }
 
-/*
-FName AInteractiveObject::GetInteractiveObjectName() const
-{
-  return StringStats[ObjectNameStatID];
-}
-*/
-
 void AInteractiveObject::RemoveEffectByIndex(int32 EffectIndex) //???? add inline?
 {
   InteractiveDataCore.AccumulatedEffects.Swap(EffectIndex, InteractiveDataCore.AccumulatedEffects.Num() - 1);
@@ -146,7 +139,7 @@ void AInteractiveObject::PickedAsCentral()
 
   MainManager->CentralObject = this;
 
-  //++++ add hint to hud that object was picked
+  InteractivityIcon->SetIconState(EIconState::CentralObject);
 }
 
 void AInteractiveObject::UnpickedAsCentral()
@@ -154,6 +147,8 @@ void AInteractiveObject::UnpickedAsCentral()
   check(MainManager != nullptr);
 
   MainManager->CentralObject = nullptr;
+
+  InteractivityIcon->Hide();
 }
 
 void AInteractiveObject::PickedAsTarget()
@@ -162,7 +157,7 @@ void AInteractiveObject::PickedAsTarget()
 
   MainManager->CentralObject->AddInfluenceOn(this);
 
-  InteractivityIcon->SetAvailability(false);
+  InteractivityIcon->SetIconState(EIconState::ChosenTarget);
 }
 
 void AInteractiveObject::UnpickedAsTarget()
@@ -171,7 +166,7 @@ void AInteractiveObject::UnpickedAsTarget()
 
   RemoveDependenceFrom(MainManager->CentralObject);
 
-  InteractivityIcon->SetAvailability(true);
+  InteractivityIcon->SetIconState(EIconState::AvailableTarget);
 }
 
 bool AInteractiveObject::IsCentral() const
@@ -206,8 +201,8 @@ void AInteractiveObject::Pick()
     PickedAsCentral();
     return;
   }
-
-  if (InteractivityIcon->IsAvailable())
+  
+  if (InteractivityIcon->GetIconState() == EIconState::AvailableTarget)
   {
     PickedAsTarget();
     return;

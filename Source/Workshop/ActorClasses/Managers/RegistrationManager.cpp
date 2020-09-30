@@ -169,11 +169,11 @@ void ARegistrationManager::AwakeByCenterObject(TArray<AInteractiveObject*>& Obje
 
     if (CentralObject->InfluencesSet.Find(Object))
     {
-      Object->InteractivityIcon->SetAvailability(false);
+      Object->InteractivityIcon->SetIconState(EIconState::ChosenTarget);
     }
     else
     {
-      Object->InteractivityIcon->SetAvailability(true);
+      Object->InteractivityIcon->SetIconState(EIconState::AvailableTarget);
     }
   }
 }
