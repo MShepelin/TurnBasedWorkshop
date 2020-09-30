@@ -112,6 +112,9 @@ public:
   UFUNCTION(BlueprintCallable)
   bool HasCentralObject() const;
 
+  UFUNCTION(BlueprintCallable)
+  AInteractiveObject* GetCentralObject();
+
   // Agreement: AInteractiveObject is the only class, 
   // which can change Manager's CentralObject and CTsSystem
   friend class AInteractiveObject;

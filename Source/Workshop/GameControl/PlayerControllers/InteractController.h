@@ -25,11 +25,16 @@ protected:
 
   UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
 
+  AInteractiveCharacter* FirstToSwap[2];
+  UPROPERTY() bool bSwapModeIsActive;
+
   // Tries to pick an Interactive object
   UFUNCTION() void StartInteract();
   UFUNCTION() void StopInteract();
 
   UFUNCTION() void ConnectionHappened();
+  
+  UFUNCTION() void SetSwapMode(bool bIsActive);
 
 public:
   AInteractController();

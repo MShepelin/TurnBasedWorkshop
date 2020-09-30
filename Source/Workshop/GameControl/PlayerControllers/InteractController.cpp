@@ -17,6 +17,9 @@ AInteractController::AInteractController()
   TurnControl = CreateDefaultSubobject<UTurnBasedComponent>(TEXT("TurnControl"));
   AddOwnedComponent(TurnControl);
   TurnControl->ConnectDelegate.BindUObject(this, &AInteractController::ConnectionHappened);
+
+  bSwapModeIsActive = false;
+  FirstToSwap[0] = FirstToSwap[1] = nullptr;
 }
 
 void AInteractController::ConnectionHappened()
@@ -98,4 +101,16 @@ void AInteractController::SetupInputComponent()
   InputComponent->BindAction("Interact", IE_Pressed, this, &AInteractController::StartInteract);
 
   InputComponent->BindAction("Interact", IE_Released, this, &AInteractController::StopInteract);
+}
+
+void AInteractController::SetSwapMode(bool bIsActive)
+{
+  if (bSwapModeIsActive == bIsActive)
+  {
+    return;
+  }
+
+  EventManager->GetCentralObject()->Pick();
+
+  bSwapModeIsActive = bIsActive;
 }

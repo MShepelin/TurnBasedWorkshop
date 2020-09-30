@@ -117,6 +117,11 @@ bool ARegistrationManager::HasCentralObject() const
   return CentralObject != nullptr;
 }
 
+AInteractiveObject* ARegistrationManager::GetCentralObject()
+{
+  return CentralObject;
+}
+
 void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
 {
   ARegistrationManager*& ObjectsManager = Object->MainManager;
