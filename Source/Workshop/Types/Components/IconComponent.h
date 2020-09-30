@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
+#include "../IconState.h"
 #include "../IconData.h"
 #include "IconComponent.generated.h"
 
 
+// Icon can show one of 3 states: available or unavailable.
 UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class WORKSHOP_API UIconComponent : public USceneComponent
 {

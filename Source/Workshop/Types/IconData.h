@@ -21,4 +21,7 @@ struct WORKSHOP_API FIconData
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconProperties")
   UPaperFlipbook* SpriteIfUnavailable;
+
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconProperties")
+  UPaperFlipbook* SpriteIfCentral;
 };

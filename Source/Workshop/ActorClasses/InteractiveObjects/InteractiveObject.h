@@ -19,13 +19,14 @@ class UAdvantageEffectData;
 
 // Interactive object is paired with Manager to support turn-based actions 
 // and exchange information between other Interactive objects.
-// Has states of being awake or asleep, and being available or unavailable.
 UCLASS(Abstract, Blueprintable)
 class WORKSHOP_API AInteractiveObject : public AActor
 {
 	GENERATED_BODY()
 
 protected:
+  // Has 2 states: awake and asleep, which corresponds to visibility of Icon component.
+
   // ---------------------- //
   // Interactive Properties //
   // ---------------------- //
