@@ -60,6 +60,36 @@ void AInteractController::StartInteract()
     return;
   }
 
+  if (bSwapModeIsActive)
+  {
+    AInteractiveCharacter* InteractiveCharacter = Cast<AInteractiveCharacter>(InteractiveObject);
+
+    if (!InteractiveCharacter)
+    {
+      return;
+    }
+
+    if (FirstToSwap[0] != nullptr)
+    {
+      FirstToSwap[0] = InteractiveCharacter;
+    }
+    else
+    {
+      FirstToSwap[1] = InteractiveCharacter;
+     
+      PlacableCharacters.Swap(PlacableCharacters.Find(FirstToSwap[0]), PlacableCharacters.Find(FirstToSwap[1]));
+      
+      //++++ add movement
+      FTransform FirstTransform = FirstToSwap[0]->GetActorTransform();
+      FirstToSwap[0]->SetActorTransform(FirstToSwap[1]->GetActorTransform());
+      FirstToSwap[1]->SetActorTransform(FirstTransform);
+
+      FirstToSwap[0] = FirstToSwap[1] = nullptr;
+    }
+
+    return;
+  }
+
   //++++ make two functions: one for rmb, other for lmb, 
   //     so that player can pick just to look info (without target choosing)
   //     also make basic function to ray cast for InteractiveObject
@@ -99,8 +129,9 @@ void AInteractController::SetupInputComponent()
   Super::SetupInputComponent();
 
   InputComponent->BindAction("Interact", IE_Pressed, this, &AInteractController::StartInteract);
-
   InputComponent->BindAction("Interact", IE_Released, this, &AInteractController::StopInteract);
+
+  // BindAction with SetSwapMode
 }
 
 void AInteractController::SetSwapMode(bool bIsActive)

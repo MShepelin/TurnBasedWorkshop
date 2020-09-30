@@ -35,6 +35,7 @@ protected:
   UFUNCTION() void ConnectionHappened();
   
   UFUNCTION() void SetSwapMode(bool bIsActive);
+  UFUNCTION() void SwapCharacters();
 
 public:
   AInteractController();
