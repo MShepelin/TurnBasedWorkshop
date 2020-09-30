@@ -9,6 +9,8 @@ UIconComponent::UIconComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+  IconState = EIconState::AvailableTarget;
+
   if (!IsTemplate())
   {
     SpriteOfIcon = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("TouchIconComponent"));
@@ -40,8 +42,32 @@ void UIconComponent::SetAvailability(bool bNewAvailability)
   }
   else
   {
-    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfUnavailable);
+    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfChosen);
   }
+}
+
+void UIconComponent::SetIconState(EIconState NewIconState)
+{
+  IconState = NewIconState;
+  switch (IconState)
+  {
+  case EIconState::AvailableTarget:
+    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfAvailable);
+    break;
+  case EIconState::ChosenTarget:
+    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfChosen);
+    break;
+  case EIconState::CentralObject:
+    SpriteOfIcon->SetFlipbook(IconProperties.SpriteIfCentral);
+    break;
+  default:
+    break;
+  }
+}
+
+EIconState UIconComponent::GetIconState() const
+{
+  return IconState;
 }
 
 void UIconComponent::Initialize()

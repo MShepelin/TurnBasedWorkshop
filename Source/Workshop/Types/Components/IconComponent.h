@@ -16,7 +16,10 @@ class WORKSHOP_API UIconComponent : public USceneComponent
 	GENERATED_BODY()
 
 protected:
+  //REWORK
   UPROPERTY() bool bIsAvailable;
+
+  UPROPERTY() EIconState IconState;
   UPROPERTY() bool bIsShown;
 
   UPaperFlipbookComponent* SpriteOfIcon;
@@ -49,9 +52,17 @@ public:
   UFUNCTION(BlueprintCallable)
   bool IsShown() const;
   
+  //REWORK
   UFUNCTION(BlueprintCallable)
   void SetAvailability(bool bNewAvailability);
 
+  UFUNCTION(BlueprintCallable)
+  EIconState GetIconState() const;
+
+  UFUNCTION(BlueprintCallable)
+  void SetIconState(EIconState NewIconState);
+    
+  //REWORK
   UFUNCTION(BlueprintCallable)
   bool IsAvailable() const;
 };

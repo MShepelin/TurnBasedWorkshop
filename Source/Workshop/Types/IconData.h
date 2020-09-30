@@ -20,7 +20,7 @@ struct WORKSHOP_API FIconData
   UPaperFlipbook* SpriteIfAvailable;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconProperties")
-  UPaperFlipbook* SpriteIfUnavailable;
+  UPaperFlipbook* SpriteIfChosen;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "IconProperties")
   UPaperFlipbook* SpriteIfCentral;
