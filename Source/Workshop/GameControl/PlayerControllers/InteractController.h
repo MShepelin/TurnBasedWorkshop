@@ -7,10 +7,8 @@
 #include "Workshop/Types/Components/TurnBasedComponent.h"
 #include "InteractController.generated.h"
 
-
 class ATurnBasedManager;
 class AInteractiveCharacter;
-
 
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractController : public ACameraController

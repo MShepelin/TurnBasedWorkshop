@@ -140,6 +140,8 @@ void AInteractiveObject::PickedAsCentral()
   MainManager->CentralObject = this;
 
   InteractivityIcon->SetIconState(EIconState::CentralObject);
+
+  InteractivityIcon->Show();
 }
 
 void AInteractiveObject::UnpickedAsCentral()

@@ -28,7 +28,7 @@ AActor* ACameraController::GeneralRayCast()
     return nullptr;
   }
 
-  FVector CameraLocation = CameraPawn->GetActorLocation();
+  FVector CameraLocation = CameraPawn->GetCameraLocation();
 
   FCollisionQueryParams CollisionParams;
   FCollisionResponseParams ResponseParams;

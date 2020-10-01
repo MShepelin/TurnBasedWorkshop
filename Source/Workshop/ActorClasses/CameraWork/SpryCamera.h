@@ -51,6 +51,9 @@ public:
   UFUNCTION(BlueprintCallable)
   FVector GetCameraDirection() const;
 
+  UFUNCTION(BlueprintCallable)
+  FVector GetCameraLocation() const;
+
   UFUNCTION() void PlayerPressedClick();
 
   UFUNCTION() void PlayerReleasedClick();

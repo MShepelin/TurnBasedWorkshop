@@ -58,6 +58,8 @@ void AHubController::ApplyChosenCharacters()
   {
     ChosenCharactersInGame.Add(TTuple<FCharacterCore,FInteractiveCore>(ChosenCharacter->CharacterDataCore, ChosenCharacter->InteractiveDataCore));
   }
+
+  UE_LOG(LogTemp, Warning, TEXT("%d characters chosen"), ChosenCharacters.Num());
   
   LoadPackageAsync(
     FString("/Game/Experiments/FightMap"),

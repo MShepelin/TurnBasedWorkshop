@@ -31,6 +31,20 @@ void AInteractController::ConnectionHappened()
 
   EventManager = TurnControl->GetManager();
 
+  FActorSpawnParameters SpawnParams = FActorSpawnParameters();
+  SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+  for (TTuple<FCharacterCore, FInteractiveCore> CharacterData : Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters)
+  {
+    check(SpawnCharacterClass != nullptr);
+    AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnCharacterClass, SpawnParams);
+    NewCharacter->CharacterDataCore = CharacterData.Get<0>();
+    NewCharacter->InteractiveDataCore = CharacterData.Get<1>();
+    //NewCharacter->SetActorLocation(GetCurrentCamera()->GetHiddenLocation());
+    NewCharacter->RefreshInteractive();
+    PlacableCharacters.Add(NewCharacter);
+  }
+
   int32 MaxLocations = GetCurrentCamera()->SpawnLocations->GetInstanceCount();
   check(MaxLocations >= PlacableCharacters.Num());
   FTransform CameraSpawnTransoform;
@@ -107,21 +121,6 @@ void AInteractController::StopInteract()
 void AInteractController::BeginPlay()
 {
   Super::BeginPlay();
-
-  FActorSpawnParameters SpawnParams = FActorSpawnParameters();
-
-  SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-  for (TTuple<FCharacterCore, FInteractiveCore> CharacterData : Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters)
-  {
-    check(SpawnCharacterClass != nullptr);
-    AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnCharacterClass, SpawnParams);
-    NewCharacter->CharacterDataCore = CharacterData.Get<0>();
-    NewCharacter->InteractiveDataCore = CharacterData.Get<1>();
-    NewCharacter->SetActorLocation(GetCurrentCamera()->GetHiddenLocation());
-    NewCharacter->RefreshInteractive();
-    PlacableCharacters.Add(NewCharacter);
-  }
 }
 
 void AInteractController::SetupInputComponent()

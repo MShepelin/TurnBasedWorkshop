@@ -82,8 +82,6 @@ void AInteractiveCharacter::PickedAsCentral()
   {
     AbilitiesWidget->FillAbilitySlots(CharacterDataCore.Abilities);
   }
-
-  //???? may be move to player controller?
 }
 
 void AInteractiveCharacter::UnpickedAsCentral()

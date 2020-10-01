@@ -88,3 +88,8 @@ void ASpryCamera::PlayerReleasedClick()
 {
   WidgetInteraction->ReleasePointerKey(FKey("LeftMouseButton"));
 }
+
+FVector ASpryCamera::GetCameraLocation() const
+{
+  return Camera->GetComponentLocation();
+}
