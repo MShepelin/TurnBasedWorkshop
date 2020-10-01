@@ -127,6 +127,7 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
 
   CentralAbility = Ability;
   CentralAbility->SetActorLocation(CentralAbilityRelativePosition + CollisionBox->GetComponentLocation());
+  ChangeCentralAbilityVisibility(false);
 }
 
 void AInteractiveCharacter::ChangeCentralAbilityVisibility(bool bIsInvisible) //++++ change function name

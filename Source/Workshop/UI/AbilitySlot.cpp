@@ -7,11 +7,14 @@
 
 void UAbilitySlot::AbilityClicked()
 {
+  UE_LOG(LogTemp, Warning, TEXT("Click started"));
   if (!ChosenAbility)
   {
     return;
   }
- 
+
+  UE_LOG(LogTemp, Warning, TEXT("Click coused centring"));
+
   ChosenAbility->CenterInCharacterOwner();
   // ChosenAbility->Pick();
   //++++ add usage of EmptySlot texture
@@ -35,6 +38,6 @@ void UAbilitySlot::NativePreConstruct()
 {
   Super::NativePreConstruct();
 
-  AbilityButton->OnClicked.AddDynamic(this, &UAbilitySlot::AbilityClicked);
-  AbilityButton->SetBackgroundColor(FLinearColor(0, 0, 0, 0.5)); // change to 0
+  AbilityButton->SetBackgroundColor(FLinearColor(0, 0, 0, 0));
+  AbilityButton->OnPressed.AddDynamic(this, &UAbilitySlot::AbilityClicked);
 }

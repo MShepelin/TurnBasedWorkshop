@@ -19,8 +19,6 @@ protected:
   UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
   UPROPERTY() ATurnBasedManager* EventManager = nullptr;
 
-  UPROPERTY(EditDefaultsOnly) TSubclassOf<AInteractiveCharacter> SpawnCharacterClass = nullptr;
-
   UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
 
   AInteractiveCharacter* FirstToSwap[2];

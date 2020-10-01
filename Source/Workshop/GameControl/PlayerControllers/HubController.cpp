@@ -53,10 +53,13 @@ void AHubController::ApplyChosenCharacters()
     bStartedLevelLoading = true;
   }
 
-  TArray<TTuple<FCharacterCore, FInteractiveCore>>& ChosenCharactersInGame = Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters;
+  TArray<TTuple<FCharacterCore, FInteractiveCore, TSubclassOf<AInteractiveCharacter>>>& ChosenCharactersInGame = Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters;
   for (AInteractiveCharacter* ChosenCharacter : ChosenCharacters)
   {
-    ChosenCharactersInGame.Add(TTuple<FCharacterCore,FInteractiveCore>(ChosenCharacter->CharacterDataCore, ChosenCharacter->InteractiveDataCore));
+    ChosenCharactersInGame.Add(TTuple<FCharacterCore, FInteractiveCore, TSubclassOf<AInteractiveCharacter>>(
+      ChosenCharacter->CharacterDataCore, 
+      ChosenCharacter->InteractiveDataCore,
+      ChosenCharacter->GetClass()));
   }
 
   UE_LOG(LogTemp, Warning, TEXT("%d characters chosen"), ChosenCharacters.Num());

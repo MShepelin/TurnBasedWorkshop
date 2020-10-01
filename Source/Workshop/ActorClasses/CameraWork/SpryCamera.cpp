@@ -71,7 +71,9 @@ void ASpryCamera::Tick(float DeltaSeconds)
 
   PlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
 
-  WidgetInteraction->SetWorldRotation(WorldDirection.Rotation());
+  FVector Direction = WorldLocation - WidgetInteraction->GetComponentLocation();
+
+  WidgetInteraction->SetWorldRotation(Direction.Rotation());
 }
 
 FVector ASpryCamera::GetCameraDirection() const

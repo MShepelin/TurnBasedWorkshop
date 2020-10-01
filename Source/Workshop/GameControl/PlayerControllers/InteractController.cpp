@@ -34,13 +34,12 @@ void AInteractController::ConnectionHappened()
   FActorSpawnParameters SpawnParams = FActorSpawnParameters();
   SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-  for (TTuple<FCharacterCore, FInteractiveCore> CharacterData : Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters)
+  for (TTuple<FCharacterCore, FInteractiveCore, TSubclassOf<AInteractiveCharacter>> CharacterData : Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters)
   {
-    check(SpawnCharacterClass != nullptr);
-    AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnCharacterClass, SpawnParams);
+    AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(CharacterData.Get<2>(), SpawnParams);
     NewCharacter->CharacterDataCore = CharacterData.Get<0>();
     NewCharacter->InteractiveDataCore = CharacterData.Get<1>();
-    //NewCharacter->SetActorLocation(GetCurrentCamera()->GetHiddenLocation());
+    NewCharacter->SetActorLocation(GetCurrentCamera()->GetHiddenLocation());
     NewCharacter->RefreshInteractive();
     PlacableCharacters.Add(NewCharacter);
   }

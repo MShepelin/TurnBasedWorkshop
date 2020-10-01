@@ -25,7 +25,7 @@ private:
   UPROPERTY(meta = (BindWidget)) UImage* AbilityIcon;
   UPROPERTY(meta = (BindWidget)) UScaleBox* IconScaleBox;
   UPROPERTY(meta = (BindWidget)) USizeBox* IconSizeBox;
-  UPROPERTY(meta = (BindWidget)) UButton* AbilityButton;
+  UPROPERTY(EditDefaultsOnly, meta = (BindWidget)) UButton* AbilityButton;
   UPROPERTY() AInteractiveAbility* ChosenAbility;
 
 public:
@@ -36,5 +36,5 @@ public:
 
   UFUNCTION() void AbilityClicked();
 
-  virtual void NativePreConstruct() override;
+  void NativePreConstruct() override;
 };
