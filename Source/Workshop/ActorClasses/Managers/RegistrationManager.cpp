@@ -143,7 +143,7 @@ void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
   AInteractiveCharacter* ObjectAsCharacter = Cast<AInteractiveCharacter>(Object);
   if (ObjectAsCharacter)
   {
-    for (AInteractiveAbility* CharactersAbility : ObjectAsCharacter->CharacterDataCore.Abilities)
+    for (AInteractiveAbility* CharactersAbility : ObjectAsCharacter->Abilities)
     {
       ConnectObject(CharactersAbility);
     }

@@ -146,7 +146,7 @@ void AInteractiveAbility::CenterInCharacterOwner()
 {
   check(CharacterOwner != nullptr);
   CharacterOwner->SetCentralAbility(this);
-  CharacterOwner->SetCentralAbilityVisibility(false);
+  CharacterOwner->ChangeCentralAbilityVisibility(false);
 }
 
 UTexture2D* AInteractiveAbility::GetIconUI() const

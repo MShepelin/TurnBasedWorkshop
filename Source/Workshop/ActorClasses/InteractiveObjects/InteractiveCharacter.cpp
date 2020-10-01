@@ -80,7 +80,7 @@ void AInteractiveCharacter::PickedAsCentral()
   AbilitiesWidget->SetVisibility(ESlateVisibility::Visible);
   if (AbilitiesWidget)
   {
-    AbilitiesWidget->FillAbilitySlots(CharacterDataCore.Abilities);
+    AbilitiesWidget->FillAbilitySlots(Abilities);
   }
 }
 
@@ -105,20 +105,6 @@ void AInteractiveCharacter::BeginPlay()
   {
     return;
   }
-
-  for (TSubclassOf<AInteractiveAbility> AbilityClass : CharacterDataCore.AbilitiesClasses)
-  {
-    ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
-
-    FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation();
-
-    AInteractiveAbility* AbilityObject = 
-      GetWorld()->SpawnActor<AInteractiveAbility>(
-        AbilityClass, HiddenLocation, FRotator(0, 0, 0));
-    AbilityObject->SetCharacterOwner(this);
-    AbilityObject->SetActorHiddenInGame(true);
-    CharacterDataCore.Abilities.Add(AbilityObject);
-  }
 }
 
 void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability) 
@@ -132,7 +118,7 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
 
     CentralAbility->ClearDependencies();
     CentralAbility->ClearInflunces();
-    SetCentralAbilityVisibility(true);
+    ChangeCentralAbilityVisibility(true);
 
     ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
     FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation(); //???? may be save hidden location somewhere
@@ -143,7 +129,7 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
   CentralAbility->SetActorLocation(CentralAbilityRelativePosition + CollisionBox->GetComponentLocation());
 }
 
-void AInteractiveCharacter::SetCentralAbilityVisibility(bool bIsInvisible) //++++ change name
+void AInteractiveCharacter::ChangeCentralAbilityVisibility(bool bIsInvisible) //++++ change function name
 {
   check(CentralAbility != nullptr);
   CentralAbility->SetActorHiddenInGame(bIsInvisible);
@@ -151,6 +137,9 @@ void AInteractiveCharacter::SetCentralAbilityVisibility(bool bIsInvisible) //+++
 
 void AInteractiveCharacter::RefreshInteractive()
 {
+  // ----------------- //
+  // Refresh animation //
+  // ----------------- //
   if (!CharacterDataCore.AnimationsMap.Find(IdleAnimation))
   {
     return;
@@ -171,4 +160,28 @@ void AInteractiveCharacter::RefreshInteractive()
   FVector BoxLocation = CollisionBox->GetRelativeLocation();
   CollisionBox->SetRelativeLocation(FVector(
     BoxLocation[0], MainSpriteYOrder, BoxLocation[2]));
+
+  // ----------------- //
+  // Refresh abilities //
+  // ----------------- //
+  ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
+
+  if (!CurrentController || !CurrentController->GetCurrentCamera())
+  {
+    return;
+  }
+
+  Abilities.Empty();
+
+  FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation();
+
+  for (TSubclassOf<AInteractiveAbility> AbilityClass : CharacterDataCore.AbilitiesClasses)
+  {
+    AInteractiveAbility* AbilityObject =
+      GetWorld()->SpawnActor<AInteractiveAbility>(
+        AbilityClass, HiddenLocation, FRotator(0, 0, 0));
+    AbilityObject->SetCharacterOwner(this);
+    //AbilityObject->SetActorHiddenInGame(true);
+    Abilities.Add(AbilityObject);
+  }
 }

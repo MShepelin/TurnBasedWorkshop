@@ -20,7 +20,6 @@ struct WORKSHOP_API FCharacterCore
   // Abilities which Interactive character can use.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
   TArray<TSubclassOf<AInteractiveAbility>> AbilitiesClasses;
-  UPROPERTY() TArray<AInteractiveAbility*> Abilities;
 
   // ------- //
   // Visuals //

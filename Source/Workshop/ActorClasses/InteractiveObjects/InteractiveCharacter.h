@@ -45,8 +45,14 @@ protected:
   UBillboardComponent* CentralAbilityPositionVisual;
 
 public:
+  // ---------------------- //
+  // Characters Description //
+  // ---------------------- //
+
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
   FCharacterCore CharacterDataCore;
+
+  UPROPERTY() TArray<AInteractiveAbility*> Abilities;
 
   AInteractiveCharacter();
 
@@ -88,7 +94,7 @@ public:
   // ----------------- //
 
   UFUNCTION(BlueprintCallable)
-  void SetCentralAbilityVisibility(bool bIsInvisible);
+  void ChangeCentralAbilityVisibility(bool bIsInvisible);
 
   void SetCentralAbility(AInteractiveAbility* Ability);
 
