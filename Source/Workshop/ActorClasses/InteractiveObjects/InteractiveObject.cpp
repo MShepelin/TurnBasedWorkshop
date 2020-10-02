@@ -171,7 +171,7 @@ void AInteractiveObject::UnpickedAsTarget()
   InteractivityIcon->SetIconState(EIconState::AvailableTarget);
 }
 
-bool AInteractiveObject::IsCentral() const
+bool AInteractiveObject::IsCentralInManager() const
 {
   check(MainManager);
   return MainManager->CentralObject == this;
@@ -191,7 +191,7 @@ void AInteractiveObject::Pick()
     return;
   }
 
-  if (IsCentral())
+  if (IsCentralInManager())
   {
     UnpickedAsCentral();
     return;

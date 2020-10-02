@@ -90,6 +90,10 @@ public:
   UFUNCTION(BlueprintCallable)
   void ResolveCharacterActions();
 
+  // Checks stats and apply conditions based on their values.
+  UFUNCTION(BlueprintCallable)
+  void UpdateCharacter();
+
   // ----------------- //
   // UI with abilities //
   // ----------------- //

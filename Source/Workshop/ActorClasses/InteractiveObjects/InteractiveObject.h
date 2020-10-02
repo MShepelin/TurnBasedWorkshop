@@ -99,7 +99,7 @@ public:
   ARegistrationManager* GetManager() const;
 
   UFUNCTION(BlueprintCallable)
-  bool IsCentral() const;
+  bool IsCentralInManager() const;
 
   UFUNCTION() virtual void PickedAsCentral();
   UFUNCTION() virtual void UnpickedAsCentral();

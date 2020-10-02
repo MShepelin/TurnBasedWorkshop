@@ -180,7 +180,7 @@ void AInteractiveCharacter::ClearCentralAbility()
     return;
   }
 
-  if (CentralAbility->IsCentral()) //++++ sounds ambiguous, change termins!
+  if (CentralAbility->IsCentralInManager()) //++++ sounds ambiguous, change termins!
   {
     CentralAbility->UnpickedAsCentral();
   }
@@ -202,4 +202,9 @@ void AInteractiveCharacter::ResolveCharacterActions()
   }
 
   CentralAbility->ResolveAbility();
+}
+
+void AInteractiveCharacter::UpdateCharacter()
+{
+
 }
