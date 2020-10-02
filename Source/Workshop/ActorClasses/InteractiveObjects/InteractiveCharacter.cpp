@@ -109,10 +109,7 @@ void AInteractiveCharacter::BeginPlay()
 
 void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability) 
 {
-  if (CentralAbility)
-  {
-    ClearCentralAbility();
-  }
+  ClearCentralAbility();
 
   CentralAbility = Ability;
   CentralAbility->SetActorLocation(CentralAbilityRelativePosition + CollisionBox->GetComponentLocation());
@@ -178,6 +175,11 @@ void AInteractiveCharacter::RefreshInteractive()
 
 void AInteractiveCharacter::ClearCentralAbility()
 {
+  if (!CentralAbility)
+  {
+    return;
+  }
+
   if (CentralAbility->IsCentral()) //++++ sounds ambiguous, change termins!
   {
     CentralAbility->UnpickedAsCentral();
@@ -190,4 +192,14 @@ void AInteractiveCharacter::ClearCentralAbility()
   ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
   FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation(); //???? may be save hidden location somewhere
   CentralAbility->SetActorLocation(HiddenLocation);
+}
+
+void AInteractiveCharacter::ResolveCharacterActions()
+{
+  if (!CentralAbility)
+  {
+    return;
+  }
+
+  CentralAbility->ResolveAbility();
 }

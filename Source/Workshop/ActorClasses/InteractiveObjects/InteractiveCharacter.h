@@ -83,11 +83,12 @@ public:
 
   virtual void UnpickedAsCentral() override;
 
-  // ----------------------//
-  // Character Information //
-  // --------------------- //
+  // ------------------ //
+  // Turn-Based actions //
+  // ------------------ //
 
-  //int32 GetProtectionFromMask() const;
+  UFUNCTION(BlueprintCallable)
+  void ResolveCharacterActions();
 
   // ----------------- //
   // UI with abilities //

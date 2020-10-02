@@ -143,3 +143,12 @@ void AInteractController::SetSwapMode(bool bIsActive)
 
   bSwapModeIsActive = bIsActive;
 }
+
+void AInteractController::ResolveCharactersAbilities()
+{
+  for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
+  {
+    PlacableCharacter->ResolveCharacterActions();
+    //???? may be wait or delay other resolvements
+  }
+}

@@ -38,4 +38,7 @@ public:
   void BeginPlay() override;
 
   void SetupInputComponent() override;
+
+  UFUNCTION(BlueprintCallable)
+  void ResolveCharactersAbilities();
 };

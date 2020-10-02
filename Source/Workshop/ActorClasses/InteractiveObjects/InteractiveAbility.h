@@ -83,8 +83,6 @@ public:
   UFUNCTION(BlueprintCallable)
   void ResolveAbility();
 
-  
-
   // Decrease duration of temporary effects depending on their resolve phase.
   UFUNCTION(BlueprintCallable)
   void UpdateEffects(ETurnPhase TurnPhase);
