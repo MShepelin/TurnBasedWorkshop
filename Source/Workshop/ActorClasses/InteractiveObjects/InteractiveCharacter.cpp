@@ -111,18 +111,7 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
 {
   if (CentralAbility)
   {
-    if (CentralAbility->IsCentral()) //++++ sounds ambiguous, change termins!
-    {
-      CentralAbility->UnpickedAsCentral();
-    }
-
-    CentralAbility->ClearDependencies();
-    CentralAbility->ClearInflunces();
-    ChangeCentralAbilityVisibility(true);
-
-    ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
-    FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation(); //???? may be save hidden location somewhere
-    CentralAbility->SetActorLocation(HiddenLocation);
+    ClearCentralAbility();
   }
 
   CentralAbility = Ability;
@@ -185,4 +174,20 @@ void AInteractiveCharacter::RefreshInteractive()
     //AbilityObject->SetActorHiddenInGame(true);
     Abilities.Add(AbilityObject);
   }
+}
+
+void AInteractiveCharacter::ClearCentralAbility()
+{
+  if (CentralAbility->IsCentral()) //++++ sounds ambiguous, change termins!
+  {
+    CentralAbility->UnpickedAsCentral();
+  }
+
+  CentralAbility->ClearDependencies();
+  CentralAbility->ClearInflunces();
+  ChangeCentralAbilityVisibility(false);
+
+  ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
+  FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation(); //???? may be save hidden location somewhere
+  CentralAbility->SetActorLocation(HiddenLocation);
 }

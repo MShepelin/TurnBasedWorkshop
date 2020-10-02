@@ -96,7 +96,11 @@ public:
   UFUNCTION(BlueprintCallable)
   void ChangeCentralAbilityVisibility(bool bIsInvisible);
 
+  UFUNCTION(BlueprintCallable)
   void SetCentralAbility(AInteractiveAbility* Ability);
+
+  UFUNCTION(BlueprintCallable)
+  void ClearCentralAbility();
 
   // ------ //
   // Others //
