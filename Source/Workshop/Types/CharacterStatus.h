@@ -11,7 +11,7 @@ enum class ECharacterStatus : uint8
 {
   NoStatus     = 0,
   Exhaust      = 1,  // Stamina ran out
-  Impatience   = 2,   // Patience ran out
+  Impatience   = 2,  // Patience ran out
   Hostility    = 4,  // Amity ran out
   Distrust     = 8,  // Trust ran out
   Hindsight    = 16, // Sagacity ran out
