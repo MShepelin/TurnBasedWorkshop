@@ -23,4 +23,6 @@ struct WORKSHOP_API FBar
   void ChangeBarBy(int32 Value);
 
   void ResetBar();
+
+  bool IsActive();
 };

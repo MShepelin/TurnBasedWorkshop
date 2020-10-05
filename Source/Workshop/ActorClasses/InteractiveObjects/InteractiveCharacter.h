@@ -9,6 +9,7 @@
 #include "InteractiveObject.h"
 #include "Components/BoxComponent.h"
 #include "Workshop/Types/InteractiveObjectData/CharacterCore.h"
+#include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "InteractiveCharacter.generated.h"
 
 class AInteractiveAbility;
@@ -92,7 +93,7 @@ public:
 
   // Checks stats and apply conditions based on their values.
   UFUNCTION(BlueprintCallable)
-  void UpdateCharacter();
+  void UpdateCharacterStatus();
 
   // ----------------- //
   // UI with abilities //

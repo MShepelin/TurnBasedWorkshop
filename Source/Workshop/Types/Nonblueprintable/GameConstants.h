@@ -36,6 +36,7 @@ const size_t DefaultNumberOfSlots = 4;
 const float MaxActorSize = 1000;
 const float RayCastLength = 1000;
 #define AverageManagedObjects 12
+const size_t CharacterIntegerStats = 8;
 
 // 4. UI
 const float MaxIconSize = 512.0;

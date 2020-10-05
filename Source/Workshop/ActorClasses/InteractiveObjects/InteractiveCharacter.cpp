@@ -53,6 +53,11 @@ void AInteractiveCharacter::PostInitProperties()
   {
     UE_LOG(LogTemp, Error, TEXT("%d animation id (IdleAnimation) must be set"), IdleAnimation);
   }
+
+  if (InteractiveDataCore.IntegerStats.Num() < CharacterIntegerStats)
+  {
+    UE_LOG(LogTemp, Error, TEXT("First %d must be allocated for default character stats."), CharacterIntegerStats);
+  }
 }
 
 void AInteractiveCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent)
@@ -204,7 +209,23 @@ void AInteractiveCharacter::ResolveCharacterActions()
   CentralAbility->ResolveAbility();
 }
 
-void AInteractiveCharacter::UpdateCharacter()
+void AInteractiveCharacter::UpdateCharacterStatus()
 {
+  check(InteractiveDataCore.IntegerStats.Num() >= CharacterIntegerStats);
 
+  size_t StatIndex = 0;
+  for (uint8 StatusMask = 1; StatIndex < 8; StatIndex++)
+  {
+    /*
+    if (InteractiveDataCore.IntegerStats[StatIndex].IsActive)
+    {
+      CharacterDataCore.CharacterStatus |= StatusMask;
+    }
+    else
+    {
+      CharacterDataCore.CharacterStatus &= ~StatusMask;
+    }
+    */
+    StatusMask = StatusMask << 1;
+  }
 }

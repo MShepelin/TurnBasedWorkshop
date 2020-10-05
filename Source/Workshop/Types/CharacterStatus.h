@@ -6,7 +6,7 @@
 #include "CharacterStatus.generated.h"
 
 
-UENUM(BlueprintType)
+UENUM(meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class ECharacterStatus : uint8
 {
   NoStatus     = 0,
@@ -19,3 +19,5 @@ enum class ECharacterStatus : uint8
   Stupor       = 64, // Creativity ran out
   Disrespect   = 128 // Respect ran out
 };
+
+ENUM_CLASS_FLAGS(ECharacterStatus)

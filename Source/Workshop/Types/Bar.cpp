@@ -30,3 +30,8 @@ void FBar::ResetBar()
 
   ChangeBarBy(0);
 }
+
+bool FBar::IsActive()
+{
+  return bIsActive;
+}
