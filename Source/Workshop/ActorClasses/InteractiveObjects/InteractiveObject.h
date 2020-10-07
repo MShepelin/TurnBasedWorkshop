@@ -52,11 +52,6 @@ protected:
   // Any object can be added only to one system of CTs
   std::shared_ptr<Node<AInteractiveObject>> NodeForCT = nullptr;
 
-  // Called when the game starts or when spawned.
-  virtual void BeginPlay() override;
-
-  inline void RemoveEffectByIndex(int32 EffectIndex);
-
 public:
   // ----------------- //
   // Object Statistics //
@@ -73,6 +68,12 @@ private:
   std::shared_ptr<Node<AInteractiveObject>>& GetNodeForCT();
 
   const TArray<int32>* GetCTs() const;
+
+protected:
+  // Called when the game starts or when spawned.
+  virtual void BeginPlay() override;
+
+  inline void RemoveEffectByIndex(int32 EffectIndex);
 
 public:
   AInteractiveObject();
