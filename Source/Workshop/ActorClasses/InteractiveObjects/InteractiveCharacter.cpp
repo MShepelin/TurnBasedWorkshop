@@ -54,10 +54,18 @@ void AInteractiveCharacter::PostInitProperties()
     UE_LOG(LogTemp, Error, TEXT("%d animation id (IdleAnimation) must be set"), IdleAnimation);
   }
 
-  if (InteractiveDataCore.IntegerStats.Num() < CharacterIntegerStats)
+#ifdef WITH_EDITOR
+  check(CharacterDataCore.CharacterStats.Num() == CharacterIntegerStats);
+
+  //Check if any of already used stat IDs are met.
+  for (TTuple<int32, int32>& NecessaryStat : InteractiveDataCore.IntegerStats)
   {
-    UE_LOG(LogTemp, Error, TEXT("First %d must be allocated for default character stats."), CharacterIntegerStats);
+    if (NecessaryStat.Get<0>() >= 0 && NecessaryStat.Get<0>() < CharacterIntegerStats)
+    {
+      UE_LOG(LogTemp, Error, TEXT("Stat IDs from 0 to %d are allocated and can't be used!"), CharacterIntegerStats - 1);
+    }
   }
+#endif
 }
 
 void AInteractiveCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent)
@@ -211,13 +219,10 @@ void AInteractiveCharacter::ResolveCharacterActions()
 
 void AInteractiveCharacter::UpdateCharacterStatus()
 {
-  check(InteractiveDataCore.IntegerStats.Num() >= CharacterIntegerStats);
-
   size_t StatIndex = 0;
   for (uint8 StatusMask = 1; StatIndex < 8; StatIndex++)
   {
-    /*
-    if (InteractiveDataCore.IntegerStats[StatIndex].IsActive)
+    if (CharacterDataCore.CharacterStats[StatIndex].IsActive())
     {
       CharacterDataCore.CharacterStatus |= StatusMask;
     }
@@ -225,7 +230,7 @@ void AInteractiveCharacter::UpdateCharacterStatus()
     {
       CharacterDataCore.CharacterStatus &= ~StatusMask;
     }
-    */
+
     StatusMask = StatusMask << 1;
   }
 }

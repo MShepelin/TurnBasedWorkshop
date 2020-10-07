@@ -7,18 +7,24 @@
 const int32 DefaultPointsValue = 10;
 const FName DefaultStringValue = "Dude";
 
-// 1.2 Stats
-const int32 ObjectNameStatID = -1;
-
-// 1.3 CTs
-//...
-
-// 1.4 Y-order of components
+// 1.2 Y-order of components
 const float MainSpriteYOrder = 0;
 const float WidgetComponentYOrder = 1;
 
-// 1.5 Animation
+// 1.3 Animation
 const int32 IdleAnimation = 1;
+
+// 1.4 CharacterStats
+const size_t CharacterIntegerStats = 8;
+// !!! IntegerStats from 0 to CharacterIntegerStats - 1 can't be used for IntegerStats !!!
+// Stamina
+// Patience
+// Amity
+// Trust
+// Sagacity
+// Tune
+// Creativity
+// Respect
 
 // 2. Debug
 // Used for drawing lines, spheres and other shapes.
@@ -36,7 +42,6 @@ const size_t DefaultNumberOfSlots = 4;
 const float MaxActorSize = 1000;
 const float RayCastLength = 1000;
 #define AverageManagedObjects 12
-const size_t CharacterIntegerStats = 8;
 
 // 4. UI
 const float MaxIconSize = 512.0;

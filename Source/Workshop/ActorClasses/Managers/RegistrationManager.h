@@ -39,10 +39,7 @@ protected:
 
   // Here are all stats available in this manager.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
-  TMap<int32, FString> StatIDToNameMap =
-  {
-    {ObjectNameStatID, "Name"}
-  };
+  TMap<int32, FString> StatIDToNameMap;
 
   // Used for search by CTs.
   CTsGraph<int32, AInteractiveObject>* CTsSystem;

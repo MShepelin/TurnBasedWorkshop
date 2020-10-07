@@ -36,14 +36,16 @@ void ARegistrationManager::PostInitProperties()
     CTsSystem->AddCT(CT.Key);
   }
 
-  //Check if all must-have properties are present
-  for (int32 NecessaryStat : {ObjectNameStatID})
+#ifdef WITH_EDITOR
+  //Check if any of already used stat IDs are met.
+  for (TTuple<int32, FString>& NecessaryStat : StatIDToNameMap)
   {
-    if (!StatIDToNameMap.Find(NecessaryStat))
+    if (NecessaryStat.Get<0>() >= 0 && NecessaryStat.Get<0>() < CharacterIntegerStats)
     {
-      UE_LOG(LogTemp, Error, TEXT("Incorrect manager description: some necessary stats are missing!"));
+      UE_LOG(LogTemp, Error, TEXT("Stat IDs from 0 to %d are allocated and can't be used!"), CharacterIntegerStats - 1);
     }
   }
+#endif
 }
 
 // Find objects with respect to chosen CentralObject.

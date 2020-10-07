@@ -17,7 +17,7 @@ struct WORKSHOP_API FInteractiveCore
 
   UPROPERTY() int32 InteractiveType = static_cast<int32>(EInteractiveType::Nothing);
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Interactive", meta = (ClampMin = "1"));
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings", meta = (ClampMin = "1"));
   TArray<int32> CTsOfObject;
 
   // ----------------- //
@@ -25,11 +25,11 @@ struct WORKSHOP_API FInteractiveCore
   // ----------------- //
 
   // Statisctics in form of strings
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Interactive")
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings")
   FName InteractiveName;
 
   // Statisctics in form of integers
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Interactive")
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings")
   TMap<int32, int32> IntegerStats;
 
   // Array of effects which are applied in the current state.

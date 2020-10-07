@@ -36,26 +36,6 @@ void UEffectData::DecreaseDuration()
   DecreaseDuration(1);
 }
 
-/* REMAKE
-FString UEffectData::GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const
-{
-  if (!bIsAbilityInfo)
-  {
-    return "";
-  }
-
-  if (!Manager)
-  {
-    UE_LOG(LogTemp, Error, TEXT("Can't gather information without correct manager!"));
-    return "";
-  }
-
-  FString EffectInforamtion = "";
-
-  return EffectInforamtion;
-}
-*/
-
 void UEffectData::ResolveOn(AInteractiveObject* TargetObject)
 {
 
