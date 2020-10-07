@@ -24,11 +24,6 @@ void AInteractiveObject::OnConstruction(const FTransform & Transform)
 void AInteractiveObject::PostInitProperties()
 {
   Super::PostInitProperties();
-
-  if (!InteractiveDataCore.StringStats.Find(ObjectNameStatID))
-  {
-    UE_LOG(LogTemp, Error, TEXT("Incorrect object stats: a name stat is needed!"));
-  }
 }
 
 void AInteractiveObject::BeginPlay()
