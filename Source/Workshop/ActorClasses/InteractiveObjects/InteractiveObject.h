@@ -73,8 +73,6 @@ protected:
   // Called when the game starts or when spawned.
   virtual void BeginPlay() override;
 
-  inline void RemoveEffectByIndex(int32 EffectIndex);
-
 public:
   AInteractiveObject();
 

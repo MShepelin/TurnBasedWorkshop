@@ -122,12 +122,6 @@ int32 AInteractiveObject::GetInteractiveType() const
   return InteractiveDataCore.InteractiveType;
 }
 
-void AInteractiveObject::RemoveEffectByIndex(int32 EffectIndex) //???? add inline?
-{
-  InteractiveDataCore.AccumulatedEffects.Swap(EffectIndex, InteractiveDataCore.AccumulatedEffects.Num() - 1);
-  InteractiveDataCore.AccumulatedEffects.Pop();
-}
-
 void AInteractiveObject::PickedAsCentral()
 {
   check(MainManager != nullptr);
@@ -212,14 +206,9 @@ void AInteractiveObject::Pick()
 
 void AInteractiveObject::ResolveAccumulatedEffects(ETurnPhase TurnPhase)
 {
-  for (size_t EffectIndex = 0; EffectIndex < InteractiveDataCore.AccumulatedEffects.Num(); EffectIndex++)
+  for (size_t EffectIndex = 0; EffectIndex < InteractiveDataCore.AccumulatedEffects[TurnPhase].Num(); EffectIndex++)
   {
-    UEffectData* ChosenEffect = InteractiveDataCore.AccumulatedEffects[EffectIndex];
-
-    if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
-    {
-      continue;
-    }
+    UEffectData* ChosenEffect = InteractiveDataCore.AccumulatedEffects[TurnPhase][EffectIndex];
 
     ChosenEffect->ResolveOn(this);
     ChosenEffect->DecreaseDuration();
@@ -227,7 +216,8 @@ void AInteractiveObject::ResolveAccumulatedEffects(ETurnPhase TurnPhase)
     // Remove effect if it is no longer present
     if (!ChosenEffect->Duration)
     {
-      RemoveEffectByIndex(EffectIndex);
+      InteractiveDataCore.AccumulatedEffects[TurnPhase].Swap(EffectIndex, InteractiveDataCore.AccumulatedEffects[TurnPhase].Num() - 1);
+      InteractiveDataCore.AccumulatedEffects[TurnPhase].Pop();
     }
   }
 }

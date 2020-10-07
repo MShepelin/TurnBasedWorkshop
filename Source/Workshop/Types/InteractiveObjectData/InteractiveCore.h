@@ -33,5 +33,5 @@ struct WORKSHOP_API FInteractiveCore
   TMap<int32, int32> IntegerStats;
 
   // Array of effects which are applied in the current state.
-  UPROPERTY() TArray<UEffectData*> AccumulatedEffects;
+  TMap<ETurnPhase, TArray<UEffectData*>> AccumulatedEffects;
 };

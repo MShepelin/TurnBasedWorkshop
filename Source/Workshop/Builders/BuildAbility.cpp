@@ -30,7 +30,14 @@ AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* Tar
     }
     else
     {
-      TargetObject->InteractiveDataCore.AccumulatedEffects.Add(DublicatedEffect);
+      if (!TargetObject->InteractiveDataCore.AccumulatedEffects.Find(DublicatedEffect->TurnPhaseToResolve))
+      {
+        TargetObject->InteractiveDataCore.AccumulatedEffects[DublicatedEffect->TurnPhaseToResolve] = { DublicatedEffect };
+      }
+      else
+      {
+        TargetObject->InteractiveDataCore.AccumulatedEffects[DublicatedEffect->TurnPhaseToResolve].Add(DublicatedEffect);
+      }
     }
   }
 
