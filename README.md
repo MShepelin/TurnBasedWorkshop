@@ -6,6 +6,8 @@ This is an open part of a developing game. Although this game has some specifics
 
 For now a short description reads: "Journey about rethinking the values of life in form of turn-based videogame. Combine abilities of diverse craftsmen to fight challenges in massive construction based on taming figurative beasts". As this game has no budget it's made by open community, so if you want to participate in development or just send some ideas and check news there is a discord channel for that: https://discord.gg/sazKY9J
 
+Also you can check [gameplay presentation](https://docs.google.com/presentation/d/161Je4Ib8IKuVyrYAJI6qKCj3mGKBmazKgrtVzlb5TDs/edit?usp=sharing), to see what ideas stay behind this game.
+
 ### Repository Structure
 
 **Source/Workshop** contains all needed code:
@@ -22,7 +24,7 @@ Used names:
 - **Interactive** refers to an often used class with some specifics such as connection to Manager, having influence on other Interactive objects,  (for example, in-game characters, items, but not UI).
 - **Core** (DataCore) is object's data which describes it regardless of other objects and current game situation and can travel through levels  (for example, rendered models and sprites, numbers and strings, but not pointers to any objects or transform).
 
-Used assets:
+### Assets
 
 [RPG Monster Pack](https://pipoya.itch.io/free-rpg-monster-pack)
 
