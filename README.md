@@ -21,3 +21,12 @@ Used names:
 - **CT** stays for Custom Tag. It's used for search purposes (for example, you want to find all People and Flowers on the level). Expected to be used when there are a lot of CTs in general, but objects only have few.
 - **Interactive** refers to an often used class with some specifics such as connection to Manager, having influence on other Interactive objects,  (for example, in-game characters, items, but not UI).
 - **Core** (DataCore) is object's data which describes it regardless of other objects and current game situation and can travel through levels  (for example, rendered models and sprites, numbers and strings, but not pointers to any objects or transform).
+
+Used assets:
+
+[RPG Monster Pack](https://pipoya.itch.io/free-rpg-monster-pack)
+
+https://game-icons.net/
+
+https://craftpix.net/freebies/free-horizontal-2d-game-backgrounds/
+
