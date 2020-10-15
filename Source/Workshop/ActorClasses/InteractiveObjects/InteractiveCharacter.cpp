@@ -58,7 +58,7 @@ void AInteractiveCharacter::PostInitProperties()
   check(CharacterDataCore.CharacterStats.Num() == CharacterIntegerStats);
 
   //Check if any of already used stat IDs are met.
-  for (TTuple<int32, int32>& NecessaryStat : InteractiveDataCore.IntegerStats)
+  for (TTuple<int32, FBar>& NecessaryStat : InteractiveDataCore.IntegerStats)
   {
     if (NecessaryStat.Get<0>() >= 0 && NecessaryStat.Get<0>() < CharacterIntegerStats)
     {

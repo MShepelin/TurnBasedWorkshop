@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "../Effects/EffectData.h"
+#include "../Bar.h"
 #include "InteractiveCore.generated.h"
 
 USTRUCT(BlueprintType)
@@ -30,7 +31,7 @@ struct WORKSHOP_API FInteractiveCore
 
   // Statisctics in form of integers
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings")
-  TMap<int32, int32> IntegerStats;
+  TMap<int32, FBar> IntegerStats;
 
   // Array of effects which are applied in the current state.
   TMap<ETurnPhase, TArray<UEffectData*>> AccumulatedEffects;

@@ -23,10 +23,10 @@ void UChangeStatEffectData::ResolveOn(AInteractiveObject* TargetObject)
 
   if (TargetObject->InteractiveDataCore.IntegerStats.Find(StatID))
   {
-    TargetObject->InteractiveDataCore.IntegerStats[StatID] += EffectValue;
+    TargetObject->InteractiveDataCore.IntegerStats[StatID].ChangeBarBy(EffectValue);
   }
-  else if (bIsForciblyAdded)
-  {
-    TargetObject->InteractiveDataCore.IntegerStats.Add(StatID, EffectValue);
-  }
+  //else if (bIsForciblyAdded)
+  //{
+  //  TargetObject->InteractiveDataCore.IntegerStats.Add(StatID, EffectValue);
+  //}
 }

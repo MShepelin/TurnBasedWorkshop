@@ -17,8 +17,8 @@ struct WORKSHOP_API FBar
   UPROPERTY(EditDefaultsOnly)
   int32 DefaultValue = 0;
 
-  UPROPERTY() int32 CurrentValue;
-  UPROPERTY() bool bIsActive;
+  UPROPERTY(BlueprintReadWrite) int32 CurrentValue;
+  UPROPERTY(BlueprintReadWrite) bool bIsActive;
 
   void ChangeBarBy(int32 Value);
 
