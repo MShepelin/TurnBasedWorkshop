@@ -63,6 +63,7 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTsWithMask(const
 
   for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num(); ObjectIndex++)
   {
+    //REWORK, remove InteractiveTypeSeparator
     AInteractiveObject* FoundObject = FoundObjects[ObjectIndex];
     int32 AtLeastOneMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & InteractiveTypeSeparator;
     int32 NecessaryMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & ~InteractiveTypeSeparator;
