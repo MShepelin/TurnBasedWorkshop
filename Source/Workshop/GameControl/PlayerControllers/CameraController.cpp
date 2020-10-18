@@ -43,6 +43,8 @@ AActor* ACameraController::GeneralRayCast()
     ResponseParams
   );
 
+  //DrawDebugLine(GetWorld(), CameraLocation, CameraLocation + CameraPawn->GetCameraDirection() * RayCastLength, FColor(0, 255, 0), false, 10);
+
   return Hit.GetActor();
 }
 

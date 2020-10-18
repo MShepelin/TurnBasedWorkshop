@@ -65,7 +65,7 @@ void AHubController::ApplyChosenCharacters()
   UE_LOG(LogTemp, Warning, TEXT("%d characters chosen"), ChosenCharacters.Num());
   
   LoadPackageAsync(
-    FString("/Game/Experiments/FightMap"),
+    FString("/Game/Levels/FightMap"),
     FLoadPackageAsyncDelegate::CreateLambda([=](const FName& PackageName, UPackage* LoadedPackage, EAsyncLoadingResult::Type Result)
     {
       if (Result == EAsyncLoadingResult::Succeeded)
