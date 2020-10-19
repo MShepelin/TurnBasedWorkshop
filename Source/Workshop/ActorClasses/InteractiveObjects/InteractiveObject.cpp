@@ -228,5 +228,12 @@ void AInteractiveObject::ResolveAccumulatedEffects(ETurnPhase TurnPhase)
 
 void AInteractiveObject::RefreshInteractive()
 {
+  // Change Y-Extent
+  FVector ScaledBoxExtent(CollisionBox->GetScaledBoxExtent());
+  CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], CollisionBoxWidth, ScaledBoxExtent[2]));
 
+  // Set Y-order
+  FVector BoxLocation = CollisionBox->GetRelativeLocation();
+  CollisionBox->SetRelativeLocation(FVector(
+    BoxLocation[0], MainSpriteYOrder, BoxLocation[2]));
 }

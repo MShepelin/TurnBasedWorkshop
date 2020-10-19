@@ -19,15 +19,12 @@ AInteractiveCharacter::AInteractiveCharacter()
   CharacterPresentation->SetupAttachment(RootComponent);
   CharacterPresentation->SetRelativeLocation(FVector(0, -1, 0)); // y-order
 
-  //CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
-  //CollisionBox->SetupAttachment(RootComponent);
-
   CentralAbilityPositionVisual = CreateDefaultSubobject<UBillboardComponent>(TEXT("CentralAbility"));
   CentralAbilityPositionVisual->SetupAttachment(CollisionBox);
 
   // Arrange components
-  FVector UnscaledBoxExtent(CollisionBox->GetScaledBoxExtent());
-  CentralAbilityRelativePositionInput = FVector2D(0, UnscaledBoxExtent[0]);
+  FVector ScaledBoxExtent(CollisionBox->GetScaledBoxExtent());
+  CentralAbilityRelativePositionInput = FVector2D(0, ScaledBoxExtent[0]);
 }
 
 void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
@@ -147,9 +144,6 @@ void AInteractiveCharacter::RefreshInteractive()
 
   CharacterPresentation->SetFlipbook(CharacterDataCore.AnimationsMap[IdleAnimation]);
 
-  FVector ScaledBoxExtent(CollisionBox->GetScaledBoxExtent());
-  CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], CollisionBoxWidth, ScaledBoxExtent[2]));
-
   // ----------- //
   // Set y-order //
   // ----------- //
@@ -157,10 +151,6 @@ void AInteractiveCharacter::RefreshInteractive()
   FVector PresentationLocation = CharacterPresentation->GetRelativeLocation();
   CharacterPresentation->SetRelativeLocation(FVector(
     PresentationLocation[0], MainSpriteYOrder, PresentationLocation[2]));
-
-  FVector BoxLocation = CollisionBox->GetRelativeLocation();
-  CollisionBox->SetRelativeLocation(FVector(
-    BoxLocation[0], MainSpriteYOrder, BoxLocation[2]));
 
   // ----------------- //
   // Refresh abilities //
