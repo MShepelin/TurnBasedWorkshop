@@ -10,6 +10,7 @@
 #include "Workshop/Types/Effects/EffectData.h"
 #include "Workshop/Types/InteractiveType.h"
 #include "Workshop/Types/TurnPhase.h"
+#include "Components/BoxComponent.h"
 #include "Workshop/Types/InteractiveObjectData/InteractiveCore.h"
 #include "InteractiveObject.generated.h"
 
@@ -25,6 +26,7 @@ class WORKSHOP_API AInteractiveObject : public AActor
 	GENERATED_BODY()
 
 protected:
+  // Class description:
   // Has 2 states: awake and asleep, which corresponds to visibility of Icon component.
 
   // ---------------------- //
@@ -40,6 +42,10 @@ protected:
 
   UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
   UIconComponent* InteractivityIcon;
+
+  // Used to receive player's input.
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+  UBoxComponent* CollisionBox;
 
   // ------------------ //
   // CTs System Support //

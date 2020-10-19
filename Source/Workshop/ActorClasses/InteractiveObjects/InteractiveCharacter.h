@@ -33,11 +33,7 @@ protected:
 
   UPROPERTY() AInteractiveAbility* CentralAbility = nullptr;
 
-  // Used for receiving player's input and set object's world transform.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
-  UBoxComponent* CollisionBox;
-
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
   FVector2D CentralAbilityRelativePositionInput;
 
   UPROPERTY() FVector CentralAbilityRelativePosition;

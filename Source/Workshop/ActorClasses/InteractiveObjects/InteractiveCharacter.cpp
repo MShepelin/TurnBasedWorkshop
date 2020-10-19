@@ -11,7 +11,6 @@
 #include "Workshop/GameControl/PlayerControllers/CameraController.h"
 #include "InteractiveAbility.h"
 
-
 AInteractiveCharacter::AInteractiveCharacter()
 {
   InteractiveDataCore.InteractiveType = static_cast<int32>(EInteractiveType::Character);
@@ -20,14 +19,14 @@ AInteractiveCharacter::AInteractiveCharacter()
   CharacterPresentation->SetupAttachment(RootComponent);
   CharacterPresentation->SetRelativeLocation(FVector(0, -1, 0)); // y-order
 
-  CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
-  CollisionBox->SetupAttachment(RootComponent);
+  //CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
+  //CollisionBox->SetupAttachment(RootComponent);
 
   CentralAbilityPositionVisual = CreateDefaultSubobject<UBillboardComponent>(TEXT("CentralAbility"));
   CentralAbilityPositionVisual->SetupAttachment(CollisionBox);
 
   // Arrange components
-  FVector UnscaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
+  FVector UnscaledBoxExtent(CollisionBox->GetScaledBoxExtent());
   CentralAbilityRelativePositionInput = FVector2D(0, UnscaledBoxExtent[0]);
 }
 
@@ -79,8 +78,7 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
 
   CentralAbilityRelativePosition = FVector(
     CentralAbilityRelativePositionInput[0], WidgetComponentYOrder, CentralAbilityRelativePositionInput[1]);
-
-  RefreshInteractive();
+  CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
 }
 
 void AInteractiveCharacter::PickedAsCentral()
@@ -114,10 +112,10 @@ void AInteractiveCharacter::BeginPlay()
 {
   Super::BeginPlay();
   
-  if (!GetWorld())
-  {
-    return;
-  }
+  //if (!GetWorld())
+  //{
+  //  return;
+  //}
 }
 
 void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability) 
@@ -137,6 +135,8 @@ void AInteractiveCharacter::ChangeCentralAbilityVisibility(bool bIsInvisible) //
 
 void AInteractiveCharacter::RefreshInteractive()
 {
+  Super::RefreshInteractive();
+
   // ----------------- //
   // Refresh animation //
   // ----------------- //
@@ -147,11 +147,12 @@ void AInteractiveCharacter::RefreshInteractive()
 
   CharacterPresentation->SetFlipbook(CharacterDataCore.AnimationsMap[IdleAnimation]);
 
-  FVector ScaledBoxExtent(CollisionBox->GetUnscaledBoxExtent());
+  FVector ScaledBoxExtent(CollisionBox->GetScaledBoxExtent());
   CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], CollisionBoxWidth, ScaledBoxExtent[2]));
 
-  // Set y-order
-  CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
+  // ----------- //
+  // Set y-order //
+  // ----------- //
 
   FVector PresentationLocation = CharacterPresentation->GetRelativeLocation();
   CharacterPresentation->SetRelativeLocation(FVector(

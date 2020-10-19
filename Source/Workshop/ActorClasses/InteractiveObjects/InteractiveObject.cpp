@@ -2,7 +2,6 @@
 
 #include "InteractiveObject.h"
 
-
 // Sets default values
 AInteractiveObject::AInteractiveObject()
 {
@@ -11,6 +10,9 @@ AInteractiveObject::AInteractiveObject()
 
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("MainScene"));;
 
+  CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
+  CollisionBox->SetupAttachment(RootComponent);
+
   InteractivityIcon = CreateDefaultSubobject<UIconComponent>(TEXT("TouchIcon"));
   InteractivityIcon->SetupAttachment(RootComponent);
 }
@@ -18,7 +20,9 @@ AInteractiveObject::AInteractiveObject()
 void AInteractiveObject::OnConstruction(const FTransform & Transform)
 {
   Super::OnConstruction(Transform);
+
   InteractivityIcon->Initialize();
+  RefreshInteractive();
 }
 
 void AInteractiveObject::PostInitProperties()
