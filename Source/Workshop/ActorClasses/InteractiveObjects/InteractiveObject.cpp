@@ -76,7 +76,7 @@ void AInteractiveObject::ShowInfluences() const
   for (AInteractiveObject* DependentObject : InfluencesSet)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), DependentObject->GetActorLocation(),
-      DebugColor, false, DebugTime);
+      DEBUG_COLOR, false, DebugTime);
   }
 }
 #endif

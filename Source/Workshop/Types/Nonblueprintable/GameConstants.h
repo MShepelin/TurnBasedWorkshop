@@ -4,18 +4,18 @@
 
 // 1. Interactive objects
 // 1.1 Default values
-const int32 DefaultPointsValue = 10;
-const FName DefaultStringValue = "Dude";
+#define DefaultPointsValue 10
+#define DefaultStringValue "Dude"
 
 // 1.2 Y-order of components
-const float MainSpriteYOrder = 0;
-const float WidgetComponentYOrder = 1;
+#define MainSpriteYOrder 0
+#define WidgetComponentYOrder 1
 
 // 1.3 Animation
-const int32 IdleAnimation = 1;
+#define IdleAnimation 1
 
 // 1.4 CharacterStats
-const size_t CharacterIntegerStats = 8;
+#define CharacterIntegerStats 8
 // !!! IntegerStats from 0 to CharacterIntegerStats - 1 can't be used for IntegerStats !!!
 // Stamina
 // Patience
@@ -29,24 +29,24 @@ const size_t CharacterIntegerStats = 8;
 // 2. Debug
 // Used for drawing lines, spheres and other shapes.
 
-const FColor DebugColor(255, 0, 0);
-const int32 DebugTime = 5;
-const FName DebugString("Hello, world!");
+#define DEBUG_COLOR FColor(255, 0, 0)
+#define DebugTime 5
+#define DebugString FName("Hello, world!")
 
 // 3. Code specifics
-const int32 LengthOfInteractiveTypeName = 18;
-const int32 LengthOfAdvantageTypeName = 16;
-const int32 InteractiveTypeSeparator = 7;
-const float CollisionBoxWidth = 4;
-const size_t DefaultNumberOfSlots = 4;
-const float MaxActorSize = 1000;
-const float RayCastLength = 1000;
+#define LengthOfInteractiveTypeName 18
+#define LengthOfAdvantageTypeName 16
+#define InteractiveTypeSeparator 7
+#define CollisionBoxWidth 4
+#define DefaultNumberOfSlots 4
+#define MaxActorSize 1000
+#define RayCastLength 1000
 #define AVERAGE_MANAGED_OBJECTS 12
 #define COLLISION_INTERACTIVE ECollisionChannel::ECC_GameTraceChannel1
 
 // 4. UI
-const float MaxIconSize = 512.0;
-const float MinIconSize = 256.0;
+#define MaxIconSize 512.0
+#define MinIconSize 256.0
 
 // Some used difinitions:
 // Interactive with capital I is a name of class and not this word itself
