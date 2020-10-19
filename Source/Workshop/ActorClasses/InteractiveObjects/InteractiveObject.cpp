@@ -51,7 +51,7 @@ void AInteractiveObject::AddInfluenceOn(AInteractiveObject * TargetObject)
   }
   else
   {
-    UE_LOG(LogTemp, Warning, TEXT("Addiction failed, objects are already connected"));
+    UE_LOG(LogTemp, Warning, TEXT("Addition failed, objects are already connected"));
   }
 }
 
