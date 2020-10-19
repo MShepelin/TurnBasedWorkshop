@@ -28,21 +28,25 @@ class WORKSHOP_API AInteractiveObject : public AActor
 protected:
   // Class description:
   // Has 2 states: awake and asleep, which corresponds to visibility of Icon component.
+  // One InteractiveObject can "influence" another one, which can be used for gameplay.
+  // Manager can check if object is influenced by another one, initiate influence or remove it.
 
   // ---------------------- //
   // Interactive Properties //
   // ---------------------- //
 
+  // InteractiveObjects linked to this object to influnece it
   TSet<AInteractiveObject*> DependenciesSet;
+  // InteractiveObjects linked to this object to dependend on it
   TSet<AInteractiveObject*> InfluencesSet;
-
+   
   // ------------- //
   // Visualisation //
   // ------------- //
 
+  // Shows if object is awake and if it used by player.
   UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
   UIconComponent* InteractivityIcon;
-
   // Used to receive player's input.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
   UBoxComponent* CollisionBox;
@@ -51,11 +55,9 @@ protected:
   // CTs System Support //
   // ------------------ //
 
-  // Manager is a way for objects to find other Interactive objects to influence.
+  // Manager which currently handles this object.
   UPROPERTY() ARegistrationManager* MainManager = nullptr;
-
-  // Node for CT system.
-  // Any object can be added only to one system of CTs
+  // Node for CT system of MainManager.
   std::shared_ptr<Node<AInteractiveObject>> NodeForCT = nullptr;
 
 public:
@@ -63,6 +65,8 @@ public:
   // Object Statistics //
   // ----------------- //
 
+  // Represents gameplay variables abstracted from other objects, 
+  // which can be moved from object to object
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
   FInteractiveCore InteractiveDataCore;
 
@@ -71,8 +75,9 @@ private:
   // CT usage //
   // -------- //
 
+  // Used for CT system
   std::shared_ptr<Node<AInteractiveObject>>& GetNodeForCT();
-
+  // Used for CT system
   const TArray<int32>* GetCTs() const;
 
 protected:
@@ -80,6 +85,7 @@ protected:
   virtual void BeginPlay() override;
 
 public:
+  // Contructor.
   AInteractiveObject();
 
   // ------------------------- //
@@ -89,42 +95,51 @@ public:
   // Called before construction script.
   virtual void OnConstruction(const FTransform & Transform) override;
 
+  // Allow actors to initialize themselves on the C++ side after all of their components have been initialized, only called during gameplay
   virtual void PostInitProperties() override;
 
   // Called every frame.
 	virtual void Tick(float DeltaTime) override;
 
+  // Called whenever this actor is being removed from a level
   virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
   // ------------------ //
   // Manager Connection //
   // ------------------ //
 
+  // Get Manager which currently handles this object.
   UFUNCTION(BlueprintCallable)
   ARegistrationManager* GetManager() const;
 
+  // Check if MainManager considers this object as central.
   UFUNCTION(BlueprintCallable)
   bool IsCentralInManager() const;
 
-  UFUNCTION() virtual void PickedAsCentral();
-  UFUNCTION() virtual void UnpickedAsCentral();
-  UFUNCTION() virtual void PickedAsTarget();
-  UFUNCTION() virtual void UnpickedAsTarget();
+  // Called when player wants to pick this object.
+  UFUNCTION(BlueprintCallable) void Pick();
 
-  // Picked by controller with purpose to choose targets to influence on.
-  UFUNCTION(BlueprintCallable)
-  void Pick();
+  // Called when the player wants to pick this object as central (both for view and MainManager).
+  UFUNCTION() virtual void PickedAsCentral();
+  // Called when the player wants to stop using object as central (both for view and MainManager).
+  UFUNCTION() virtual void UnpickedAsCentral();
+  // Called when the player wants to pick this object as target of other object's influence.
+  UFUNCTION() virtual void PickedAsTarget();
+  // Called when the player wants to stop using object as target of other object's influence.
+  UFUNCTION() virtual void UnpickedAsTarget();
 
   // --------------------------- //
   // Influences and dependencies //
   // --------------------------- //
 
+  // Called to start influence on other object.
   UFUNCTION() void AddInfluenceOn(AInteractiveObject* object);
+  // Called to stop influence on this object by another one.
   UFUNCTION() void RemoveDependenceFrom(AInteractiveObject * object);
+  // Called to remove influence of this obejct.
   UFUNCTION() void ClearInflunces();
+  // Called to stop any influence on this obejct.
   UFUNCTION() void ClearDependencies();
-
-  // Attention: these 4 functions above don't change appearence of connections.
 
   // --------------- //
   // Get information //
@@ -136,6 +151,7 @@ public:
   virtual void ShowInfluences() const;
 #endif
 
+  // Get mask which gives information about used class and control properties.
   UFUNCTION(BlueprintCallable)
   int32 GetInteractiveType() const;
 
@@ -143,7 +159,7 @@ public:
   // Others //
   // ------ //
 
-  // Special function which should be called after any properties are changed in any unusual way.
+  // Called to refresh appearance.
   UFUNCTION() virtual void RefreshInteractive();
 
   // Resolve effects depeding on their resolve phase.
