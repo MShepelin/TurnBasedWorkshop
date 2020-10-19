@@ -12,7 +12,7 @@ AInteractiveObject::AInteractiveObject()
 
   CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
   CollisionBox->SetupAttachment(RootComponent);
-  CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Block);
+  CollisionBox->SetCollisionProfileName(TEXT("Interactive"));
 
   InteractivityIcon = CreateDefaultSubobject<UIconComponent>(TEXT("TouchIcon"));
   InteractivityIcon->SetupAttachment(RootComponent);

@@ -38,7 +38,7 @@ AActor* ACameraController::GeneralRayCast()
     Hit,
     CameraLocation,
     CameraLocation + CameraPawn->GetCameraDirection() * RayCastLength,
-    ECollisionChannel::ECC_EngineTraceChannel1,
+    COLLISION_INTERACTIVE,
     CollisionParams,
     ResponseParams
   );

@@ -33,7 +33,7 @@ protected:
 
   // Used to store managed InteractiveObjects.
   // Agreement: changed only by Awake/PutToSleep functions of InteractiveObjects.
-  TArray<AInteractiveObject*, TInlineAllocator<AverageManagedObjects>> AwakenObjects;
+  TArray<AInteractiveObject*, TInlineAllocator<AVERAGE_MANAGED_OBJECTS>> AwakenObjects;
   //???? change every used in this case tarray to tarray with TInlineAllocator
   //???? use TQueue?
 

@@ -41,7 +41,8 @@ const float CollisionBoxWidth = 4;
 const size_t DefaultNumberOfSlots = 4;
 const float MaxActorSize = 1000;
 const float RayCastLength = 1000;
-#define AverageManagedObjects 12
+#define AVERAGE_MANAGED_OBJECTS 12
+#define COLLISION_INTERACTIVE ECollisionChannel::ECC_GameTraceChannel1
 
 // 4. UI
 const float MaxIconSize = 512.0;
