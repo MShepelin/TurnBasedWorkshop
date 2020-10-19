@@ -12,6 +12,7 @@ AInteractiveObject::AInteractiveObject()
 
   CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
   CollisionBox->SetupAttachment(RootComponent);
+  CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Block);
 
   InteractivityIcon = CreateDefaultSubobject<UIconComponent>(TEXT("TouchIcon"));
   InteractivityIcon->SetupAttachment(RootComponent);
@@ -129,18 +130,15 @@ int32 AInteractiveObject::GetInteractiveType() const
 void AInteractiveObject::PickedAsCentral()
 {
   check(MainManager != nullptr);
-
   MainManager->CentralObject = this;
 
   InteractivityIcon->SetIconState(EIconState::CentralObject);
-
   InteractivityIcon->Show();
 }
 
 void AInteractiveObject::UnpickedAsCentral()
 {
   check(MainManager != nullptr);
-
   MainManager->CentralObject = nullptr;
 
   InteractivityIcon->Hide();
@@ -149,7 +147,6 @@ void AInteractiveObject::UnpickedAsCentral()
 void AInteractiveObject::PickedAsTarget()
 {
   check(MainManager != nullptr);
-
   MainManager->CentralObject->AddInfluenceOn(this);
 
   InteractivityIcon->SetIconState(EIconState::ChosenTarget);
@@ -158,7 +155,6 @@ void AInteractiveObject::PickedAsTarget()
 void AInteractiveObject::UnpickedAsTarget()
 {
   check(MainManager != nullptr);
-
   RemoveDependenceFrom(MainManager->CentralObject);
 
   InteractivityIcon->SetIconState(EIconState::AvailableTarget);
