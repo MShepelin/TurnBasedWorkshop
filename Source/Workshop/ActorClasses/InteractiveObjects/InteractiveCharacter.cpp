@@ -85,7 +85,7 @@ void AInteractiveCharacter::PickedAsCentral()
   // Add list of abilities to the HUD.
   ATurnBasedHUD* HUD = Cast<ATurnBasedHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
   UAbilitiesWidget* AbilitiesWidget = HUD->GetAbilitiesWidget();
-  AbilitiesWidget->SetVisibility(ESlateVisibility::Visible);
+  AbilitiesWidget->SetVisibility(ESlateVisibility::Visible); //???? is it neccessary?
   if (AbilitiesWidget)
   {
     AbilitiesWidget->FillAbilitySlots(Abilities);

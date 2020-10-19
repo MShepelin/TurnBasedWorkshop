@@ -129,6 +129,8 @@ void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
 {
   ARegistrationManager*& ObjectsManager = Object->MainManager;
 
+  // Remove previuos Manager if it was chosen for an object
+  //???? check if object is already connected
   if (ObjectsManager)
   {
     ObjectsManager->CTsSystem->RemoveObject(Object);
@@ -140,7 +142,6 @@ void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
   }
 
   ObjectsManager = this;
-
   CTsSystem->AddObject(Object);
 
   AInteractiveCharacter* ObjectAsCharacter = Cast<AInteractiveCharacter>(Object);
