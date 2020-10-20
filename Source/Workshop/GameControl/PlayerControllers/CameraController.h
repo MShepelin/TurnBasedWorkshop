@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/PlayerController.h"
 #include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
+#include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "CameraController.generated.h"
 
 
@@ -16,6 +17,7 @@ class WORKSHOP_API ACameraController : public APlayerController
 
 protected:
   UPROPERTY() ASpryCamera* CurrentCamera;
+  UPROPERTY() ARegistrationManager* UsedManager = nullptr;
 
   UFUNCTION() AActor* GeneralRayCast();
 
@@ -27,4 +29,6 @@ public:
   void SetPawn(APawn * InPawn) override;
 
   ASpryCamera* GetCurrentCamera() const;
+
+  const ARegistrationManager* GetUsedManager() const;
 };

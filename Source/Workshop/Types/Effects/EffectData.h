@@ -5,6 +5,7 @@
 //#include <algorithm>
 #include "CoreMinimal.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
+#include "Workshop/GameControl/PlayerControllers/CameraController.h"
 #include "Workshop/Types/InteractiveType.h"
 #include "Workshop/Types/TurnPhase.h"
 #include "EffectData.generated.h"
