@@ -5,7 +5,7 @@
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "Components/SlateWrapperTypes.h"
 
-void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities)
+void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager)
 {
   check(AbilitySlotClass != nullptr);
 
@@ -17,7 +17,7 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
       AddAbilitySlot();
     }
 
-    VerticalBoxSlots[SlotsIndex]->SetChosenAbility(Ability);
+    VerticalBoxSlots[SlotsIndex]->SetChosenAbility(Ability, UsedManager);
     AbilitiesLayout->InvalidateLayoutAndVolatility();
     
     SlotsIndex++;

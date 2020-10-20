@@ -9,6 +9,7 @@
 #include "Components/VerticalBoxSlot.h"
 #include "Blueprint/WidgetTree.h"
 #include "GeneratedCodeHelpers.h"
+#include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "AbilitiesWidget.generated.h"
 
 
@@ -34,7 +35,7 @@ protected:
   void RemoveAbilitySlot();
 
 public:
-  void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities);
+  void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager);
 
   void NativePreConstruct() override;
 };

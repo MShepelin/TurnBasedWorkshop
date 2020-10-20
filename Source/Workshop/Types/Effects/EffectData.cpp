@@ -40,7 +40,7 @@ void UEffectData::ResolveOn(AInteractiveObject* TargetObject)
 
 }
 
-FString UEffectData::GetInfoString()
+FString UEffectData::GetInfoString(ARegistrationManager* UsedManager)
 {
   FString InfoString = "";
   if (bIsBonusEffect)

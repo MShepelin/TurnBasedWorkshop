@@ -10,6 +10,7 @@
 #include "Components/PanelWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
+#include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "AbilitySlot.generated.h"
 
 class AInteractiveAbility;
@@ -37,7 +38,7 @@ public:
   UFUNCTION(BlueprintCallable)
   void SetMaxSize(float IconMaxSize, float IconMinSize);
 
-  void SetChosenAbility(AInteractiveAbility* NewAbility);
+  void SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager);
 
   UFUNCTION() void AbilityClicked();
 

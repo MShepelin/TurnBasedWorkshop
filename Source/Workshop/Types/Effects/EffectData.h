@@ -5,7 +5,6 @@
 //#include <algorithm>
 #include "CoreMinimal.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
-#include "Workshop/GameControl/PlayerControllers/CameraController.h"
 #include "Workshop/Types/InteractiveType.h"
 #include "Workshop/Types/TurnPhase.h"
 #include "EffectData.generated.h"
@@ -53,7 +52,7 @@ public:
   void DecreaseDuration(int32 OnValue);
   void DecreaseDuration();
 
-  virtual FString GetInfoString();
+  virtual FString GetInfoString(ARegistrationManager* UsedManager);
 
   // REMAKE
   //virtual FString GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const;

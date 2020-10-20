@@ -22,5 +22,5 @@ public:
 
   virtual void ResolveOn(AInteractiveObject* TargetObject) override;
 
-  FString GetInfoString() override;
+  FString GetInfoString(ARegistrationManager* UsedManager) override;
 };

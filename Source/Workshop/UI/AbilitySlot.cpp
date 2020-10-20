@@ -28,7 +28,7 @@ void UAbilitySlot::SetMaxSize(float IconMaxSize, float IconMinSize)
   IconSizeBox->MaxDesiredHeight = IconMaxSize;
 }
 
-void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility)
+void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager)
 {
   ChosenAbility = NewAbility;
   AbilityIcon->SetBrushFromTexture(ChosenAbility->GetIconUI());
@@ -37,7 +37,7 @@ void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility)
 
   for (UEffectData* Effect : NewAbility->AbilityDataCore.UsedEffects)
   {
-    CollectedEffectsInfo += Effect->GetInfoString() + "\n";
+    CollectedEffectsInfo += Effect->GetInfoString(UsedManager) + "\n";
   }
   
   EffectsInfo->SetText(FText::FromString(CollectedEffectsInfo));

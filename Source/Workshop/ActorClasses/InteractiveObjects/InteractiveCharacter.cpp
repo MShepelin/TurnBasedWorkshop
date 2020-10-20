@@ -88,7 +88,7 @@ void AInteractiveCharacter::PickedAsCentral()
   AbilitiesWidget->SetVisibility(ESlateVisibility::Visible); //???? is it neccessary?
   if (AbilitiesWidget)
   {
-    AbilitiesWidget->FillAbilitySlots(Abilities);
+    AbilitiesWidget->FillAbilitySlots(Abilities, MainManager);
   }
 }
 
