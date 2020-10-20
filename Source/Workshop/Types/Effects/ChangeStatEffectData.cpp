@@ -36,7 +36,7 @@ FString UChangeStatEffectData::GetInfoString(ARegistrationManager* UsedManager)
 {
   FString InfoString = std::move(Super::GetInfoString(UsedManager));
 
-  InfoString += UsedManager->GetStatNameByID(StatID) + " " + FString::FromInt(EffectValue);
+  InfoString += UsedManager->GetStatNameByID(StatID) + " " + ((EffectValue > 0) ? "" : "+") + FString::FromInt(EffectValue);
 
   return InfoString;
 }

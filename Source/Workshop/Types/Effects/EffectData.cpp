@@ -43,10 +43,6 @@ void UEffectData::ResolveOn(AInteractiveObject* TargetObject)
 FString UEffectData::GetInfoString(ARegistrationManager* UsedManager)
 {
   FString InfoString = "";
-  if (bIsBonusEffect)
-  {
-    InfoString += "[B] ";
-  }
 
   return InfoString;
 }

@@ -37,7 +37,16 @@ void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrati
 
   for (UEffectData* Effect : NewAbility->AbilityDataCore.UsedEffects)
   {
-    CollectedEffectsInfo += Effect->GetInfoString(UsedManager) + "\n";
+    if (Effect->bIsBonusEffect)
+    {
+      CollectedEffectsInfo += "<BonusEffect>";
+    }
+    CollectedEffectsInfo += Effect->GetInfoString(UsedManager);
+    if (Effect->bIsBonusEffect)
+    {
+      CollectedEffectsInfo += "</>";
+    }
+    CollectedEffectsInfo += "\n";
   }
   
   EffectsInfo->SetText(FText::FromString(CollectedEffectsInfo));

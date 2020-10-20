@@ -54,7 +54,5 @@ public:
 
   virtual FString GetInfoString(ARegistrationManager* UsedManager);
 
-  // REMAKE
-  //virtual FString GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const;
   virtual void ResolveOn(AInteractiveObject* TargetObject);
 };

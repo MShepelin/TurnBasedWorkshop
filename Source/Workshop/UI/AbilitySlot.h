@@ -9,7 +9,7 @@
 #include "Components/Image.h"
 #include "Components/PanelWidget.h"
 #include "Components/Button.h"
-#include "Components/TextBlock.h"
+#include "Components/RichTextBlock.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "AbilitySlot.generated.h"
 
@@ -30,7 +30,7 @@ private:
   UPROPERTY(EditDefaultsOnly, meta = (BindWidget)) UButton* AbilityButton;
   UPROPERTY(meta = (BindWidget)) UImage* AbilityIcon;
 
-  UPROPERTY(meta = (BindWidget)) UTextBlock* EffectsInfo;
+  UPROPERTY(meta = (BindWidget)) URichTextBlock* EffectsInfo;
 
   UPROPERTY() AInteractiveAbility* ChosenAbility;
 
