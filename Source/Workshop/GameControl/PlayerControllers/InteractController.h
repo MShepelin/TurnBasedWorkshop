@@ -17,7 +17,6 @@ class WORKSHOP_API AInteractController : public ACameraController
 
 protected:
   UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
-  UPROPERTY() ATurnBasedManager* EventManager = nullptr;
 
   UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
 

@@ -24,6 +24,7 @@ AInteractController::AInteractController()
 
 void AInteractController::ConnectionHappened()
 {
+  ATurnBasedManager* EventManager = Cast<ATurnBasedManager>(UsedManager);
   if (EventManager)
   {
     EventManager->RemoveController(this);
@@ -56,6 +57,8 @@ void AInteractController::ConnectionHappened()
 
     EventManager->ConnectObject(PlacableCharacter);
   }
+
+  UsedManager = EventManager;
 }
 
 void AInteractController::StartInteract()
@@ -139,7 +142,7 @@ void AInteractController::SetSwapMode(bool bIsActive)
     return;
   }
 
-  EventManager->GetCentralObject()->Pick();
+  UsedManager->GetCentralObject()->Pick();
 
   bSwapModeIsActive = bIsActive;
 }
