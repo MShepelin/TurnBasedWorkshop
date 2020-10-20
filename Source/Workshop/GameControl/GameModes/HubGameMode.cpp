@@ -10,5 +10,5 @@ AHubGameMode::AHubGameMode()
   DefaultPawnClass = ASpryCamera::StaticClass();
   PlayerControllerClass = AHubController::StaticClass();
   HUDClass = ATurnBasedHUD::StaticClass();
-  bUseSeamlessTravel = true;
+  //bUseSeamlessTravel = true;
 }
