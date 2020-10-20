@@ -9,6 +9,7 @@
 #include "Components/Image.h"
 #include "Components/PanelWidget.h"
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
 #include "AbilitySlot.generated.h"
 
 class AInteractiveAbility;
@@ -22,10 +23,14 @@ private:
   UPROPERTY(EditDefaultsOnly, Category = "SlotSettings") 
   UTexture* EmptySlot;
 
-  UPROPERTY(meta = (BindWidget)) UImage* AbilityIcon;
   UPROPERTY(meta = (BindWidget)) UScaleBox* IconScaleBox;
   UPROPERTY(meta = (BindWidget)) USizeBox* IconSizeBox;
+
   UPROPERTY(EditDefaultsOnly, meta = (BindWidget)) UButton* AbilityButton;
+  UPROPERTY(meta = (BindWidget)) UImage* AbilityIcon;
+
+  UPROPERTY(meta = (BindWidget)) UTextBlock* EffectsInfo;
+
   UPROPERTY() AInteractiveAbility* ChosenAbility;
 
 public:

@@ -2,7 +2,6 @@
 
 #include "EffectData.h"
 
-
 UEffectData::UEffectData()
 {
 
@@ -39,4 +38,15 @@ void UEffectData::DecreaseDuration()
 void UEffectData::ResolveOn(AInteractiveObject* TargetObject)
 {
 
+}
+
+FString UEffectData::GetInfoString()
+{
+  FString InfoString = "";
+  if (bIsBonusEffect)
+  {
+    InfoString += "[B] ";
+  }
+
+  return InfoString;
 }

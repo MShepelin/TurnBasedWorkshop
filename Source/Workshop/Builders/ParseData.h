@@ -19,7 +19,7 @@ class WORKSHOP_API UParseData : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
   
 public:
-  // Parse information abot AccumulatedEffects.
-  UFUNCTION(BlueprintCallable)
-  FString GetAccumulatedEffects(AInteractiveObject* TargetObject);
+  // Parse information about AccumulatedEffects.
+  //UFUNCTION(BlueprintCallable)
+  //FString CollectAccumulatedEffects(AInteractiveObject* TargetObject);
 };

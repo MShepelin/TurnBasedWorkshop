@@ -3,7 +3,8 @@
 #include "ParseData.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 
-FString UParseData::GetAccumulatedEffects(AInteractiveObject* TargetObject)
+/*
+FString UParseData::CollectAccumulatedEffects(AInteractiveObject* TargetObject)
 {
   ARegistrationManager* Manager = TargetObject->GetManager();
 
@@ -15,3 +16,4 @@ FString UParseData::GetAccumulatedEffects(AInteractiveObject* TargetObject)
 
   return ParsedString;
 }
+*/

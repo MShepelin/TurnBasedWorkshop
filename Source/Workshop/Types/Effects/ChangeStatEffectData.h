@@ -21,4 +21,6 @@ public:
   UChangeStatEffectData();
 
   virtual void ResolveOn(AInteractiveObject* TargetObject) override;
+
+  FString GetInfoString() override;
 };

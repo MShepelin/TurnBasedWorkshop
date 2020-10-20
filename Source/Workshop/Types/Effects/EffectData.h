@@ -52,6 +52,8 @@ public:
   void DecreaseDuration(int32 OnValue);
   void DecreaseDuration();
 
+  virtual FString GetInfoString();
+
   // REMAKE
   //virtual FString GatherInformation(bool bIsAbilityInfo, ARegistrationManager* Manager) const;
   virtual void ResolveOn(AInteractiveObject* TargetObject);

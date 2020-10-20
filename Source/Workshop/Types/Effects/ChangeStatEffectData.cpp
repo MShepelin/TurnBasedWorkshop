@@ -17,6 +17,7 @@ void UChangeStatEffectData::ResolveOn(AInteractiveObject* TargetObject)
     AInteractiveCharacter* TargetCharacter = Cast<AInteractiveCharacter>(TargetObject);
     check(TargetCharacter);
 
+    check(TargetCharacter->CharacterDataCore.CharacterStats.Num() > StatID);
     TargetCharacter->CharacterDataCore.CharacterStats[StatID].ChangeBarBy(EffectValue);
     return;
   }
@@ -29,4 +30,13 @@ void UChangeStatEffectData::ResolveOn(AInteractiveObject* TargetObject)
   //{
   //  TargetObject->InteractiveDataCore.IntegerStats.Add(StatID, EffectValue);
   //}
+}
+
+FString UChangeStatEffectData::GetInfoString()
+{
+  FString InfoString = std::move(Super::GetInfoString());
+
+  //InfoString += Manager->GetStatNameByID(StatID) + " " + FString::FromInt(EffectValue);
+
+  return InfoString;
 }
