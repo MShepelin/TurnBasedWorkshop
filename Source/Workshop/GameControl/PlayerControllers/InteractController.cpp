@@ -102,9 +102,7 @@ void AInteractController::StartInteract()
     //++++ add movement
     FTransform FirstTransform = FirstToSwap[0]->GetActorTransform();
     FirstToSwap[0]->SetActorTransform(FirstToSwap[1]->GetActorTransform());
-    FirstToSwap[0]->UpdateCentralAbility();
     FirstToSwap[1]->SetActorTransform(FirstTransform);
-    FirstToSwap[1]->UpdateCentralAbility();
 
     FirstToSwap[0] = FirstToSwap[1] = nullptr;
   }

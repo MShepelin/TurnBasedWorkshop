@@ -121,6 +121,8 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
 
   CentralAbility = Ability;
   CentralAbility->SetActorLocation(CentralAbilityRelativePosition + CollisionBox->GetComponentLocation());
+  CentralAbility->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+
   CentralAbility->SetActorHiddenInGame(false);
 }
 
@@ -189,6 +191,8 @@ void AInteractiveCharacter::ClearCentralAbility()
     CentralAbility->UnpickedAsCentral();
   }
 
+  CentralAbility->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
   CentralAbility->ClearDependencies();
   CentralAbility->ClearInflunces();
   ChangeCentralAbilityVisibility(false);
@@ -196,14 +200,6 @@ void AInteractiveCharacter::ClearCentralAbility()
   ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
   FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation(); //???? may be save hidden location somewhere
   CentralAbility->SetActorLocation(HiddenLocation);
-}
-
-void AInteractiveCharacter::UpdateCentralAbility()
-{
-  if (CentralAbility)
-  {
-    CentralAbility->SetActorLocation(CentralAbilityRelativePosition + CollisionBox->GetComponentLocation());
-  }
 }
 
 void AInteractiveCharacter::ResolveCharacterActions()
