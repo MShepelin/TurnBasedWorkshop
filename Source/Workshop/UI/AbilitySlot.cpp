@@ -7,16 +7,12 @@
 
 void UAbilitySlot::AbilityClicked()
 {
-  UE_LOG(LogTemp, Warning, TEXT("Click started"));
   if (!ChosenAbility)
   {
     return;
   }
 
-  UE_LOG(LogTemp, Warning, TEXT("Click coused centring"));
-
   ChosenAbility->CenterInCharacterOwner();
-  // ChosenAbility->Pick();
   //++++ add usage of EmptySlot texture
 }
 
