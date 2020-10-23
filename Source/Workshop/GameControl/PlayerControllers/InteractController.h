@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "CameraController.h"
+#include "Components/WidgetComponent.h"
+#include "Workshop/UI/TurnBasedEvent/AbilitiesWidget.h"
 #include "Workshop/Types/Components/TurnBasedComponent.h"
 #include "InteractController.generated.h"
 
@@ -40,4 +42,7 @@ public:
 
   UFUNCTION(BlueprintCallable)
   void ResolveCharactersAbilities();
+
+  UFUNCTION(BlueprintCallable)
+  void LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWidget);
 };

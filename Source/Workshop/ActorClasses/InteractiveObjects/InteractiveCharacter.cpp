@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "InteractiveCharacter.h"
-#include "Workshop/UI/TurnBasedEvent/InformationWidget.h"
 #include "Workshop/UI/TurnBasedEvent/AbilitiesWidget.h"
 #include "Components/BillboardComponent.h"
 #include "Workshop/UI/AbilitySlot.h"

@@ -7,15 +7,14 @@
 #include "Components/Overlay.h"
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
+#include "Components/Button.h"
 #include "Blueprint/WidgetTree.h"
 #include "GeneratedCodeHelpers.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "AbilitiesWidget.generated.h"
 
-
 class UAbilitySlot;
 class AInteractiveAbility;
-
 
 UCLASS(Abstract)
 class WORKSHOP_API UAbilitiesWidget : public UUserWidget
@@ -28,6 +27,9 @@ protected:
 
   UPROPERTY() TArray<UAbilitySlot*> VerticalBoxSlots;
   UPROPERTY(meta = (BindWidget)) UVerticalBox* AbilitiesLayout;
+
+public:
+  UPROPERTY(meta = (BindWidget)) UButton* NextPhaseButton;
 
 protected:
   void AddAbilitySlot();

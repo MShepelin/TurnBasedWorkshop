@@ -13,14 +13,8 @@ class WORKSHOP_API UNextPhaseWidget : public UUserWidget
 {
   GENERATED_BODY()
 
-private:
+public:
   UPROPERTY(EditDefaultsOnly, meta = (BindWidget)) UButton* NextPhase;
 
-  UPROPERTY() AInteractiveAbility* ChosenAbility;
-  UPROPERTY() AInteractController* PlayerController;
-
-  UFUNCTION() void PushButton();
-
-public:
   void NativePreConstruct() override;
 };

@@ -155,3 +155,8 @@ void AInteractController::ResolveCharactersAbilities()
     //???? may be wait or delay other resolvements
   }
 }
+
+void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWidget)
+{
+  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(TurnControl, &UTurnBasedComponent::NextPhase);
+}

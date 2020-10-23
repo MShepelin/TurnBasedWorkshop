@@ -15,6 +15,8 @@ bool UTurnBasedComponent::IsTurnControlled() const
 
 void UTurnBasedComponent::NextPhase()
 {
+  UE_LOG(LogTemp, Warning, TEXT("NextPhase activated!"));
+
   check(Manager != nullptr);
 
   if (!bIsTurnControlled)
