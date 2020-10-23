@@ -89,7 +89,7 @@ void AInteractController::StartInteract()
     return;
   }
 
-  if (FirstToSwap[0] != nullptr)
+  if (FirstToSwap[0] == nullptr)
   {
     FirstToSwap[0] = InteractiveCharacter;
   }
@@ -143,6 +143,18 @@ void AInteractController::TurnSwapMode()
   {
     UsedManager->GetCentralObject()->Pick();
   }
+
+  if (UsedAbilitiesWidget)
+  {
+    if (bSwapModeIsActive)
+    {
+      UsedAbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsActiveText);
+    }
+    else
+    {
+      UsedAbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsInactiveText);
+    }
+  }
 }
 
 void AInteractController::ResolveCharactersAbilities()
@@ -150,14 +162,29 @@ void AInteractController::ResolveCharactersAbilities()
   for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
   {
     PlacableCharacter->ResolveCharacterActions();
+    UE_LOG(LogTemp, Warning, TEXT("Character resolved"));
     //???? may be wait or delay other resolvements
   }
 }
 
 void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWidget)
 {
-  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(TurnControl, &UTurnBasedComponent::NextPhase);
+  if (UsedAbilitiesWidget)
+  {
+    UsedAbilitiesWidget->NextPhaseButton->OnPressed.Clear();
+    UsedAbilitiesWidget->TurnSwapButton->OnPressed.Clear();
+  }
 
-  // BindAction with TurnSwapMode
+  UsedAbilitiesWidget = AbilitiesWidget;
+  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(TurnControl, &UTurnBasedComponent::NextPhase);
   AbilitiesWidget->TurnSwapButton->OnPressed.AddDynamic(this, &AInteractController::TurnSwapMode);
+
+  if (bSwapModeIsActive)
+  {
+    AbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsActiveText);
+  }
+  else
+  {
+    AbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsInactiveText);
+  }
 }

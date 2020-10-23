@@ -36,9 +36,9 @@ protected:
   // ---------------------- //
 
   // InteractiveObjects linked to this object to influnece it
-  TSet<AInteractiveObject*> DependenciesSet;
-  // InteractiveObjects linked to this object to dependend on it
-  TSet<AInteractiveObject*> InfluencesSet;
+  TSet<AInteractiveObject*> DependsOn;
+  // InteractiveObjects linked to this object to depend on it
+  TSet<AInteractiveObject*> InfluencesOn;
   
   // ------------- //
   // Visualisation //

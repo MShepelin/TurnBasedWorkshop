@@ -44,7 +44,7 @@ void AInteractiveAbility::ResolveAbility()
   
   //++++ apply movememt
 
-  for (AInteractiveObject* DependentObject : InfluencesSet)
+  for (AInteractiveObject* DependentObject : InfluencesOn)
   {
     CustomEffect(DependentObject);
   }

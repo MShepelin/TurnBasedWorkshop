@@ -43,12 +43,12 @@ void AInteractiveObject::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AInteractiveObject::AddInfluenceOn(AInteractiveObject * TargetObject)
+void AInteractiveObject::AddInfluenceOn(AInteractiveObject* TargetObject)
 {
-  if (!InfluencesSet.Find(TargetObject))
+  if (!InfluencesOn.Find(TargetObject))
   {
-    InfluencesSet.Add(TargetObject);
-    TargetObject->DependenciesSet.Add(this);
+    InfluencesOn.Add(TargetObject);
+    TargetObject->DependsOn.Add(this);
   }
   else
   {
@@ -56,12 +56,12 @@ void AInteractiveObject::AddInfluenceOn(AInteractiveObject * TargetObject)
   }
 }
 
-void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
+void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject* TargetObject)
 {
-  if (DependenciesSet.Find(this))
+  if (DependsOn.Find(TargetObject))
   {
-    TargetObject->InfluencesSet.Remove(this);
-    DependenciesSet.Remove(TargetObject);
+    TargetObject->InfluencesOn.Remove(this);
+    DependsOn.Remove(TargetObject);
   }
   else
   {
@@ -73,7 +73,7 @@ void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject * TargetObject)
 void AInteractiveObject::ShowInfluences() const
 {
   // Show what objects are influenced by this object
-  for (AInteractiveObject* DependentObject : InfluencesSet)
+  for (AInteractiveObject* DependentObject : InfluencesOn)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), DependentObject->GetActorLocation(),
       DEBUG_COLOR, false, DebugTime);
@@ -83,20 +83,20 @@ void AInteractiveObject::ShowInfluences() const
 
 void AInteractiveObject::ClearInflunces()
 {
-  for (AInteractiveObject* DependingObject : InfluencesSet)
+  for (AInteractiveObject* DependentObject : InfluencesOn)
   {
-    DependingObject->DependenciesSet.Remove(this);
+    DependentObject->DependsOn.Remove(this);
   }
-  InfluencesSet.Empty();
+  InfluencesOn.Empty();
 }
 
 void AInteractiveObject::ClearDependencies()
 {
-  for (AInteractiveObject* InfluencingObject : DependenciesSet)
+  for (AInteractiveObject* InfluencingObject : DependsOn)
   {
-    InfluencingObject->InfluencesSet.Remove(this);
+    InfluencingObject->InfluencesOn.Remove(this);
   }
-  DependenciesSet.Empty();
+  DependsOn.Empty();
 }
 
 std::shared_ptr<Node<AInteractiveObject>>& AInteractiveObject::GetNodeForCT()
@@ -129,6 +129,8 @@ int32 AInteractiveObject::GetInteractiveType() const
 
 void AInteractiveObject::PickedAsCentral()
 {
+  UE_LOG(LogTemp, Warning, TEXT("PickedAsCentral"));
+
   check(MainManager != nullptr);
   MainManager->CentralObject = this;
 
@@ -138,6 +140,8 @@ void AInteractiveObject::PickedAsCentral()
 
 void AInteractiveObject::UnpickedAsCentral()
 {
+  UE_LOG(LogTemp, Warning, TEXT("UnpickedAsCentral"));
+
   check(MainManager != nullptr);
   MainManager->CentralObject = nullptr;
 
@@ -146,6 +150,8 @@ void AInteractiveObject::UnpickedAsCentral()
 
 void AInteractiveObject::PickedAsTarget()
 {
+  UE_LOG(LogTemp, Warning, TEXT("PickedAsTarget"));
+
   check(MainManager != nullptr);
   MainManager->CentralObject->AddInfluenceOn(this);
 
@@ -154,6 +160,8 @@ void AInteractiveObject::PickedAsTarget()
 
 void AInteractiveObject::UnpickedAsTarget()
 {
+  UE_LOG(LogTemp, Warning, TEXT("UnpickedAsTarget"));
+
   check(MainManager != nullptr);
   RemoveDependenceFrom(MainManager->CentralObject);
 

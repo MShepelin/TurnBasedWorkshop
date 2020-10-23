@@ -171,7 +171,7 @@ void ARegistrationManager::AwakeByCenterObject(TArray<AInteractiveObject*>& Obje
     // Using friend status not to add new functions
     Object->InteractivityIcon->Show();
 
-    if (CentralObject->InfluencesSet.Find(Object))
+    if (CentralObject->InfluencesOn.Find(Object))
     {
       Object->InteractivityIcon->SetIconState(EIconState::ChosenTarget);
     }

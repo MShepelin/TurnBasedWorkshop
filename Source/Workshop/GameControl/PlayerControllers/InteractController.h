@@ -25,6 +25,8 @@ protected:
   AInteractiveCharacter* FirstToSwap[2];
   UPROPERTY() bool bSwapModeIsActive;
 
+  UPROPERTY() UAbilitiesWidget* UsedAbilitiesWidget;
+
   // Tries to pick an Interactive object
   UFUNCTION() void StartInteract();
   UFUNCTION() void StopInteract();

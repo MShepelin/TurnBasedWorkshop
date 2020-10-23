@@ -35,6 +35,10 @@ public:
   UPROPERTY(meta = (BindWidget)) URichTextBlock* NextPhaseText;
 
   UPROPERTY(meta = (BindWidget)) UButton* TurnSwapButton;
+  UPROPERTY(meta = (BindWidget)) URichTextBlock* SwapText;
+
+  UPROPERTY(BlueprintReadOnly) FText SwapIsActiveText = FText::FromString("Stop Swap");
+  UPROPERTY(BlueprintReadOnly) FText SwapIsInactiveText = FText::FromString("Start Swap");;
 
 protected:
   void AddAbilitySlot();
