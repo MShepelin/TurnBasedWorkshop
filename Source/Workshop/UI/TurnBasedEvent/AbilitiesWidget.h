@@ -46,6 +46,9 @@ protected:
   void RemoveAbilitySlot();
 
 public:
+  void HideAbilitySlots();
+  void ShowAbilitySlots();
+
   void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager);
 
   void NativePreConstruct() override;

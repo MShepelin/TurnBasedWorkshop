@@ -102,7 +102,9 @@ void AInteractController::StartInteract()
     //++++ add movement
     FTransform FirstTransform = FirstToSwap[0]->GetActorTransform();
     FirstToSwap[0]->SetActorTransform(FirstToSwap[1]->GetActorTransform());
+    FirstToSwap[0]->UpdateCentralAbility();
     FirstToSwap[1]->SetActorTransform(FirstTransform);
+    FirstToSwap[1]->UpdateCentralAbility();
 
     FirstToSwap[0] = FirstToSwap[1] = nullptr;
   }
@@ -141,7 +143,7 @@ void AInteractController::TurnSwapMode()
   // Unpick central object if needed
   if (UsedManager->HasCentralObject())
   {
-    UsedManager->GetCentralObject()->Pick();
+    UsedManager->GetCentralObject()->UnpickedAsCentral();
   }
 
   if (UsedAbilitiesWidget)
@@ -163,7 +165,6 @@ void AInteractController::ResolveCharactersAbilities()
   {
     PlacableCharacter->ResolveCharacterActions();
     UE_LOG(LogTemp, Warning, TEXT("Character resolved"));
-    //???? may be wait or delay other resolvements
   }
 }
 

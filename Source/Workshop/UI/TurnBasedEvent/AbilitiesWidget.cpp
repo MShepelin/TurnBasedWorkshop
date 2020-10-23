@@ -64,3 +64,24 @@ void UAbilitiesWidget::RemoveAbilitySlot()
   VerticalBoxSlots[VerticalBoxSlots.Num() - 1]->RemoveFromParent();
   VerticalBoxSlots.Pop();
 }
+
+void UAbilitiesWidget::HideAbilitySlots()
+{
+  for (size_t NewSlotIndex = VerticalBoxSlots.Num(); NewSlotIndex <= DefaultNumberOfSlots; NewSlotIndex++)
+  {
+    AddAbilitySlot();
+  }
+
+  for (UAbilitySlot* SlotToHide : VerticalBoxSlots)
+  {
+    SlotToHide->SetVisibility(ESlateVisibility::Hidden);
+  }
+}
+
+void UAbilitiesWidget::ShowAbilitySlots()
+{
+  for (UAbilitySlot* SlotToHide : VerticalBoxSlots)
+  {
+    SlotToHide->SetVisibility(ESlateVisibility::Visible);
+  }
+}

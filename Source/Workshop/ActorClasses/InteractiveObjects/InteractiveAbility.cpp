@@ -42,7 +42,7 @@ void AInteractiveAbility::ResolveAbility()
 
   CharacterOwner->PlayAnimation(AbilityDataCore.AbilityAnimationId);
   
-  //++++ apply movememt
+  //++++ add movememt
 
   for (AInteractiveObject* DependentObject : InfluencesOn)
   {

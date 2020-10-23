@@ -84,10 +84,10 @@ void AInteractiveCharacter::PickedAsCentral()
   // Add list of abilities to the HUD.
   ATurnBasedHUD* HUD = Cast<ATurnBasedHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
   UAbilitiesWidget* AbilitiesWidget = HUD->GetAbilitiesWidget();
-  AbilitiesWidget->SetVisibility(ESlateVisibility::Visible); //???? is it neccessary?
   if (AbilitiesWidget)
   {
     AbilitiesWidget->FillAbilitySlots(Abilities, MainManager);
+    AbilitiesWidget->ShowAbilitySlots();
   }
 }
 
@@ -100,7 +100,8 @@ void AInteractiveCharacter::UnpickedAsCentral()
   UAbilitiesWidget* AbilitiesWidget = HUD->GetAbilitiesWidget();
   if (AbilitiesWidget)
   {
-    AbilitiesWidget->SetVisibility(ESlateVisibility::Hidden);
+    //AbilitiesWidget->SetVisibility(ESlateVisibility::Hidden);
+    AbilitiesWidget->HideAbilitySlots();
   }
 }
 
@@ -120,13 +121,13 @@ void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability)
 
   CentralAbility = Ability;
   CentralAbility->SetActorLocation(CentralAbilityRelativePosition + CollisionBox->GetComponentLocation());
-  ChangeCentralAbilityVisibility(false);
+  CentralAbility->SetActorHiddenInGame(false);
 }
 
-void AInteractiveCharacter::ChangeCentralAbilityVisibility(bool bIsInvisible) //++++ change function name
+void AInteractiveCharacter::ChangeCentralAbilityVisibility(bool bIsVisible) //++++ change function name
 {
   check(CentralAbility != nullptr);
-  CentralAbility->SetActorHiddenInGame(bIsInvisible);
+  CentralAbility->SetActorHiddenInGame(!bIsVisible);
 }
 
 void AInteractiveCharacter::RefreshInteractive()
@@ -183,7 +184,7 @@ void AInteractiveCharacter::ClearCentralAbility()
     return;
   }
 
-  if (CentralAbility->IsCentralInManager()) //++++ sounds ambiguous, change termins!
+  if (CentralAbility->IsCentralInManager())
   {
     CentralAbility->UnpickedAsCentral();
   }
@@ -197,6 +198,14 @@ void AInteractiveCharacter::ClearCentralAbility()
   CentralAbility->SetActorLocation(HiddenLocation);
 }
 
+void AInteractiveCharacter::UpdateCentralAbility()
+{
+  if (CentralAbility)
+  {
+    CentralAbility->SetActorLocation(CentralAbilityRelativePosition + CollisionBox->GetComponentLocation());
+  }
+}
+
 void AInteractiveCharacter::ResolveCharacterActions()
 {
   if (!CentralAbility)
@@ -204,7 +213,9 @@ void AInteractiveCharacter::ResolveCharacterActions()
     return;
   }
 
+  //++++ add movement
   CentralAbility->ResolveAbility();
+  //++++ add movement
 }
 
 void AInteractiveCharacter::UpdateCharacterStatus()

@@ -104,6 +104,9 @@ public:
   UFUNCTION(BlueprintCallable)
   void ClearCentralAbility();
 
+  UFUNCTION(BlueprintCallable)
+  void UpdateCentralAbility();
+
   // ------ //
   // Others //
   // ------ //
