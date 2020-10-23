@@ -15,8 +15,6 @@ bool UTurnBasedComponent::IsTurnControlled() const
 
 void UTurnBasedComponent::NextPhase()
 {
-  UE_LOG(LogTemp, Warning, TEXT("NextPhase activated!"));
-
   check(Manager != nullptr);
 
   if (!bIsTurnControlled)
@@ -35,4 +33,18 @@ bool UTurnBasedComponent::IsManaged() const
 ATurnBasedManager* UTurnBasedComponent::GetManager()
 {
   return Manager;
+}
+
+void UTurnBasedComponent::ChangeControl(bool bComponentHasControl)
+{
+  bIsTurnControlled = bComponentHasControl;
+
+  if (bComponentHasControl)
+  {
+    TurnIsTakenUnderControl.ExecuteIfBound();
+  }
+  else
+  {
+    TurnIsOutOfControl.ExecuteIfBound();
+  }
 }

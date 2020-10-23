@@ -10,6 +10,7 @@
 #include "Components/Button.h"
 #include "Blueprint/WidgetTree.h"
 #include "GeneratedCodeHelpers.h"
+#include "Components/RichTextBlock.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "AbilitiesWidget.generated.h"
 
@@ -30,6 +31,8 @@ protected:
 
 public:
   UPROPERTY(meta = (BindWidget)) UButton* NextPhaseButton;
+  UPROPERTY(meta = (BindWidget)) URichTextBlock* PhaseText;
+  UPROPERTY(meta = (BindWidget)) URichTextBlock* NextPhaseText;
 
 protected:
   void AddAbilitySlot();
