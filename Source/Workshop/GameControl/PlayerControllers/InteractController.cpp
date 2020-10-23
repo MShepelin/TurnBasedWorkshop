@@ -131,7 +131,7 @@ void AInteractController::SetupInputComponent()
 
   InputComponent->BindAction("Interact", IE_Pressed, this, &AInteractController::StartInteract);
   InputComponent->BindAction("Interact", IE_Released, this, &AInteractController::StopInteract);
-
+   
   // BindAction with SetSwapMode
 }
 

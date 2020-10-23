@@ -34,6 +34,8 @@ public:
   UPROPERTY(meta = (BindWidget)) URichTextBlock* PhaseText;
   UPROPERTY(meta = (BindWidget)) URichTextBlock* NextPhaseText;
 
+  UPROPERTY(meta = (BindWidget)) UButton* SwapButton;
+
 protected:
   void AddAbilitySlot();
 
