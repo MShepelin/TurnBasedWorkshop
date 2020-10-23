@@ -159,5 +159,5 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
   AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(TurnControl, &UTurnBasedComponent::NextPhase);
 
   // BindAction with TurnSwapMode
-  TurnSwapButton->OnPressed.AddDynamic(this, &AInteractController::TurnSwapMode);
+  AbilitiesWidget->TurnSwapButton->OnPressed.AddDynamic(this, &AInteractController::TurnSwapMode);
 }
