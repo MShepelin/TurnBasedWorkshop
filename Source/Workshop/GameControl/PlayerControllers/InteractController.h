@@ -31,7 +31,9 @@ protected:
 
   UFUNCTION() void ConnectionHappened();
   
-  UFUNCTION() void SetSwapMode(bool bIsActive);
+  // If SwapMode is active it will be turned off,
+  // else it will be turned on
+  UFUNCTION() void TurnSwapMode();
 
 public:
   AInteractController();

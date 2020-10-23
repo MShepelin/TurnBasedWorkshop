@@ -76,40 +76,41 @@ void AInteractController::StartInteract()
     return;
   }
 
-  if (bSwapModeIsActive)
+  if (!bSwapModeIsActive)
   {
-    AInteractiveCharacter* InteractiveCharacter = Cast<AInteractiveCharacter>(InteractiveObject);
-
-    if (!InteractiveCharacter)
-    {
-      return;
-    }
-
-    if (FirstToSwap[0] != nullptr)
-    {
-      FirstToSwap[0] = InteractiveCharacter;
-    }
-    else
-    {
-      FirstToSwap[1] = InteractiveCharacter;
-     
-      PlacableCharacters.Swap(PlacableCharacters.Find(FirstToSwap[0]), PlacableCharacters.Find(FirstToSwap[1]));
-      
-      //++++ add movement
-      FTransform FirstTransform = FirstToSwap[0]->GetActorTransform();
-      FirstToSwap[0]->SetActorTransform(FirstToSwap[1]->GetActorTransform());
-      FirstToSwap[1]->SetActorTransform(FirstTransform);
-
-      FirstToSwap[0] = FirstToSwap[1] = nullptr;
-    }
-
+    InteractiveObject->Pick();
     return;
+  }
+
+  AInteractiveCharacter* InteractiveCharacter = Cast<AInteractiveCharacter>(InteractiveObject);
+
+  if (!InteractiveCharacter)
+  {
+    return;
+  }
+
+  if (FirstToSwap[0] != nullptr)
+  {
+    FirstToSwap[0] = InteractiveCharacter;
+  }
+  else
+  {
+    FirstToSwap[1] = InteractiveCharacter;
+     
+    PlacableCharacters.Swap(PlacableCharacters.Find(FirstToSwap[0]), PlacableCharacters.Find(FirstToSwap[1]));
+      
+    //++++ add movement
+    FTransform FirstTransform = FirstToSwap[0]->GetActorTransform();
+    FirstToSwap[0]->SetActorTransform(FirstToSwap[1]->GetActorTransform());
+    FirstToSwap[1]->SetActorTransform(FirstTransform);
+
+    FirstToSwap[0] = FirstToSwap[1] = nullptr;
   }
 
   //++++ make two functions: one for rmb, other for lmb, 
   //     so that player can pick just to look info (without target choosing)
   //     also make basic function to ray cast for InteractiveObject
-  InteractiveObject->Pick();
+  
 }
 
 void AInteractController::StopInteract()
@@ -131,20 +132,17 @@ void AInteractController::SetupInputComponent()
 
   InputComponent->BindAction("Interact", IE_Pressed, this, &AInteractController::StartInteract);
   InputComponent->BindAction("Interact", IE_Released, this, &AInteractController::StopInteract);
-   
-  // BindAction with SetSwapMode
 }
 
-void AInteractController::SetSwapMode(bool bIsActive)
+void AInteractController::TurnSwapMode()
 {
-  if (bSwapModeIsActive == bIsActive)
+  bSwapModeIsActive = !bSwapModeIsActive;
+
+  // Unpick central object if needed
+  if (UsedManager->HasCentralObject())
   {
-    return;
+    UsedManager->GetCentralObject()->Pick();
   }
-
-  UsedManager->GetCentralObject()->Pick();
-
-  bSwapModeIsActive = bIsActive;
 }
 
 void AInteractController::ResolveCharactersAbilities()
@@ -159,4 +157,7 @@ void AInteractController::ResolveCharactersAbilities()
 void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWidget)
 {
   AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(TurnControl, &UTurnBasedComponent::NextPhase);
+
+  // BindAction with TurnSwapMode
+  TurnSwapButton->OnPressed.AddDynamic(this, &AInteractController::TurnSwapMode);
 }
