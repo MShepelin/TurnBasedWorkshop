@@ -87,6 +87,7 @@ void ATurnBasedManager::NextPhase()
 
   case ETurnPhase::End:
     JoinedControllers[CurrentControllerIndex]->bIsTurnControlled = false;
+    //JoinedControllers[CurrentControllerIndex]->
     CurrentControllerIndex++;
     break;
 

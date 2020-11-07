@@ -5,19 +5,28 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
+#include "Workshop/Types/Components/TurnBasedComponent.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
 #include "TurnBasedBeastAI.generated.h"
 
 UCLASS(Blueprintable)
-class WORKSHOP_API ATurnBasedBeastAI : public APlayerController
+class WORKSHOP_API ATurnBasedBeastAI : public AController
 {
   GENERATED_BODY()
 
 protected:
   UPROPERTY() ARegistrationManager* UsedManager = nullptr;
 
+  UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
+
+  UPROPERTY(EditDefaultsOnly) TArray<TSubclassOf<AInteractiveCharacter>> UsedCharacters;
+  UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
+
+protected:
+  UFUNCTION() void ConnectionHappened();
+
 public:
-  //ATurnBasedBeastAI();
+  ATurnBasedBeastAI();
 
   //void BeginPlay() override;
 

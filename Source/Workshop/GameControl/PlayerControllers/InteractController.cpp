@@ -25,6 +25,7 @@ AInteractController::AInteractController()
 void AInteractController::ConnectionHappened()
 {
   ATurnBasedManager* EventManager = Cast<ATurnBasedManager>(UsedManager);
+  // Disconnect from previous manager
   if (EventManager)
   {
     EventManager->RemoveController(this);
