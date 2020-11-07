@@ -6,7 +6,6 @@
 #include "Workshop/UI/AbilitySlot.h"
 #include "Kismet/GameplayStatics.h"
 #include "InteractiveAbility.h"
-#include "Workshop/UI/TurnBasedEvent/TurnBasedHUD.h"
 #include "Workshop/GameControl/PlayerControllers/InteractController.h"
 #include "InteractiveAbility.h"
 
