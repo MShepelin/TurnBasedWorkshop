@@ -15,7 +15,6 @@
 
 class AInteractiveAbility;
 
-// OK-STATUS
 UCLASS(Abstract)
 class WORKSHOP_API UAbilitySlot : public UUserWidget
 {

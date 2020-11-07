@@ -71,7 +71,7 @@ ASpryCamera* ACameraController::GetCurrentCamera() const
   return CurrentCamera;
 }
 
-const ARegistrationManager* ACameraController::GetUsedManager() const
+ARegistrationManager* ACameraController::GetUsedManager()
 {
   return UsedManager;
 }

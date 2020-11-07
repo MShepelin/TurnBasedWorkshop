@@ -10,6 +10,7 @@
 #include "Async/AsyncWork.h"
 #include "Kismet/GameplayStatics.h"
 #include "UnrealEd.h"
+#include "Workshop/GameControl/GameModes/FightGameMode.h"
 #include "../ChoicesInstance.h"
 
 AInteractController::AInteractController()
@@ -52,7 +53,8 @@ void AInteractController::ConnectionHappened()
   int32 LocationCounter = MaxLocations / 2 - PlacableCharacters.Num() / 2;
   for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
   {
-    GetCurrentCamera()->SpawnLocations->GetInstanceTransform(LocationCounter, CameraSpawnTransoform, true);
+    //GetCurrentCamera()->SpawnLocations->GetInstanceTransform(LocationCounter, CameraSpawnTransoform, true);
+    CameraSpawnTransoform = CharactersSpawnTransforms[LocationCounter];
     PlacableCharacter->SetActorTransform(CameraSpawnTransoform);
     LocationCounter++;
 
@@ -111,7 +113,6 @@ void AInteractController::StartInteract()
   //++++ make two functions: one for rmb, other for lmb, 
   //     so that player can pick just to look info (without target choosing)
   //     also make basic function to ray cast for InteractiveObject
-  
 }
 
 void AInteractController::StopInteract()
@@ -133,6 +134,15 @@ void AInteractController::SetupInputComponent()
 
   InputComponent->BindAction("Interact", IE_Pressed, this, &AInteractController::StartInteract);
   InputComponent->BindAction("Interact", IE_Released, this, &AInteractController::StopInteract);
+}
+
+void AInteractController::ObjectsReady()
+{
+  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
+  check(GameMode);
+
+  GameMode->RegisterAllSpawnLocations.Broadcast();
+  // sort transforms by orderID
 }
 
 void AInteractController::TurnSwapMode()
@@ -192,4 +202,9 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
 UAbilitiesWidget* AInteractController::GetAbilitiesWidget()
 {
   return UsedAbilitiesWidget;
+}
+
+void AInteractController::AddSpawnTransform(FTransform NewSpawn)
+{
+  CharactersSpawnTransforms.Add(NewSpawn);
 }

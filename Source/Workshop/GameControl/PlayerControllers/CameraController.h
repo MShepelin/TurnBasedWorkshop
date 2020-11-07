@@ -29,5 +29,6 @@ public:
 
   ASpryCamera* GetCurrentCamera() const;
 
-  const ARegistrationManager* GetUsedManager() const;
+  //const ARegistrationManager* GetUsedManager() const;
+  ARegistrationManager* GetUsedManager();
 };

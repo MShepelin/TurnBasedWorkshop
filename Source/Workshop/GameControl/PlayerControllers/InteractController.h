@@ -21,6 +21,7 @@ protected:
   UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
 
   UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
+  UPROPERTY() TArray<FTransform> CharactersSpawnTransforms;
 
   AInteractiveCharacter* FirstToSwap[2];
   UPROPERTY() bool bSwapModeIsActive;
@@ -52,4 +53,12 @@ public:
 
   UFUNCTION(BlueprintCallable)
   UAbilitiesWidget* GetAbilitiesWidget();
+
+  // Should be called before any other functions 
+  // when all objects used by controller are prepared
+  UFUNCTION(BlueprintCallable)
+  void ObjectsReady();
+
+  UFUNCTION(BlueprintCallable)
+  void AddSpawnTransform(FTransform NewSpawn);
 };

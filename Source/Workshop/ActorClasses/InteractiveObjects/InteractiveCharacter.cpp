@@ -107,11 +107,6 @@ void AInteractiveCharacter::UnpickedAsCentral()
 void AInteractiveCharacter::BeginPlay()
 {
   Super::BeginPlay();
-  
-  //if (!GetWorld())
-  //{
-  //  return;
-  //}
 }
 
 void AInteractiveCharacter::SetCentralAbility(AInteractiveAbility* Ability) 
