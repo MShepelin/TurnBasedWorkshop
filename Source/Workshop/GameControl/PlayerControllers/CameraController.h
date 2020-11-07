@@ -18,7 +18,7 @@ protected:
   UPROPERTY() ASpryCamera* CurrentCamera;
   UPROPERTY() ARegistrationManager* UsedManager = nullptr;
 
-  UFUNCTION() AActor* GeneralRayCast();
+  UFUNCTION() AActor* GeneralRayCast(); // not general - interactive
 
 public:
   ACameraController();

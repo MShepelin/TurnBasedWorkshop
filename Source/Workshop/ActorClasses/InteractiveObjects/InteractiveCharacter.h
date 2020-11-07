@@ -16,6 +16,7 @@ class AInteractiveAbility;
 class UAbilitiesWidget;
 class UInformationWidget;
 class UAbilitySlot;
+class AInteractController;
 
 // Interactive characters have visual represenation, abilities, types, 
 // they are able to take actions in turn-based events and connected to 

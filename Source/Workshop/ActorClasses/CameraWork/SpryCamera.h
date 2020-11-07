@@ -7,9 +7,7 @@
 #include "Components/WidgetInteractionComponent.h"
 #include "SpryCamera.generated.h"
 
-
 class AInteractiveCharacter;
-
 
 UCLASS(Blueprintable)
 class WORKSHOP_API ASpryCamera : public APawn
@@ -41,9 +39,11 @@ public:
 
   virtual void Tick(float DeltaSeconds) override;
 
+  /* REWORK
   UFUNCTION(BlueprintNativeEvent)
   void OnCharacterResolvesAbility(AInteractiveCharacter* CurrentCharacter);
   virtual void OnCharacterResolvesAbility_Implementation(AInteractiveCharacter* CurrentCharacter);
+  */
 
   UFUNCTION(BlueprintCallable)
   FVector GetHiddenLocation() const;

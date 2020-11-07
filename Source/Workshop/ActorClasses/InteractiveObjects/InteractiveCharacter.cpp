@@ -7,7 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "InteractiveAbility.h"
 #include "Workshop/UI/TurnBasedEvent/TurnBasedHUD.h"
-#include "Workshop/GameControl/PlayerControllers/CameraController.h"
+#include "Workshop/GameControl/PlayerControllers/InteractController.h"
 #include "InteractiveAbility.h"
 
 AInteractiveCharacter::AInteractiveCharacter()
@@ -81,9 +81,9 @@ void AInteractiveCharacter::PickedAsCentral()
 {
   Super::PickedAsCentral();
 
-  // Add list of abilities to the HUD.
-  ATurnBasedHUD* HUD = Cast<ATurnBasedHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
-  UAbilitiesWidget* AbilitiesWidget = HUD->GetAbilitiesWidget();
+  // Add list of abilities to the AbilitiesWidget.
+  UAbilitiesWidget* AbilitiesWidget = Cast<AInteractController>(
+    UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetAbilitiesWidget();
   if (AbilitiesWidget)
   {
     AbilitiesWidget->FillAbilitySlots(Abilities, MainManager);
@@ -95,9 +95,9 @@ void AInteractiveCharacter::UnpickedAsCentral()
 {
   Super::UnpickedAsCentral();
 
-  // Remove list of abilities from the HUD.
-  ATurnBasedHUD* HUD = Cast<ATurnBasedHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
-  UAbilitiesWidget* AbilitiesWidget = HUD->GetAbilitiesWidget();
+  // Remove list of abilities from the AbilitiesWidget.
+  UAbilitiesWidget* AbilitiesWidget = Cast<AInteractController>(
+    UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetAbilitiesWidget();
   if (AbilitiesWidget)
   {
     //AbilitiesWidget->SetVisibility(ESlateVisibility::Hidden);

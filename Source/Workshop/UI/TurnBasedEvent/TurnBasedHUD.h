@@ -9,7 +9,6 @@
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "TurnBasedHUD.generated.h"
 
-
 UCLASS()
 class WORKSHOP_API ATurnBasedHUD : public AHUD
 {

@@ -21,10 +21,12 @@ ASpryCamera::ASpryCamera()
   SpawnLocations->SetHiddenInGame(true, true);
 }
 
+/*
 void ASpryCamera::OnCharacterResolvesAbility_Implementation(AInteractiveCharacter* CurrentCharacter)
 {
   // apply movement
 }
+*/
 
 FVector ASpryCamera::GetHiddenLocation() const
 {

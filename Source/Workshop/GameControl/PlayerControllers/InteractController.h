@@ -49,4 +49,7 @@ public:
 
   UFUNCTION(BlueprintCallable)
   void LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWidget);
+
+  UFUNCTION(BlueprintCallable)
+  UAbilitiesWidget* GetAbilitiesWidget();
 };

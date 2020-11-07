@@ -188,3 +188,8 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
     AbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsInactiveText);
   }
 }
+
+UAbilitiesWidget* AInteractController::GetAbilitiesWidget()
+{
+  return UsedAbilitiesWidget;
+}
