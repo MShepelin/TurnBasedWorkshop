@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "CameraController.h"
 #include "Workshop/ActorClasses/Managers/TurnBasedManager.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"

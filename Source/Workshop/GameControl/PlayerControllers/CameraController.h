@@ -9,7 +9,6 @@
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "CameraController.generated.h"
 
-
 UCLASS(Blueprintable)
 class WORKSHOP_API ACameraController : public APlayerController
 {
