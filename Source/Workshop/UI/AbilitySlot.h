@@ -15,6 +15,7 @@
 
 class AInteractiveAbility;
 
+// OK-STATUS
 UCLASS(Abstract)
 class WORKSHOP_API UAbilitySlot : public UUserWidget
 {
@@ -24,9 +25,6 @@ private:
   UPROPERTY(EditDefaultsOnly, Category = "SlotSettings") 
   UTexture* EmptySlot;
 
-  UPROPERTY(meta = (BindWidget)) UScaleBox* IconScaleBox;
-  UPROPERTY(meta = (BindWidget)) USizeBox* IconSizeBox;
-
   UPROPERTY(EditDefaultsOnly, meta = (BindWidget)) UButton* AbilityButton;
   UPROPERTY(meta = (BindWidget)) UImage* AbilityIcon;
 
@@ -35,9 +33,6 @@ private:
   UPROPERTY() AInteractiveAbility* ChosenAbility;
 
 public:
-  UFUNCTION(BlueprintCallable)
-  void SetMaxSize(float IconMaxSize, float IconMinSize);
-
   void SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager);
 
   UFUNCTION() void AbilityClicked();

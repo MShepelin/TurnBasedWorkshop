@@ -16,14 +16,6 @@ void UAbilitySlot::AbilityClicked()
   //++++ add usage of EmptySlot texture
 }
 
-void UAbilitySlot::SetMaxSize(float IconMaxSize, float IconMinSize)
-{
-  IconSizeBox->MinDesiredWidth = IconMinSize;
-  IconSizeBox->MinDesiredHeight = IconMinSize;
-  IconSizeBox->MaxDesiredWidth = IconMaxSize;
-  IconSizeBox->MaxDesiredHeight = IconMaxSize;
-}
-
 void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager)
 {
   ChosenAbility = NewAbility;
