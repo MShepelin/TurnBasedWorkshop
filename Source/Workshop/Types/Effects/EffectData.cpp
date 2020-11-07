@@ -42,7 +42,11 @@ void UEffectData::ResolveOn(AInteractiveObject* TargetObject)
 
 FString UEffectData::GetInfoString(ARegistrationManager* UsedManager)
 {
-  FString InfoString = "";
+  if (Duration == -1)
+  {
+    return "";
+  }
 
-  return InfoString;
+  return "(" + FString::FromInt(Duration) + ")";
+  // if Duration == 0 the effect must have been removed
 }

@@ -34,9 +34,8 @@ void UChangeStatEffectData::ResolveOn(AInteractiveObject* TargetObject)
 
 FString UChangeStatEffectData::GetInfoString(ARegistrationManager* UsedManager)
 {
-  FString InfoString = std::move(Super::GetInfoString(UsedManager));
-
-  InfoString += UsedManager->GetStatNameByID(StatID) + " " + ((EffectValue > 0) ? "" : "+") + FString::FromInt(EffectValue);
+  FString InfoString = UsedManager->GetStatNameByID(StatID) + " " + ((EffectValue > 0) ? "+" : "") + FString::FromInt(EffectValue);
+  InfoString += Super::GetInfoString(UsedManager);
 
   return InfoString;
 }
