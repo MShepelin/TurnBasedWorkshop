@@ -47,14 +47,13 @@ void AInteractController::ConnectionHappened()
     PlacableCharacters.Add(NewCharacter);
   }
 
-  int32 MaxLocations = GetCurrentCamera()->SpawnLocations->GetInstanceCount();
+  int32 MaxLocations = CharactersSpawnTransforms.Num();
   check(MaxLocations >= PlacableCharacters.Num());
   FTransform CameraSpawnTransoform;
-  int32 LocationCounter = MaxLocations / 2 - PlacableCharacters.Num() / 2;
+  int32 LocationCounter = (MaxLocations - PlacableCharacters.Num()) / 2;
   for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
   {
-    //GetCurrentCamera()->SpawnLocations->GetInstanceTransform(LocationCounter, CameraSpawnTransoform, true);
-    CameraSpawnTransoform = CharactersSpawnTransforms[LocationCounter];
+    CameraSpawnTransoform = CharactersSpawnTransforms[LocationCounter].Value;
     PlacableCharacter->SetActorTransform(CameraSpawnTransoform);
     LocationCounter++;
 
@@ -142,7 +141,9 @@ void AInteractController::ObjectsReady()
   check(GameMode);
 
   GameMode->RegisterAllSpawnLocations.Broadcast();
-  // sort transforms by orderID
+
+  // Sort transforms by orderID
+  CharactersSpawnTransforms.Sort([](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; });
 }
 
 void AInteractController::TurnSwapMode()
@@ -204,7 +205,7 @@ UAbilitiesWidget* AInteractController::GetAbilitiesWidget()
   return UsedAbilitiesWidget;
 }
 
-void AInteractController::AddSpawnTransform(FTransform NewSpawn)
+void AInteractController::AddSpawnTransform(FTransform NewSpawn, int32 Order)
 {
-  CharactersSpawnTransforms.Add(NewSpawn);
+  CharactersSpawnTransforms.Add(TPairInitializer<int32, FTransform>(Order, NewSpawn));
 }

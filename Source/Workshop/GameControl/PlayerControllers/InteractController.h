@@ -21,7 +21,7 @@ protected:
   UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
 
   UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
-  UPROPERTY() TArray<FTransform> CharactersSpawnTransforms;
+  TArray<TPair<int32, FTransform>> CharactersSpawnTransforms;
 
   AInteractiveCharacter* FirstToSwap[2];
   UPROPERTY() bool bSwapModeIsActive;
@@ -60,5 +60,5 @@ public:
   void ObjectsReady();
 
   UFUNCTION(BlueprintCallable)
-  void AddSpawnTransform(FTransform NewSpawn);
+  void AddSpawnTransform(FTransform NewSpawn, int32 Order);
 };

@@ -30,7 +30,7 @@ void ACharacterSpawn::RegisterSpawnTransform()
 
   if (bPlayerControlled)
   {
-    Controller->AddSpawnTransform(GetActorTransform());
+    Controller->AddSpawnTransform(GetActorTransform(), CharacterOrderID);
     return;
   }
   

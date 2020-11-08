@@ -12,8 +12,8 @@ class ACharacterSpawn : public AActor
 
 public:
   // IDs will be sorted in the ascending order to arrange locations to spawn characters
-  int32 CharacterOrderID = 0;
-  bool bPlayerControlled = false;
+  UPROPERTY(EditAnywhere) int32 CharacterOrderID = 0;
+  UPROPERTY(EditAnywhere) bool bPlayerControlled = true;
 
 public:
   //ACharacterSpawn();
