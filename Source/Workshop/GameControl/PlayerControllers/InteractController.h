@@ -57,7 +57,7 @@ public:
   // Should be called before any other functions 
   // when all objects used by controller are prepared
   UFUNCTION(BlueprintCallable)
-  void ObjectsReady();
+  void ObjectsReady(ATurnBasedManager* EventManager);
 
   UFUNCTION(BlueprintCallable)
   void AddSpawnTransform(FTransform NewSpawn, int32 Order);

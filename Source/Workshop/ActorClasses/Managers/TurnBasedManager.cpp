@@ -96,7 +96,7 @@ void ATurnBasedManager::NextPhase()
   }
 }
 
-void ATurnBasedManager::BeginPlay()
+void ATurnBasedManager::SpawnCharacters()
 {
   FActorSpawnParameters SpawnParams = FActorSpawnParameters();
   SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;

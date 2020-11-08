@@ -33,10 +33,10 @@ void ACharacterSpawn::RegisterSpawnTransform()
     Controller->AddSpawnTransform(GetActorTransform(), CharacterOrderID);
     return;
   }
-  
-  ATurnBasedManager* Manager = Cast<ATurnBasedManager>(Controller->GetUsedManager());
-  if (Manager)
+
+  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
+  if (GameMode && GameMode->FightManager)
   {
-    Manager->EnemySpawnLocations.Add(TPairInitializer<int32, FTransform>(CharacterOrderID, GetActorTransform()));
+    GameMode->FightManager->EnemySpawnLocations.Add(TPairInitializer<int32, FTransform>(CharacterOrderID, GetActorTransform()));
   }
 }

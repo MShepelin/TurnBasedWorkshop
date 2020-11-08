@@ -27,7 +27,7 @@ public:
   // AI //
   // -- //
   TArray<TPair<int32, FTransform>> EnemySpawnLocations;
-  UPROPERTY() TArray<TSubclassOf<AInteractiveCharacter>> EnemyClasses;
+  UPROPERTY(EditInstanceOnly) TArray<TSubclassOf<AInteractiveCharacter>> EnemyClasses;
   UPROPERTY() TArray<AInteractiveCharacter*> Enemies;
   
 public:
@@ -43,7 +43,8 @@ public:
   UFUNCTION(BlueprintCallable)
   void RemoveController(AController* NewController);
 
-  void BeginPlay() override;
+  UFUNCTION(BlueprintCallable)
+  void SpawnCharacters();
 
   UFUNCTION(BlueprintCallable)
   ETurnPhase GetPhase() const;

@@ -135,16 +135,18 @@ void AInteractController::SetupInputComponent()
   InputComponent->BindAction("Interact", IE_Released, this, &AInteractController::StopInteract);
 }
 
-void AInteractController::ObjectsReady()
+void AInteractController::ObjectsReady(ATurnBasedManager* EventManager)
 {
   AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
   check(GameMode);
 
+  GameMode->FightManager = EventManager;
   GameMode->RegisterAllSpawnLocations.Broadcast();
 
   // Sort transforms by orderID
   CharactersSpawnTransforms.Sort([](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; });
-  Cast<ATurnBasedManager>(UsedManager)->EnemySpawnLocations.Sort(
+
+  EventManager->EnemySpawnLocations.Sort(
     [](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; }
   );
 }
