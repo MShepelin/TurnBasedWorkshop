@@ -144,6 +144,9 @@ void AInteractController::ObjectsReady()
 
   // Sort transforms by orderID
   CharactersSpawnTransforms.Sort([](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; });
+  Cast<ATurnBasedManager>(UsedManager)->EnemySpawnLocations.Sort(
+    [](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; }
+  );
 }
 
 void AInteractController::TurnSwapMode()

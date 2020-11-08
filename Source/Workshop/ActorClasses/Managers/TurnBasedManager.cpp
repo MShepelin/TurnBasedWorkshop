@@ -3,7 +3,7 @@
 #include "TurnBasedManager.h"
 #include "Workshop/Types/Components/TurnBasedComponent.h"
 #include "Components/TextRenderComponent.h"
-
+#include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
 
 ATurnBasedManager::ATurnBasedManager()
 {
@@ -96,7 +96,28 @@ void ATurnBasedManager::NextPhase()
   }
 }
 
-void ATurnBasedManager::PostInitializeComponents()
+void ATurnBasedManager::BeginPlay()
 {
-  Super::PostInitializeComponents();
+  FActorSpawnParameters SpawnParams = FActorSpawnParameters();
+  SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+  for (TSubclassOf<AInteractiveCharacter> SpawnClass : EnemyClasses)
+  {
+    AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnClass, SpawnParams);
+    NewCharacter->RefreshInteractive();
+    Enemies.Add(NewCharacter);
+  }
+
+  int32 MaxLocations = EnemySpawnLocations.Num();
+  check(MaxLocations >= Enemies.Num());
+  FTransform CameraSpawnTransform;
+  int32 LocationCounter = (MaxLocations - Enemies.Num()) / 2;
+  for (AInteractiveCharacter* PlacableCharacter : Enemies)
+  {
+    CameraSpawnTransform = EnemySpawnLocations[LocationCounter].Value;
+    PlacableCharacter->SetActorTransform(CameraSpawnTransform);
+    LocationCounter++;
+
+    ConnectObject(PlacableCharacter);
+  }
 }

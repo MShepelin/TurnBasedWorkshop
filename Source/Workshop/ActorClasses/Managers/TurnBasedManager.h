@@ -8,6 +8,7 @@
 #include "TurnBasedManager.generated.h"
 
 class UTurnBasedComponent;
+class AInteractiveCharacter;
 
 // Supports turn's phases change for connected controllers, which can join any time.
 UCLASS()
@@ -26,6 +27,8 @@ public:
   // AI //
   // -- //
   TArray<TPair<int32, FTransform>> EnemySpawnLocations;
+  UPROPERTY() TArray<TSubclassOf<AInteractiveCharacter>> EnemyClasses;
+  UPROPERTY() TArray<AInteractiveCharacter*> Enemies;
   
 public:
   ATurnBasedManager();
@@ -40,7 +43,7 @@ public:
   UFUNCTION(BlueprintCallable)
   void RemoveController(AController* NewController);
 
-  void PostInitializeComponents() override;
+  void BeginPlay() override;
 
   UFUNCTION(BlueprintCallable)
   ETurnPhase GetPhase() const;
