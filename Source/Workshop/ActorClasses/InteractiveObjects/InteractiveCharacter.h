@@ -25,7 +25,7 @@ UCLASS(Abstract, Blueprintable)
 class WORKSHOP_API AInteractiveCharacter : public AInteractiveObject
 {
 	GENERATED_BODY()
-
+  
 protected:
   //???? add state machine support functions
 

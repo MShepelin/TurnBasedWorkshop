@@ -15,10 +15,6 @@ ASpryCamera::ASpryCamera()
 
   WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
   WidgetInteraction->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-  SpawnLocations = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("ControllerLocations"));
-  SpawnLocations->SetupAttachment(RootComponent);
-  SpawnLocations->SetHiddenInGame(true, true);
 }
 
 /*

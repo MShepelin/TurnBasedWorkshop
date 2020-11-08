@@ -26,8 +26,8 @@ protected:
   APlayerController* PlayerController = nullptr;
 
 public:
-  UPROPERTY(EditAnywhere, Category = "TurnBased")
-  UInstancedStaticMeshComponent* SpawnLocations;
+  //UPROPERTY(EditAnywhere, Category = "TurnBased")
+  //UInstancedStaticMeshComponent* SpawnLocations;
 
   ASpryCamera();
 

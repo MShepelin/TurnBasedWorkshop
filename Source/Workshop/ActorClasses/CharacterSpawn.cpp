@@ -34,6 +34,9 @@ void ACharacterSpawn::RegisterSpawnTransform()
     return;
   }
   
-  // Cast<ATurnBasedManager>(Controller->GetUsedManager())
-  // add location
+  ATurnBasedManager* Manager = Cast<ATurnBasedManager>(Controller->GetUsedManager());
+  if (Manager)
+  {
+    Manager->EnemySpawnLocations.Add(TPairInitializer<int32, FTransform>(CharacterOrderID, GetActorTransform()));
+  }
 }

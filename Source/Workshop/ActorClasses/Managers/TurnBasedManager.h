@@ -7,9 +7,7 @@
 #include "Workshop/Types/TurnPhase.h"
 #include "TurnBasedManager.generated.h"
 
-
 class UTurnBasedComponent;
-
 
 // Supports turn's phases change for connected controllers, which can join any time.
 UCLASS()
@@ -23,9 +21,11 @@ protected:
   UPROPERTY() int32 AddedControllers;
   UPROPERTY() ETurnPhase CurrentTurnPhase = ETurnPhase::Start;
 
-  UPROPERTY(VisibleAnywhere, Category = "TurnBased")
-    UInstancedStaticMeshComponent* SpawnLocations;
-  TArray<FTransform> ControllersLocations;
+public:
+  // -- //
+  // AI //
+  // -- //
+  TArray<TPair<int32, FTransform>> EnemySpawnLocations;
   
 public:
   ATurnBasedManager();

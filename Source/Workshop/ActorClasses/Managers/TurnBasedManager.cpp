@@ -7,10 +7,6 @@
 
 ATurnBasedManager::ATurnBasedManager()
 {
-  SpawnLocations = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("ControllerLocations"));
-  SpawnLocations->SetupAttachment(RootComponent);
-  SpawnLocations->SetHiddenInGame(true, true);
-
   AddedControllers = 0;
 }
 
@@ -23,13 +19,8 @@ void ATurnBasedManager::AddController(AController* NewController)
     return;
   }
 
-  if (AddedControllers == SpawnLocations->GetInstanceCount())
-  {
-    UE_LOG(LogTemp, Error, TEXT("Not enough places to add new controller."));
-    return;
-  }
+  //NewController->GetPawn()->SetActorTransform(ControllersLocations[AddedControllers]);
 
-  NewController->GetPawn()->SetActorTransform(ControllersLocations[AddedControllers]);
   AddedControllers++;
 
   UTurnBasedComponent* TurnBasedComponent = Cast<UTurnBasedComponent>(NeededComponent);
@@ -108,10 +99,4 @@ void ATurnBasedManager::NextPhase()
 void ATurnBasedManager::PostInitializeComponents()
 {
   Super::PostInitializeComponents();
-
-  ControllersLocations.Init(FTransform(), SpawnLocations->GetInstanceCount());
-  for (int32 Index = 0; Index < SpawnLocations->GetInstanceCount(); Index++)
-  {
-    SpawnLocations->GetInstanceTransform(Index, ControllersLocations[Index], true);
-  }
 }
