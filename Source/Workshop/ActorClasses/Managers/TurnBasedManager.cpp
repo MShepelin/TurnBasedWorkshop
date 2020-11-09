@@ -19,19 +19,17 @@ void ATurnBasedManager::AddController(AController* NewController)
     return;
   }
 
-  //NewController->GetPawn()->SetActorTransform(ControllersLocations[AddedControllers]);
-
   AddedControllers++;
 
   UTurnBasedComponent* TurnBasedComponent = Cast<UTurnBasedComponent>(NeededComponent);
-  TurnBasedComponent->Manager = this;
   TurnBasedComponent->bIsTurnControlled = JoinedControllers.Num() ? false : true;
   JoinedControllers.Add(TurnBasedComponent);
-  TurnBasedComponent->ConnectionHappened();
+  TurnBasedComponent->ConnectDelegate.ExecuteIfBound();
 }
 
 void ATurnBasedManager::RemoveController(AController* NewController)
 {
+  // REWORK needed as objects of InteractController don't get removed
   UActorComponent* NeededComponent = NewController->GetComponentByClass(UTurnBasedComponent::StaticClass());
   if (!NeededComponent)
   {
@@ -43,10 +41,10 @@ void ATurnBasedManager::RemoveController(AController* NewController)
 
   if (JoinedControllers.Find(TurnBasedComponent) == INDEX_NONE)
   {
+    UE_LOG(LogTemp, Error, TEXT("UTurnBasedComponent wasn't connected to this Manager"));
     return;
   }
 
-  TurnBasedComponent->Manager = nullptr;
   JoinedControllers.Remove(TurnBasedComponent);
   JoinedControllers.Shrink();
 }

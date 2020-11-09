@@ -85,3 +85,8 @@ void UAbilitiesWidget::ShowAbilitySlots()
     SlotToHide->SetVisibility(ESlateVisibility::Visible);
   }
 }
+
+void UAbilitiesWidget::PhaseChange()
+{
+  return;
+}

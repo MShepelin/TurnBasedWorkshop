@@ -21,28 +21,9 @@ public:
   FStandartDelegateSignature TurnIsTakenUnderControl;
   FStandartDelegateSignature TurnIsOutOfControl;
 
-private:
   UPROPERTY() bool bIsTurnControlled;
-  UPROPERTY() ATurnBasedManager* Manager;
-
-  UFUNCTION() void ConnectionHappened();
-
-  UFUNCTION() void ChangeControl(bool bComponentHasControl);
-public:
-
-  UFUNCTION(BlueprintCallable)
-  bool IsTurnControlled() const;
-
-  UFUNCTION(BlueprintCallable)
-  void NextPhase();
-
-  UFUNCTION(BlueprintCallable)
-  bool IsManaged() const;
-
-  UFUNCTION(BlueprintCallable)
-  ATurnBasedManager* GetManager();
 
   // ATurnBasedManager changes UTurnBasedComponent
   // and gives permission to control a turn.
-  friend class ATurnBasedManager;
+  //friend class ATurnBasedManager;
 };

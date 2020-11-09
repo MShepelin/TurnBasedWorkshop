@@ -33,6 +33,8 @@ public:
 public:
   ATurnBasedManager();
 
+  FString PhaseNameBuffer = "";
+
   // Expected to be called with by TurnBasedComponent, but can be called by other entities.
   UFUNCTION(BlueprintCallable) void NextPhase();
 

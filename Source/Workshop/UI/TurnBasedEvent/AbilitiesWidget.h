@@ -30,6 +30,8 @@ protected:
   UPROPERTY(meta = (BindWidget)) UVerticalBox* AbilitiesLayout;
 
 public:
+  const FString* ConsideredTurnPhase = nullptr;
+
   UPROPERTY(meta = (BindWidget)) UButton* NextPhaseButton;
   UPROPERTY(meta = (BindWidget)) URichTextBlock* PhaseText;
   UPROPERTY(meta = (BindWidget)) URichTextBlock* NextPhaseText;
@@ -46,12 +48,14 @@ protected:
   void RemoveAbilitySlot();
 
 public:
-  void HideAbilitySlots();
-  void ShowAbilitySlots();
+  UFUNCTION() void NativePreConstruct() override;
 
-  void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager);
+  UFUNCTION() void HideAbilitySlots();
+  UFUNCTION() void ShowAbilitySlots();
 
-  void NativePreConstruct() override;
+  UFUNCTION() void PhaseChange();
+
+  UFUNCTION() void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager);
 };
 
 //++++ add function to set abilities of new character:

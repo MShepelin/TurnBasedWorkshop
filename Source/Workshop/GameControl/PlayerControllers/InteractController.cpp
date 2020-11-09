@@ -25,28 +25,31 @@ AInteractController::AInteractController()
 
 void AInteractController::ConnectionHappened()
 {
+  // Disconnect from previous manager.
   ATurnBasedManager* EventManager = Cast<ATurnBasedManager>(UsedManager);
-  // Disconnect from previous manager
   if (EventManager)
   {
     EventManager->RemoveController(this);
   }
 
-  EventManager = TurnControl->GetManager();
+  // Find new manager. //++++ change this part for more general case
+  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
+  check(GameMode);
+  EventManager = GameMode->FightManager;
 
+  // Spawn characters.
   FActorSpawnParameters SpawnParams = FActorSpawnParameters();
   SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
   for (TTuple<FCharacterCore, FInteractiveCore, TSubclassOf<AInteractiveCharacter>> CharacterData : Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters)
   {
     AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(CharacterData.Get<2>(), SpawnParams);
     NewCharacter->CharacterDataCore = CharacterData.Get<0>();
     NewCharacter->InteractiveDataCore = CharacterData.Get<1>();
-    NewCharacter->SetActorLocation(GetCurrentCamera()->GetHiddenLocation());
     NewCharacter->RefreshInteractive();
     PlacableCharacters.Add(NewCharacter);
   }
 
+  // Give them to appropriate transforms.
   int32 MaxLocations = CharactersSpawnTransforms.Num();
   check(MaxLocations >= PlacableCharacters.Num());
   FTransform CameraSpawnTransoform;
@@ -60,6 +63,7 @@ void AInteractController::ConnectionHappened()
     EventManager->ConnectObject(PlacableCharacter);
   }
 
+  // Set new manager.
   UsedManager = EventManager;
 }
 
@@ -185,6 +189,9 @@ void AInteractController::ResolveCharactersAbilities()
 
 void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWidget)
 {
+  // It's guarantied that before the call of LinkWithAbilitiesWidget
+  // UsedManager is inherited from TurnBasedManager
+
   if (UsedAbilitiesWidget)
   {
     UsedAbilitiesWidget->NextPhaseButton->OnPressed.Clear();
@@ -192,8 +199,11 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
   }
 
   UsedAbilitiesWidget = AbilitiesWidget;
-  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(TurnControl, &UTurnBasedComponent::NextPhase);
+  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(Cast<ATurnBasedManager>(UsedManager), &ATurnBasedManager::NextPhase);
+  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(UsedAbilitiesWidget, &UAbilitiesWidget::PhaseChange);
   AbilitiesWidget->TurnSwapButton->OnPressed.AddDynamic(this, &AInteractController::TurnSwapMode);
+
+  AbilitiesWidget->ConsideredTurnPhase = &(Cast<ATurnBasedManager>(UsedManager)->PhaseNameBuffer);
 
   if (bSwapModeIsActive)
   {
