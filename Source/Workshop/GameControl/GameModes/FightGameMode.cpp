@@ -3,6 +3,7 @@
 #include "FightGameMode.h"
 #include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
 #include "Workshop/GameControl/PlayerControllers/InteractController.h"
+#include "../AI/FightController.h"
 
 AFightGameMode::AFightGameMode()
 {

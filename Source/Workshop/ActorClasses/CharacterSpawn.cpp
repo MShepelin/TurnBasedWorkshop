@@ -3,6 +3,7 @@
 #include "CharacterSpawn.h"
 #include "Workshop/ActorClasses/Managers/TurnBasedManager.h"
 #include "Workshop/GameControl/GameModes/FightGameMode.h"
+#include "Workshop/GameControl/AI/FightController.h"
 #include "Kismet/GameplayStatics.h"
 
 void ACharacterSpawn::PostInitializeComponents()
@@ -24,19 +25,20 @@ void ACharacterSpawn::PostInitializeComponents()
 
 void ACharacterSpawn::RegisterSpawnTransform()
 {
-  AInteractController* Controller = Cast<AInteractController>(
-    UGameplayStatics::GetPlayerController(GetWorld(), 0));
-  check(Controller);
-
-  if (bPlayerControlled)
+  if (ControllerID == -1)
   {
+    AInteractController* Controller = Cast<AInteractController>(
+      UGameplayStatics::GetPlayerController(GetWorld(), 0));
+    check(Controller);
+
     Controller->AddSpawnTransform(GetActorTransform(), CharacterOrderID);
     return;
   }
 
   AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
-  if (GameMode && GameMode->FightManager)
+  if (GameMode && ControllerID < GameMode->FightControllers.Num())
   {
-    GameMode->FightManager->EnemySpawnLocations.Add(TPairInitializer<int32, FTransform>(CharacterOrderID, GetActorTransform()));
+    GameMode->FightControllers[ControllerID].Value->CharactersSpawnTransforms.Add(
+      TPairInitializer<int32, FTransform>(CharacterOrderID, GetActorTransform()));
   }
 }

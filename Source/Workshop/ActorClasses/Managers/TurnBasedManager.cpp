@@ -3,6 +3,7 @@
 #include "TurnBasedManager.h"
 #include "Workshop/Types/Components/TurnBasedComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "Workshop/GameControl/GameModes/FightGameMode.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
 
 ATurnBasedManager::ATurnBasedManager()
@@ -104,6 +105,11 @@ void ATurnBasedManager::NextPhase()
 
 void ATurnBasedManager::SpawnCharacters()
 {
+  /*
+  EnemySpawnLocations.Sort(
+    [](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; }
+  );
+
   FActorSpawnParameters SpawnParams = FActorSpawnParameters();
   SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
@@ -125,5 +131,17 @@ void ATurnBasedManager::SpawnCharacters()
     LocationCounter++;
 
     ConnectObject(PlacableCharacter);
-  }
+  }*/
+}
+
+void ATurnBasedManager::MakeObjectsReady()
+{
+  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
+  check(GameMode);
+
+  GameMode->FightManager = this;
+  GameMode->FightControllers.Sort(
+    [](const TPair<int32, AFightController*>& Left, const TPair<int32, AFightController*>& Right) { return Left.Key < Right.Key; });
+  GameMode->RegisterAllSpawnLocations.Broadcast();
+  GameMode->ObjectsReady.Broadcast();
 }

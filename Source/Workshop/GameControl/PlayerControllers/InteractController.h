@@ -45,6 +45,8 @@ public:
 
   void SetupInputComponent() override;
 
+  void PostInitializeComponents() override;
+
   UFUNCTION(BlueprintCallable)
   void ResolveCharactersAbilities();
 
@@ -56,8 +58,11 @@ public:
 
   // Should be called before any other functions 
   // when all objects used by controller are prepared
-  UFUNCTION(BlueprintCallable)
-  void ObjectsReady(ATurnBasedManager* EventManager);
+  
+  //UFUNCTION(BlueprintCallable)
+  //void ObjectsReady(ATurnBasedManager* EventManager);
+
+  UFUNCTION() void PrepareCharacters();
 
   UFUNCTION(BlueprintCallable)
   void AddSpawnTransform(FTransform NewSpawn, int32 Order);

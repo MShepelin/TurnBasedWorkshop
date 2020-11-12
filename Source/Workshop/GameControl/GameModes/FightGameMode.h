@@ -7,7 +7,10 @@
 #include "Workshop/ActorClasses/Managers/TurnBasedManager.h"
 #include "FightGameMode.generated.h"
 
+class AFightController;
+
 DECLARE_MULTICAST_DELEGATE(FRegisterSpawns)
+DECLARE_MULTICAST_DELEGATE(FObjectsReady)
 
 UCLASS(Blueprintable)
 class WORKSHOP_API AFightGameMode : public AGameModeBase
@@ -16,6 +19,8 @@ class WORKSHOP_API AFightGameMode : public AGameModeBase
 
 public:
   FRegisterSpawns RegisterAllSpawnLocations;
+  FObjectsReady ObjectsReady;
+  TArray<TPair<int32, AFightController*>> FightControllers;
   ATurnBasedManager* FightManager;
 
 public:

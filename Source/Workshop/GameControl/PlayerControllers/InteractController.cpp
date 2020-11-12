@@ -139,22 +139,6 @@ void AInteractController::SetupInputComponent()
   InputComponent->BindAction("Interact", IE_Released, this, &AInteractController::StopInteract);
 }
 
-void AInteractController::ObjectsReady(ATurnBasedManager* EventManager)
-{
-  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
-  check(GameMode);
-
-  GameMode->FightManager = EventManager;
-  GameMode->RegisterAllSpawnLocations.Broadcast();
-
-  // Sort transforms by orderID
-  CharactersSpawnTransforms.Sort([](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; });
-
-  EventManager->EnemySpawnLocations.Sort(
-    [](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; }
-  );
-}
-
 void AInteractController::TurnSwapMode()
 {
   bSwapModeIsActive = !bSwapModeIsActive;
@@ -223,4 +207,18 @@ UAbilitiesWidget* AInteractController::GetAbilitiesWidget()
 void AInteractController::AddSpawnTransform(FTransform NewSpawn, int32 Order)
 {
   CharactersSpawnTransforms.Add(TPairInitializer<int32, FTransform>(Order, NewSpawn));
+}
+
+void AInteractController::PostInitializeComponents()
+{
+  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
+  check(GameMode);
+
+  GameMode->ObjectsReady.AddUObject(this, &AInteractController::PrepareCharacters);
+}
+
+void AInteractController::PrepareCharacters()
+{
+  // Sort transforms by orderID
+  CharactersSpawnTransforms.Sort([](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; });
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Controller.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
+#include "Workshop/ActorClasses/Managers/TurnBasedManager.h"
 #include "Workshop/Types/Components/TurnBasedComponent.h"
 #include "FightController.generated.h"
 
@@ -14,10 +15,13 @@ class WORKSHOP_API AFightController : public AController
   GENERATED_BODY()
 
 public:
-  // Unique for every controller (0 - means player controller).
+  UPROPERTY() ATurnBasedManager* UsedManager;
+
+  // Unique for every controller. Used to sort controllers and give them CharacterSpawns.
   UPROPERTY() int32 ControllerID;
 
-  UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
+  UPROPERTY(EditInstanceOnly) TArray<TSubclassOf<AInteractiveCharacter>> CharacterClasses;
+  UPROPERTY() TArray<AInteractiveCharacter*> SpawnedCharacters;
   TArray<TPair<int32, FTransform>> CharactersSpawnTransforms;
 
   UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
@@ -25,5 +29,9 @@ public:
 public:
   AFightController();
 
+  void PostInitializeComponents() override;
+
   void ConnectionHappened();
+
+  void SpawnCharacters();
 };

@@ -18,13 +18,6 @@ class WORKSHOP_API ATurnBasedManager : public ARegistrationManager
 	GENERATED_BODY()
 
 protected:
-  // -- //
-  // AI //
-  // -- //
-
-  //UPROPERTY() int32 AIControllerID = 0;
-  //UFUNCTION() void AITakeAction();
-
   UPROPERTY() TArray<UTurnBasedComponent*> JoinedControllers;
   UPROPERTY() int32 CurrentControllerIndex;
   UPROPERTY() ETurnPhase CurrentTurnPhase = ETurnPhase::Start;
@@ -41,6 +34,8 @@ public:
   ATurnBasedManager();
 
   FString PhaseNameBuffer = "";
+
+  UFUNCTION() void MakeObjectsReady();
 
   // Expected to be called with by TurnBasedComponent, but can be called by other entities.
   UFUNCTION(BlueprintCallable) void NextPhase();
