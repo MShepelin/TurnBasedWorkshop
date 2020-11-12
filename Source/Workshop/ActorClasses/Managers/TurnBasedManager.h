@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "RegistrationManager.h"
 #include "Workshop/Types/TurnPhase.h"
+#include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "TurnBasedManager.generated.h"
 
 class UTurnBasedComponent;
@@ -17,9 +18,15 @@ class WORKSHOP_API ATurnBasedManager : public ARegistrationManager
 	GENERATED_BODY()
 
 protected:
+  // -- //
+  // AI //
+  // -- //
+
+  //UPROPERTY() int32 AIControllerID = 0;
+  //UFUNCTION() void AITakeAction();
+
   UPROPERTY() TArray<UTurnBasedComponent*> JoinedControllers;
   UPROPERTY() int32 CurrentControllerIndex;
-  UPROPERTY() int32 AddedControllers;
   UPROPERTY() ETurnPhase CurrentTurnPhase = ETurnPhase::Start;
 
 public:

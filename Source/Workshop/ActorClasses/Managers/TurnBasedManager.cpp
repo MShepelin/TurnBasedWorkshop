@@ -7,7 +7,7 @@
 
 ATurnBasedManager::ATurnBasedManager()
 {
-  AddedControllers = 0;
+  CurrentControllerIndex = 0;
 }
 
 void ATurnBasedManager::AddController(AController* NewController)
@@ -19,12 +19,16 @@ void ATurnBasedManager::AddController(AController* NewController)
     return;
   }
 
-  AddedControllers++;
-
   UTurnBasedComponent* TurnBasedComponent = Cast<UTurnBasedComponent>(NeededComponent);
-  TurnBasedComponent->bIsTurnControlled = JoinedControllers.Num() ? false : true;
   JoinedControllers.Add(TurnBasedComponent);
   TurnBasedComponent->ConnectDelegate.ExecuteIfBound();
+
+  // Initialise turn if needed
+  if (JoinedControllers.Num() == 1)
+  {
+    CurrentTurnPhase = ETurnPhase::Start;
+    NextPhase();
+  }
 }
 
 void ATurnBasedManager::RemoveController(AController* NewController)
@@ -56,29 +60,33 @@ ETurnPhase ATurnBasedManager::GetPhase() const
 
 void ATurnBasedManager::NextPhase()
 {
+  // It's guaranteed that JoinedControllers doesn't have null-pointers.
+
   if (!JoinedControllers.Num())
   {
-    UE_LOG(LogTemp, Warning, TEXT("Can't go to the next phase without controllers"));
+    UE_LOG(LogTemp, Warning, TEXT("Can't go to the next phase without external controllers"));
     return;
   }
 
   switch (CurrentTurnPhase)
   {
   case ETurnPhase::Start:
+  {
+    JoinedControllers[CurrentControllerIndex]->TurnIsTakenUnderControl.ExecuteIfBound();
+    break;
+  }
+  case ETurnPhase::End:
+  {
+    JoinedControllers[CurrentControllerIndex]->TurnIsOutOfControl.ExecuteIfBound();
+
+    // Change current controller
+    CurrentControllerIndex++;
     if (CurrentControllerIndex == JoinedControllers.Num())
     {
       CurrentControllerIndex = 0;
     }
-
-    //???? check for null before that
-    JoinedControllers[CurrentControllerIndex]->bIsTurnControlled = true;
     break;
-
-  case ETurnPhase::End:
-    JoinedControllers[CurrentControllerIndex]->bIsTurnControlled = false;
-    //JoinedControllers[CurrentControllerIndex]->
-    CurrentControllerIndex++;
-    break;
+  }
 
   default:
     break;
