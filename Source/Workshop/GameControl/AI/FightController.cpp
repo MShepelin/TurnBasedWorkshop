@@ -1,6 +1,7 @@
 // ...
 
 #include "FightController.h"
+#include "Workshop/ActorClasses/CharactersCollection.h"
 #include "Workshop/GameControl/GameModes/FightGameMode.h"
 
 AFightController::AFightController()
@@ -12,20 +13,32 @@ AFightController::AFightController()
 
 void AFightController::ConnectionHappened()
 {
+  if (!GetPawn())
+  {
+    UE_LOG(LogTemp, Error, TEXT("Controller must possess a CharactersCollection to spawn characters"));
+    return;
+  }
 
-}
+  ACharactersCollection* PossessedPawn = Cast<ACharactersCollection>(GetPawn());
+  if (!PossessedPawn)
+  {
+    UE_LOG(LogTemp, Error, TEXT("Possessed pawn must inherit from CharactersCollection"));
+    return;
+  }
 
-void AFightController::SpawnCharacters()
-{
+  // Find new manager. //++++ change this part for more general case
+  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
+  check(GameMode);
+  UsedManager = GameMode->FightManager;
   check(UsedManager != nullptr);
 
   CharactersSpawnTransforms.Sort(
-    [](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; });
+    [](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; }); //++++ move somewhere else
 
   FActorSpawnParameters SpawnParams = FActorSpawnParameters();
   SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-  for (TSubclassOf<AInteractiveCharacter> SpawnClass : CharacterClasses)
+  for (TSubclassOf<AInteractiveCharacter> SpawnClass : PossessedPawn->CharacterClasses)
   {
     AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnClass, SpawnParams);
     NewCharacter->RefreshInteractive();

@@ -211,6 +211,8 @@ void AInteractController::AddSpawnTransform(FTransform NewSpawn, int32 Order)
 
 void AInteractController::PostInitializeComponents()
 {
+  Super::PostInitializeComponents();
+
   AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
   check(GameMode);
 

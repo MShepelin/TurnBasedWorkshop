@@ -32,6 +32,4 @@ public:
   void PostInitializeComponents() override;
 
   void ConnectionHappened();
-
-  void SpawnCharacters();
 };

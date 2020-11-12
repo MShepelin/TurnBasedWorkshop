@@ -38,6 +38,7 @@ void ACharacterSpawn::RegisterSpawnTransform()
   AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
   if (GameMode && ControllerID < GameMode->FightControllers.Num())
   {
+    UE_LOG(LogTemp, Warning, TEXT("Connection happened"));
     GameMode->FightControllers[ControllerID].Value->CharactersSpawnTransforms.Add(
       TPairInitializer<int32, FTransform>(CharacterOrderID, GetActorTransform()));
   }
