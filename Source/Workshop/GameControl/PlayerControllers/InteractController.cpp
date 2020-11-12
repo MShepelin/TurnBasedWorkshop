@@ -18,6 +18,8 @@ AInteractController::AInteractController()
   TurnControl = CreateDefaultSubobject<UTurnBasedComponent>(TEXT("TurnControl"));
   AddOwnedComponent(TurnControl);
   TurnControl->ConnectDelegate.BindUObject(this, &AInteractController::ConnectionHappened);
+  TurnControl->TurnIsTakenUnderControl.BindUObject(this, &AInteractController::TurnControllGained);
+  TurnControl->TurnIsOutOfControl.BindUObject(this, &AInteractController::TurnControllLost);
 
   bSwapModeIsActive = false;
   FirstToSwap[0] = FirstToSwap[1] = nullptr;
@@ -183,7 +185,7 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
   }
 
   UsedAbilitiesWidget = AbilitiesWidget;
-  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(Cast<ATurnBasedManager>(UsedManager), &ATurnBasedManager::NextPhase);
+  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(this, &AInteractController::PlayerWantsToChangePhase); //Cast<ATurnBasedManager>(UsedManager), &ATurnBasedManager::NextPhase);
   AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(UsedAbilitiesWidget, &UAbilitiesWidget::PhaseChange);
   AbilitiesWidget->TurnSwapButton->OnPressed.AddDynamic(this, &AInteractController::TurnSwapMode);
 
@@ -223,4 +225,23 @@ void AInteractController::PrepareCharacters()
 {
   // Sort transforms by orderID
   CharactersSpawnTransforms.Sort([](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; });
+}
+
+void AInteractController::TurnControllGained()
+{
+  bLevelIsControlled = true;
+}
+
+void AInteractController::TurnControllLost()
+{
+  bLevelIsControlled = false;
+}
+
+void AInteractController::PlayerWantsToChangePhase()
+{
+  if (!bLevelIsControlled)
+  {
+    return;
+  }
+  Cast<ATurnBasedManager>(UsedManager)->NextPhase();
 }

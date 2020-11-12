@@ -21,14 +21,6 @@ protected:
   UPROPERTY() TArray<UTurnBasedComponent*> JoinedControllers;
   UPROPERTY() int32 CurrentControllerIndex;
   UPROPERTY() ETurnPhase CurrentTurnPhase = ETurnPhase::Start;
-
-public:
-  // -- //
-  // AI //
-  // -- //
-  TArray<TPair<int32, FTransform>> EnemySpawnLocations;
-  UPROPERTY(EditInstanceOnly) TArray<TSubclassOf<AInteractiveCharacter>> EnemyClasses;
-  UPROPERTY() TArray<AInteractiveCharacter*> Enemies;
   
 public:
   ATurnBasedManager();
@@ -37,7 +29,6 @@ public:
 
   UFUNCTION(BlueprintCallable) void MakeObjectsReady();
 
-  // Expected to be called with by TurnBasedComponent, but can be called by other entities.
   UFUNCTION(BlueprintCallable) void NextPhase();
 
   // Controller will join turn order last.
@@ -46,9 +37,6 @@ public:
 
   UFUNCTION(BlueprintCallable)
   void RemoveController(AController* NewController);
-
-  UFUNCTION(BlueprintCallable)
-  void SpawnCharacters();
 
   UFUNCTION(BlueprintCallable)
   ETurnPhase GetPhase() const;

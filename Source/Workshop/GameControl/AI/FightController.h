@@ -31,5 +31,7 @@ public:
 
   void PostInitializeComponents() override;
 
-  void ConnectionHappened();
+  UFUNCTION() void ConnectionHappened();
+
+  UFUNCTION() void TurnControllGained();
 };

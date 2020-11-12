@@ -8,7 +8,7 @@
 
 ATurnBasedManager::ATurnBasedManager()
 {
-  CurrentControllerIndex = 0;
+  
 }
 
 void ATurnBasedManager::AddController(AController* NewController)
@@ -27,8 +27,9 @@ void ATurnBasedManager::AddController(AController* NewController)
   // Initialise turn if needed
   if (JoinedControllers.Num() == 1)
   {
+    CurrentControllerIndex = 0;
     CurrentTurnPhase = ETurnPhase::Start;
-    NextPhase();
+    JoinedControllers[CurrentControllerIndex]->TurnIsTakenUnderControl.ExecuteIfBound();
   }
 }
 
@@ -69,30 +70,6 @@ void ATurnBasedManager::NextPhase()
     return;
   }
 
-  switch (CurrentTurnPhase)
-  {
-  case ETurnPhase::Start:
-  {
-    JoinedControllers[CurrentControllerIndex]->TurnIsTakenUnderControl.ExecuteIfBound();
-    break;
-  }
-  case ETurnPhase::End:
-  {
-    JoinedControllers[CurrentControllerIndex]->TurnIsOutOfControl.ExecuteIfBound();
-
-    // Change current controller
-    CurrentControllerIndex++;
-    if (CurrentControllerIndex == JoinedControllers.Num())
-    {
-      CurrentControllerIndex = 0;
-    }
-    break;
-  }
-
-  default:
-    break;
-  }
-
   if (CurrentTurnPhase == ETurnPhase::End)
   {
     CurrentTurnPhase = ETurnPhase::Start;
@@ -101,37 +78,26 @@ void ATurnBasedManager::NextPhase()
   {
     CurrentTurnPhase = static_cast<ETurnPhase>(static_cast<uint8>(CurrentTurnPhase) + 1);
   }
-}
 
-void ATurnBasedManager::SpawnCharacters()
-{
-  /*
-  EnemySpawnLocations.Sort(
-    [](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; }
-  );
-
-  FActorSpawnParameters SpawnParams = FActorSpawnParameters();
-  SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-  for (TSubclassOf<AInteractiveCharacter> SpawnClass : EnemyClasses)
+  switch (CurrentTurnPhase)
   {
-    AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnClass, SpawnParams);
-    NewCharacter->RefreshInteractive();
-    Enemies.Add(NewCharacter);
+  case ETurnPhase::Start:
+  {
+    // Change current controller
+    JoinedControllers[CurrentControllerIndex]->TurnIsOutOfControl.ExecuteIfBound();
+    
+    CurrentControllerIndex++;
+    if (CurrentControllerIndex == JoinedControllers.Num())
+    {
+      CurrentControllerIndex = 0;
+    }
+
+    JoinedControllers[CurrentControllerIndex]->TurnIsTakenUnderControl.ExecuteIfBound();
+    break;
   }
-
-  int32 MaxLocations = EnemySpawnLocations.Num();
-  check(MaxLocations >= Enemies.Num());
-  FTransform CameraSpawnTransform;
-  int32 LocationCounter = (MaxLocations - Enemies.Num()) / 2;
-  for (AInteractiveCharacter* PlacableCharacter : Enemies)
-  {
-    CameraSpawnTransform = EnemySpawnLocations[LocationCounter].Value;
-    PlacableCharacter->SetActorTransform(CameraSpawnTransform);
-    LocationCounter++;
-
-    ConnectObject(PlacableCharacter);
-  }*/
+  default:
+    break;
+  }
 }
 
 void ATurnBasedManager::MakeObjectsReady()

@@ -129,8 +129,6 @@ int32 AInteractiveObject::GetInteractiveType() const
 
 void AInteractiveObject::PickedAsCentral()
 {
-  UE_LOG(LogTemp, Warning, TEXT("PickedAsCentral"));
-
   check(MainManager != nullptr);
   MainManager->CentralObject = this;
 
@@ -140,8 +138,6 @@ void AInteractiveObject::PickedAsCentral()
 
 void AInteractiveObject::UnpickedAsCentral()
 {
-  UE_LOG(LogTemp, Warning, TEXT("UnpickedAsCentral"));
-
   check(MainManager != nullptr);
   MainManager->CentralObject = nullptr;
 
@@ -150,8 +146,6 @@ void AInteractiveObject::UnpickedAsCentral()
 
 void AInteractiveObject::PickedAsTarget()
 {
-  UE_LOG(LogTemp, Warning, TEXT("PickedAsTarget"));
-
   check(MainManager != nullptr);
   MainManager->CentralObject->AddInfluenceOn(this);
 
@@ -160,8 +154,6 @@ void AInteractiveObject::PickedAsTarget()
 
 void AInteractiveObject::UnpickedAsTarget()
 {
-  UE_LOG(LogTemp, Warning, TEXT("UnpickedAsTarget"));
-
   check(MainManager != nullptr);
   RemoveDependenceFrom(MainManager->CentralObject);
 

@@ -25,6 +25,7 @@ protected:
 
   AInteractiveCharacter* FirstToSwap[2];
   UPROPERTY() bool bSwapModeIsActive;
+  UPROPERTY() bool bLevelIsControlled = false;
 
   UPROPERTY() UAbilitiesWidget* UsedAbilitiesWidget;
 
@@ -33,6 +34,9 @@ protected:
   UFUNCTION() void StopInteract();
 
   UFUNCTION() void ConnectionHappened();
+  UFUNCTION() void TurnControllGained();
+  UFUNCTION() void TurnControllLost();
+  UFUNCTION() void PlayerWantsToChangePhase();
   
   // If SwapMode is active it will be turned off,
   // else it will be turned on

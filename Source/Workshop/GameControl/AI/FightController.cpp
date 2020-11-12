@@ -9,6 +9,17 @@ AFightController::AFightController()
   TurnControl = CreateDefaultSubobject<UTurnBasedComponent>(TEXT("TurnControl"));
   AddOwnedComponent(TurnControl);
   TurnControl->ConnectDelegate.BindUObject(this, &AFightController::ConnectionHappened);
+  TurnControl->TurnIsTakenUnderControl.BindUObject(this, &AFightController::TurnControllGained);
+}
+
+void AFightController::TurnControllGained()
+{
+  while (UsedManager->GetPhase() != ETurnPhase::End)
+  {
+    UsedManager->NextPhase();
+  }
+
+  UsedManager->NextPhase();
 }
 
 void AFightController::ConnectionHappened()
