@@ -190,8 +190,6 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
   AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(UsedAbilitiesWidget, &UAbilitiesWidget::PhaseChange);
   AbilitiesWidget->TurnSwapButton->OnPressed.AddDynamic(this, &AInteractController::TurnSwapMode);
 
-  AbilitiesWidget->ConsideredTurnPhase = &(Cast<ATurnBasedManager>(UsedManager)->PhaseNameBuffer);
-
   if (bSwapModeIsActive)
   {
     AbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsActiveText);
@@ -253,9 +251,11 @@ void AInteractController::PlayerWantsToChangePhase()
     return;
   }
 
-  if (Manager->GetPhase() == )
+  // Check if player chose all targets and is ready to apply effects.
+  if (Manager->GetPhase() == ETurnPhase::AbilitiesEffect)
   {
-
+    Manager->GetCentralObject()->UnpickedAsCentral();
+    ResolveCharactersAbilities();
   }
 
   Manager->NextPhase();

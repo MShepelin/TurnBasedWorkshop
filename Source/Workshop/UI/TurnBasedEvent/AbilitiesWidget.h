@@ -30,8 +30,6 @@ protected:
   UPROPERTY(meta = (BindWidget)) UVerticalBox* AbilitiesLayout;
 
 public:
-  const FString* ConsideredTurnPhase = nullptr;
-
   UPROPERTY(meta = (BindWidget)) UButton* NextPhaseButton;
   UPROPERTY(meta = (BindWidget)) URichTextBlock* PhaseText;
   UPROPERTY(meta = (BindWidget)) URichTextBlock* NextPhaseText;
