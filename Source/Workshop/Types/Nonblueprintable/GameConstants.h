@@ -35,6 +35,7 @@
 
 // 3. Code specifics
 #define LengthOfInteractiveTypeName 18
+#define LengthOfPhaseTypeName 12
 #define LengthOfAdvantageTypeName 16
 #define InteractiveTypeSeparator 7
 #define CollisionBoxWidth 4

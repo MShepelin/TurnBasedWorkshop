@@ -14,6 +14,7 @@ AFightController::AFightController()
 
 void AFightController::TurnControllGained()
 {
+  UE_LOG(LogTemp, Warning, TEXT("AI gained control!"));
   while (UsedManager->GetPhase() != ETurnPhase::End)
   {
     UsedManager->NextPhase();

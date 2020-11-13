@@ -25,8 +25,6 @@ protected:
 public:
   ATurnBasedManager();
 
-  FString PhaseNameBuffer = "";
-
   UFUNCTION(BlueprintCallable) void MakeObjectsReady();
 
   UFUNCTION(BlueprintCallable) void NextPhase();

@@ -12,6 +12,7 @@
 #include "UnrealEd.h"
 #include "Workshop/GameControl/GameModes/FightGameMode.h"
 #include "../ChoicesInstance.h"
+#include "Workshop/Types/Nonblueprintable/GameConstants.h"
 
 AInteractController::AInteractController()
 {
@@ -199,6 +200,8 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
   {
     AbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsInactiveText);
   }
+
+  UpdatePhaseInfo();
 }
 
 UAbilitiesWidget* AInteractController::GetAbilitiesWidget()
@@ -243,5 +246,44 @@ void AInteractController::PlayerWantsToChangePhase()
   {
     return;
   }
-  Cast<ATurnBasedManager>(UsedManager)->NextPhase();
+
+  ATurnBasedManager* Manager;
+  if ((Manager = Cast<ATurnBasedManager>(UsedManager)) == nullptr)
+  {
+    return;
+  }
+
+  if (Manager->GetPhase() == )
+  {
+
+  }
+
+  Manager->NextPhase();
+
+  UpdatePhaseInfo();
+}
+
+void AInteractController::UpdatePhaseInfo()
+{
+  ATurnBasedManager* Manager;
+
+  if (UsedAbilitiesWidget == nullptr || (Manager = Cast<ATurnBasedManager>(UsedManager)) == nullptr)
+  {
+    return;
+  }
+
+  ETurnPhase Phase = Manager->GetPhase();
+  UsedAbilitiesWidget->PhaseText->SetText(FText::FromString(UEnum::GetValueAsString(Phase).RightChop(LengthOfPhaseTypeName)));
+
+  if (Phase == ETurnPhase::End)
+  {
+    UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString("Next turn"));
+    return;
+  }
+  else
+  {
+    Phase = static_cast<ETurnPhase>(static_cast<uint8>(Phase) + 1);
+  }
+
+  UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString(UEnum::GetValueAsString(Phase).RightChop(LengthOfPhaseTypeName)));
 }

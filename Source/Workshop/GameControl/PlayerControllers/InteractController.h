@@ -42,6 +42,8 @@ protected:
   // else it will be turned on
   UFUNCTION() void TurnSwapMode();
 
+  UFUNCTION() void UpdatePhaseInfo();
+
 public:
   AInteractController();
 
