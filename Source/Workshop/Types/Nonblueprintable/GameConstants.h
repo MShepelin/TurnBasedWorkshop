@@ -6,6 +6,7 @@
 // 1.1 Default values
 #define DefaultPointsValue 10
 #define DefaultStringValue "Dude"
+#define DEFAULT_DELAY 2.f
 
 // 1.2 Y-order of components
 #define MainSpriteYOrder 0
@@ -16,19 +17,9 @@
 
 // 1.4 CharacterStats
 #define CharacterIntegerStats 8
-// !!! IntegerStats from 0 to CharacterIntegerStats - 1 can't be used for IntegerStats !!!
-// Stamina
-// Patience
-// Amity
-// Trust
-// Sagacity
-// Tune
-// Creativity
-// Respect
 
 // 2. Debug
 // Used for drawing lines, spheres and other shapes.
-
 #define DEBUG_COLOR FColor(255, 0, 0)
 #define DebugTime 5
 #define DebugString FName("Hello, world!")

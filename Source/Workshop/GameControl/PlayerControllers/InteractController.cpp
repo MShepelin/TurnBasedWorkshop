@@ -53,7 +53,7 @@ void AInteractController::ConnectionHappened()
     PlacableCharacters.Add(NewCharacter);
   }
 
-  // Give them to appropriate transforms.
+  // Give characters appropriate transforms.
   int32 MaxLocations = CharactersSpawnTransforms.Num();
   check(MaxLocations >= PlacableCharacters.Num());
   FTransform CameraSpawnTransoform;
@@ -76,6 +76,12 @@ void AInteractController::StartInteract()
   AActor* ChosenObject = GeneralRayCast();
   if (!ChosenObject)
   {
+    return;
+  }
+
+  if (!bCanPick)
+  {
+    CantPickCallback();
     return;
   }
 
@@ -145,6 +151,12 @@ void AInteractController::SetupInputComponent()
 
 void AInteractController::TurnSwapMode()
 {
+  if (!bCanPick)
+  {
+    CantPickCallback();
+    return;
+  }
+
   bSwapModeIsActive = !bSwapModeIsActive;
 
   // Unpick central object if needed
@@ -187,8 +199,7 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
   }
 
   UsedAbilitiesWidget = AbilitiesWidget;
-  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(this, &AInteractController::PlayerWantsToChangePhase); //Cast<ATurnBasedManager>(UsedManager), &ATurnBasedManager::NextPhase);
-  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(UsedAbilitiesWidget, &UAbilitiesWidget::PhaseChange);
+  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(this, &AInteractController::PlayerWantsToChangePhase);
   AbilitiesWidget->TurnSwapButton->OnPressed.AddDynamic(this, &AInteractController::TurnSwapMode);
 
   if (bSwapModeIsActive)
@@ -231,43 +242,43 @@ void AInteractController::PrepareCharacters()
 
 void AInteractController::TurnControllGained()
 {
-  bLevelIsControlled = true;
+  bTurnIsControlled = true;
+  bCanPick = true;
 }
 
 void AInteractController::TurnControllLost()
 {
-  bLevelIsControlled = false;
+  bTurnIsControlled = false;
 }
 
 void AInteractController::PlayerWantsToChangePhase()
 {
-  if (!bLevelIsControlled)
+  if (!bTurnIsControlled)
   {
     return;
   }
 
-  bLevelIsControlled = false;
+  bTurnIsControlled = false;
 
   ATurnBasedManager* Manager;
   if ((Manager = Cast<ATurnBasedManager>(UsedManager)) == nullptr)
   {
+    // Error
     return;
   }
 
-  // Check if player chose all targets and is ready to apply effects.
   if (Manager->GetPhase() == ETurnPhase::AbilitiesEffect)
   {
+    bCanPick = false;
+
     if (Manager->HasCentralObject())
     {
-      //++++ turn off ability to pick until the turn is back!!!
       Manager->GetCentralObject()->UnpickedAsCentral();
     }
 
-    //ResolveCharactersAbilities();
-
     if (ResolveThread)
     {
-      // PlayerWantsToChangePhase can't be called until ResolveThread changes bLevelIsControlled. 
+      // PlayerWantsToChangePhase can't be called until ResolveThread changes bTurnIsControlled. 
       ResolveThread->Kill(false);
       ResolveRunnable.reset();
     }
@@ -278,17 +289,17 @@ void AInteractController::PlayerWantsToChangePhase()
     Manager->NextPhase();
     UpdatePhaseInfo();
 
-    // bLevelIsControlled changed by the thread
+    // bTurnIsControlled changed by the thread
     return;
   }
 
   Manager->NextPhase();
   UpdatePhaseInfo();
 
-  bLevelIsControlled = true;
+  bTurnIsControlled = true;
 }
 
-void AInteractController::UpdatePhaseInfo()
+void AInteractController::UpdatePhaseInfo() //???? move to AbilitiesWidget
 {
   ATurnBasedManager* Manager;
 
@@ -325,6 +336,17 @@ void AInteractController::EndPlay(const EEndPlayReason::Type EndPlayReason)
   }
 }
 
+void AInteractController::CantPickCallback()
+{
+  if (UsedAbilitiesWidget)
+  {
+    UsedAbilitiesWidget->FailToInteract();
+    UsedAbilitiesWidget->ResetTextCounter.Increment();
+
+    GetWorldTimerManager().SetTimer(Handler, UsedAbilitiesWidget, &UAbilitiesWidget::ShowBasicText, DEFAULT_DELAY, true);
+  }
+}
+
 FCharactersResolve::FCharactersResolve(AInteractController* Controller) : UsedController(Controller)
 {
 
@@ -334,11 +356,11 @@ uint32 FCharactersResolve::Run()
 {
   UE_LOG(LogTemp, Warning, TEXT("Thread is running"));
   UsedController->ResolveCharactersAbilities();
-  UsedController->bLevelIsControlled = true;
+  UsedController->bTurnIsControlled = true;
   return 0;
 }
 
 void FCharactersResolve::Exit()
 {
-  UE_LOG(LogTemp, Warning, TEXT("Thread exits"));
+  // UE_LOG(LogTemp, Warning, TEXT("Thread exits"));
 }

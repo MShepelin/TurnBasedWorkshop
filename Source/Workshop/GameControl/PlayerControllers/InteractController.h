@@ -36,7 +36,8 @@ protected:
   
 public:
   // WARNING: not thread-safe => REWORK
-  UPROPERTY() bool bLevelIsControlled = false; //++++ change to private
+  UPROPERTY() bool bTurnIsControlled = false; //++++ change to private
+  UPROPERTY() bool bCanPick = false; //++++ change to private
 
 protected:
   // Tries to pick an Interactive object
@@ -53,6 +54,10 @@ protected:
   UFUNCTION() void TurnSwapMode();
 
   UFUNCTION() void UpdatePhaseInfo();
+
+  UFUNCTION() void CantPickCallback();
+
+  FTimerHandle Handler;
 
 public:
   AInteractController();

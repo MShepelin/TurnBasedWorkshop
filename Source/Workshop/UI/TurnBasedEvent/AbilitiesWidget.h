@@ -12,6 +12,7 @@
 #include "GeneratedCodeHelpers.h"
 #include "Components/RichTextBlock.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
+#include "HAL/ThreadSafeCounter.h"
 #include "AbilitiesWidget.generated.h"
 
 class UAbilitySlot;
@@ -37,13 +38,16 @@ public:
   UPROPERTY(meta = (BindWidget)) UButton* TurnSwapButton;
   UPROPERTY(meta = (BindWidget)) URichTextBlock* SwapText;
 
+  UPROPERTY(meta = (BindWidget)) URichTextBlock* MassageText;
+  FThreadSafeCounter ResetTextCounter = 0;
+
   UPROPERTY(BlueprintReadOnly) FText SwapIsActiveText = FText::FromString("Stop Swap");
   UPROPERTY(BlueprintReadOnly) FText SwapIsInactiveText = FText::FromString("Start Swap");;
 
 protected:
-  void AddAbilitySlot();
+  UFUNCTION() void AddAbilitySlot();
 
-  void RemoveAbilitySlot();
+  UFUNCTION() void RemoveAbilitySlot();
 
 public:
   UFUNCTION() void NativePreConstruct() override;
@@ -51,7 +55,8 @@ public:
   UFUNCTION() void HideAbilitySlots();
   UFUNCTION() void ShowAbilitySlots();
 
-  UFUNCTION() void PhaseChange();
+  UFUNCTION() void FailToInteract();
+  UFUNCTION() void ShowBasicText();
 
   UFUNCTION() void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager);
 };

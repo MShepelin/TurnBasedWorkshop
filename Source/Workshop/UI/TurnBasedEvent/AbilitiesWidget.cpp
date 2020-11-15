@@ -4,6 +4,7 @@
 #include "../AbilitySlot.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "Components/SlateWrapperTypes.h"
+#include "TimerManager.h"
 
 void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager)
 {
@@ -86,8 +87,16 @@ void UAbilitiesWidget::ShowAbilitySlots()
   }
 }
 
-void UAbilitiesWidget::PhaseChange()
+void UAbilitiesWidget::FailToInteract()
 {
-  // change test
-  return;
+  MassageText->SetText(FText::FromString("<BigText> Fail To Interact! </>"));
+}
+
+void UAbilitiesWidget::ShowBasicText()
+{
+  ResetTextCounter.Decrement();
+  if (!ResetTextCounter.GetValue())
+  {
+    MassageText->SetText(FText::FromString("<BigText> Info </>"));
+  }
 }
