@@ -7,10 +7,13 @@
 #include "Components/WidgetComponent.h"
 #include "Workshop/UI/TurnBasedEvent/AbilitiesWidget.h"
 #include "Workshop/Types/Components/TurnBasedComponent.h"
+#include "HAL/Runnable.h"
+#include <memory>
 #include "InteractController.generated.h"
 
 class ATurnBasedManager;
 class AInteractiveCharacter;
+class FCharactersResolve;
 
 UCLASS(Blueprintable)
 class WORKSHOP_API AInteractController : public ACameraController
@@ -29,6 +32,10 @@ protected:
 
   UPROPERTY() UAbilitiesWidget* UsedAbilitiesWidget;
 
+  std::shared_ptr<FCharactersResolve> ResolveRunnable;
+  FRunnableThread* ResolveThread = nullptr;
+
+protected:
   // Tries to pick an Interactive object
   UFUNCTION() void StartInteract();
   UFUNCTION() void StopInteract();
@@ -48,6 +55,8 @@ public:
   AInteractController();
 
   void BeginPlay() override;
+
+  void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
   void SetupInputComponent() override;
 
@@ -72,4 +81,17 @@ public:
 
   UFUNCTION(BlueprintCallable)
   void AddSpawnTransform(FTransform NewSpawn, int32 Order);
+};
+
+class FCharactersResolve : public FRunnable
+{
+private:
+  AInteractController* UsedController = nullptr;
+
+public:
+  FCharactersResolve(AInteractController* Controller);
+
+  uint32 Run() override;
+
+  void Exit() override;
 };

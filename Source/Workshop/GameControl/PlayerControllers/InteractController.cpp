@@ -245,6 +245,8 @@ void AInteractController::PlayerWantsToChangePhase()
     return;
   }
 
+  bLevelIsControlled = false;
+
   ATurnBasedManager* Manager;
   if ((Manager = Cast<ATurnBasedManager>(UsedManager)) == nullptr)
   {
@@ -254,13 +256,28 @@ void AInteractController::PlayerWantsToChangePhase()
   // Check if player chose all targets and is ready to apply effects.
   if (Manager->GetPhase() == ETurnPhase::AbilitiesEffect)
   {
-    Manager->GetCentralObject()->UnpickedAsCentral();
-    ResolveCharactersAbilities();
+    if (Manager->HasCentralObject())
+    {
+      Manager->GetCentralObject()->UnpickedAsCentral();
+    }
+
+    // ResolveCharactersAbilities();
+    if (!ResolveThread)
+    {
+      ResolveRunnable = std::make_shared<FCharactersResolve>(this);
+      ResolveThread = FRunnableThread::Create(ResolveRunnable.get(), TEXT("Characters Resolvement"));
+    }
+    else
+    {
+      //error
+    }
   }
 
   Manager->NextPhase();
 
   UpdatePhaseInfo();
+
+  bLevelIsControlled = true;
 }
 
 void AInteractController::UpdatePhaseInfo()
@@ -286,4 +303,32 @@ void AInteractController::UpdatePhaseInfo()
   }
 
   UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString(UEnum::GetValueAsString(Phase).RightChop(LengthOfPhaseTypeName)));
+}
+
+void AInteractController::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+  Super::EndPlay(EndPlayReason);
+
+  if (ResolveRunnable && ResolveThread)
+  {
+    ResolveThread->Suspend(true);
+    ResolveThread->Kill(false); //???? change somehow to prevent problems with threads
+    ResolveRunnable.reset();
+  }
+}
+
+FCharactersResolve::FCharactersResolve(AInteractController* Controller) : UsedController(Controller)
+{
+
+}
+
+uint32 FCharactersResolve::Run()
+{
+  UE_LOG(LogTemp, Warning, TEXT("Thread is running"));
+  return 0;
+}
+
+void FCharactersResolve::Exit()
+{
+  UE_LOG(LogTemp, Warning, TEXT("Thread exits"));
 }
