@@ -47,8 +47,9 @@ protected:
   UFUNCTION() void ConnectionHappened();
   UFUNCTION() void TurnControllGained();
   UFUNCTION() void TurnControllLost();
-  UFUNCTION() void PlayerWantsToChangePhase();
   
+  UFUNCTION() void PlayerWantsToChangePhase();
+
   // If SwapMode is active it will be turned off,
   // else it will be turned on
   UFUNCTION() void TurnSwapMode();

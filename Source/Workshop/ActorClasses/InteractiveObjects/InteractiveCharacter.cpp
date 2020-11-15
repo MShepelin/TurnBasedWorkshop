@@ -208,6 +208,7 @@ void AInteractiveCharacter::ResolveCharacterActions()
   }
 
   //++++ add movement
+  //ClearCentralAbility();
   CentralAbility->ResolveAbility();
   //++++ add movement
 }

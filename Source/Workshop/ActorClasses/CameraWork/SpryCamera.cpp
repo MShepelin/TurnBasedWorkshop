@@ -4,7 +4,7 @@
 #include "../InteractiveObjects/InteractiveCharacter.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "Kismet/KismetMathLibrary.h"
-
+#include "Kismet/GameplayStatics.h"
 
 ASpryCamera::ASpryCamera()
 {
@@ -15,6 +15,7 @@ ASpryCamera::ASpryCamera()
 
   WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
   WidgetInteraction->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+  WidgetInteraction->InteractionSource = EWidgetInteractionSource::Mouse;
 }
 
 /*
@@ -55,28 +56,13 @@ void ASpryCamera::UnPossessed()
   PlayerController = nullptr;
 }
 
-void ASpryCamera::Tick(float DeltaSeconds)
-{
-  Super::Tick(DeltaSeconds);
-
-  if (!bIsPossesed)
-  {
-    return;
-  }
-
-  FVector WorldLocation;
-  FVector WorldDirection;
-
-  PlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
-
-  FVector Direction = WorldLocation - WidgetInteraction->GetComponentLocation();
-
-  WidgetInteraction->SetWorldRotation(Direction.Rotation());
-}
-
 FVector ASpryCamera::GetCameraDirection() const
 {
-  return WidgetInteraction->GetComponentRotation().Vector();
+  FVector WorldLocation;
+  FVector WorldDirection;
+  PlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
+
+  return WorldLocation - WidgetInteraction->GetComponentLocation();
 }
 
 void ASpryCamera::PlayerPressedClick()

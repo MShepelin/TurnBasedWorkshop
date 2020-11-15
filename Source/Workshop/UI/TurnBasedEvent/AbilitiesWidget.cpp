@@ -94,9 +94,5 @@ void UAbilitiesWidget::FailToInteract()
 
 void UAbilitiesWidget::ShowBasicText()
 {
-  ResetTextCounter.Decrement();
-  if (!ResetTextCounter.GetValue())
-  {
-    MassageText->SetText(FText::FromString("<BigText> Info </>"));
-  }
+  MassageText->SetText(FText::FromString("<BigText> Info </>"));
 }

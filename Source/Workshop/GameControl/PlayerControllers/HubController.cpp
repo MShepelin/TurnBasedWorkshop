@@ -19,12 +19,16 @@ void AHubController::SetupInputComponent()
   Super::SetupInputComponent();
 
   InputComponent->BindAction("Interact", IE_Pressed, this, &AHubController::ChooseCharacter);
-
   InputComponent->BindAction("Apply", IE_Pressed, this, &AHubController::ApplyChosenCharacters);
 }
 
 void AHubController::ChooseCharacter()
 {
+  if (CurrentCamera)
+  {
+    CurrentCamera->PlayerPressedClick();
+  }
+
   AActor* ChosenObject = GeneralRayCast();
 
   if (!ChosenObject)

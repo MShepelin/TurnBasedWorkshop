@@ -17,6 +17,9 @@
 
 AInteractController::AInteractController()
 {
+  bEnableClickEvents = true;
+  bEnableMouseOverEvents = true;
+
   TurnControl = CreateDefaultSubobject<UTurnBasedComponent>(TEXT("TurnControl"));
   AddOwnedComponent(TurnControl);
   TurnControl->ConnectDelegate.BindUObject(this, &AInteractController::ConnectionHappened);
@@ -73,15 +76,14 @@ void AInteractController::ConnectionHappened()
 
 void AInteractController::StartInteract()
 {
+  if (CurrentCamera)
+  {
+    CurrentCamera->PlayerPressedClick();
+  }
+
   AActor* ChosenObject = GeneralRayCast();
   if (!ChosenObject)
   {
-    return;
-  }
-
-  if (!bCanPick)
-  {
-    CantPickCallback();
     return;
   }
 
@@ -89,6 +91,12 @@ void AInteractController::StartInteract()
 
   if (!InteractiveObject)
   {
+    return;
+  }
+
+  if (!bCanPick)
+  {
+    CantPickCallback();
     return;
   }
 
@@ -183,7 +191,6 @@ void AInteractController::ResolveCharactersAbilities()
   for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
   {
     PlacableCharacter->ResolveCharacterActions();
-    UE_LOG(LogTemp, Warning, TEXT("Character resolved"));
   }
 }
 
@@ -199,8 +206,8 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
   }
 
   UsedAbilitiesWidget = AbilitiesWidget;
-  AbilitiesWidget->NextPhaseButton->OnPressed.AddDynamic(this, &AInteractController::PlayerWantsToChangePhase);
-  AbilitiesWidget->TurnSwapButton->OnPressed.AddDynamic(this, &AInteractController::TurnSwapMode);
+  AbilitiesWidget->NextPhaseButton->OnClicked.AddDynamic(this, &AInteractController::PlayerWantsToChangePhase);
+  AbilitiesWidget->TurnSwapButton->OnClicked.AddDynamic(this, &AInteractController::TurnSwapMode);
 
   if (bSwapModeIsActive)
   {
@@ -229,9 +236,11 @@ void AInteractController::PostInitializeComponents()
   Super::PostInitializeComponents();
 
   AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
-  check(GameMode);
 
-  GameMode->ObjectsReady.AddUObject(this, &AInteractController::PrepareCharacters);
+  if (GameMode)
+  {
+    GameMode->ObjectsReady.AddUObject(this, &AInteractController::PrepareCharacters);
+  }
 }
 
 void AInteractController::PrepareCharacters()
@@ -341,8 +350,6 @@ void AInteractController::CantPickCallback()
   if (UsedAbilitiesWidget)
   {
     UsedAbilitiesWidget->FailToInteract();
-    UsedAbilitiesWidget->ResetTextCounter.Increment();
-
     GetWorldTimerManager().SetTimer(Handler, UsedAbilitiesWidget, &UAbilitiesWidget::ShowBasicText, DEFAULT_DELAY, true);
   }
 }

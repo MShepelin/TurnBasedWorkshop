@@ -15,11 +15,6 @@ ACameraController::ACameraController()
 
 AActor* ACameraController::GeneralRayCast()
 {
-  if (CurrentCamera)
-  {
-    CurrentCamera->PlayerPressedClick();
-  }
-
   ASpryCamera* CameraPawn = Cast<ASpryCamera>(GetPawn());
 
   if (!(CameraPawn && GetWorld()))

@@ -39,7 +39,6 @@ public:
   UPROPERTY(meta = (BindWidget)) URichTextBlock* SwapText;
 
   UPROPERTY(meta = (BindWidget)) URichTextBlock* MassageText;
-  FThreadSafeCounter ResetTextCounter = 0;
 
   UPROPERTY(BlueprintReadOnly) FText SwapIsActiveText = FText::FromString("Stop Swap");
   UPROPERTY(BlueprintReadOnly) FText SwapIsInactiveText = FText::FromString("Start Swap");;

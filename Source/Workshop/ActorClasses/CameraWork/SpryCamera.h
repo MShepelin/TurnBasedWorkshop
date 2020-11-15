@@ -37,8 +37,6 @@ public:
 
   virtual void UnPossessed() override;
 
-  virtual void Tick(float DeltaSeconds) override;
-
   /* REWORK
   UFUNCTION(BlueprintNativeEvent)
   void OnCharacterResolvesAbility(AInteractiveCharacter* CurrentCharacter);
