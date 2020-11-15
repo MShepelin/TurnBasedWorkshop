@@ -28,12 +28,15 @@ protected:
 
   AInteractiveCharacter* FirstToSwap[2];
   UPROPERTY() bool bSwapModeIsActive;
-  UPROPERTY() bool bLevelIsControlled = false;
 
   UPROPERTY() UAbilitiesWidget* UsedAbilitiesWidget;
 
   std::shared_ptr<FCharactersResolve> ResolveRunnable;
   FRunnableThread* ResolveThread = nullptr;
+  
+public:
+  // WARNING: not thread-safe => REWORK
+  UPROPERTY() bool bLevelIsControlled = false; //++++ change to private
 
 protected:
   // Tries to pick an Interactive object

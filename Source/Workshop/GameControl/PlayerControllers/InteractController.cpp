@@ -13,6 +13,7 @@
 #include "Workshop/GameControl/GameModes/FightGameMode.h"
 #include "../ChoicesInstance.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
+#include "GenericPlatform/GenericPlatformProcess.h"
 
 AInteractController::AInteractController()
 {
@@ -258,23 +259,30 @@ void AInteractController::PlayerWantsToChangePhase()
   {
     if (Manager->HasCentralObject())
     {
+      //++++ turn off ability to pick until the turn is back!!!
       Manager->GetCentralObject()->UnpickedAsCentral();
     }
 
-    // ResolveCharactersAbilities();
-    if (!ResolveThread)
+    //ResolveCharactersAbilities();
+
+    if (ResolveThread)
     {
-      ResolveRunnable = std::make_shared<FCharactersResolve>(this);
-      ResolveThread = FRunnableThread::Create(ResolveRunnable.get(), TEXT("Characters Resolvement"));
+      // PlayerWantsToChangePhase can't be called until ResolveThread changes bLevelIsControlled. 
+      ResolveThread->Kill(false);
+      ResolveRunnable.reset();
     }
-    else
-    {
-      //error
-    }
+
+    ResolveRunnable = std::make_shared<FCharactersResolve>(this);
+    ResolveThread = FRunnableThread::Create(ResolveRunnable.get(), TEXT("Characters Resolvement"));
+
+    Manager->NextPhase();
+    UpdatePhaseInfo();
+
+    // bLevelIsControlled changed by the thread
+    return;
   }
 
   Manager->NextPhase();
-
   UpdatePhaseInfo();
 
   bLevelIsControlled = true;
@@ -325,6 +333,8 @@ FCharactersResolve::FCharactersResolve(AInteractController* Controller) : UsedCo
 uint32 FCharactersResolve::Run()
 {
   UE_LOG(LogTemp, Warning, TEXT("Thread is running"));
+  UsedController->ResolveCharactersAbilities();
+  UsedController->bLevelIsControlled = true;
   return 0;
 }
 
