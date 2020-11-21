@@ -3,9 +3,9 @@
 #include "Bar.h"
 #include "Math/UnrealMathUtility.h"
 
-void FBar::ChangeBarBy(int32 Value)
+void FBar::ChangeBarBy(float Value)
 {
-  CurrentValue = FMath::Clamp(CurrentValue + Value, BarLimits[0], BarLimits[BarLimits.Num() - 1]);
+  CurrentValue = FMath::Clamp(CurrentValue + Value, 0.f, 1.f);
 
   size_t LeftLimit = 0, RightLimit = BarLimits.Num();
   while (LeftLimit < RightLimit - 1)

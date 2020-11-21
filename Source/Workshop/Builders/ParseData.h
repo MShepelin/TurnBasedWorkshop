@@ -8,6 +8,7 @@
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
 #include "Workshop/Types/Effects/AdvantageEffectData.h"
 #include "Workshop/Types/Effects/ChangeStatEffectData.h"
+#include "Workshop/UI/MixedProgressBar.h"
 #include "ParseData.generated.h"
 
 
@@ -19,6 +20,10 @@ class WORKSHOP_API UParseData : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
   
 public:
+
+  UFUNCTION(BlueprintCallable)
+  static void DrawBar(const UMixedProgressBar* BarWidget, UPARAM(ref) FPaintContext& Context);
+
   // Parse information about AccumulatedEffects.
   //UFUNCTION(BlueprintCallable)
   //FString CollectAccumulatedEffects(AInteractiveObject* TargetObject);

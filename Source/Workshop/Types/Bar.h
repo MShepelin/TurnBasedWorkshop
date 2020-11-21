@@ -11,16 +11,17 @@ struct WORKSHOP_API FBar
   GENERATED_BODY()
 
   // Sorted array which defines in which value bar is active.
-  UPROPERTY(EditDefaultsOnly)
-  TArray<int32> BarLimits;
+  // Values are from 0 and 1.
+  UPROPERTY(EditDefaultsOnly, meta = (ClampMin="0.0", ClampMax="1.0"))
+  TArray<float> BarLimits;
 
   UPROPERTY(EditDefaultsOnly)
-  int32 DefaultValue = 0;
+  float DefaultValue = 0;
 
-  UPROPERTY(BlueprintReadWrite) int32 CurrentValue;
+  UPROPERTY(BlueprintReadWrite) float CurrentValue;
   UPROPERTY(BlueprintReadWrite) bool bIsActive;
 
-  void ChangeBarBy(int32 Value);
+  void ChangeBarBy(float Value);
 
   void ResetBar();
 

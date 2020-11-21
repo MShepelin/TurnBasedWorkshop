@@ -90,6 +90,7 @@ void AInteractiveCharacter::PickedAsCentral()
   if (AbilitiesWidget)
   {
     AbilitiesWidget->FillAbilitySlots(Abilities, MainManager);
+    // AbilitiesWidget->DrawBars(...)
     AbilitiesWidget->ShowAbilitySlots();
   }
 }
