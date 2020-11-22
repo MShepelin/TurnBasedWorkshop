@@ -11,7 +11,6 @@
 #include "Workshop/UI/MixedProgressBar.h"
 #include "ParseData.generated.h"
 
-
 // Functions from UBuildAbility should be added to CustomEffect 
 // of AInteractiveAbility to implement needed gameplay.
 UCLASS()

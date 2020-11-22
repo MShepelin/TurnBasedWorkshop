@@ -31,7 +31,7 @@ void FBar::ResetBar()
   ChangeBarBy(0);
 }
 
-bool FBar::IsActive()
+bool FBar::IsActive() const
 {
   return bIsActive;
 }

@@ -23,16 +23,28 @@ FString UParseData::CollectAccumulatedEffects(AInteractiveObject* TargetObject)
 
 void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Context)
 {
+  const FBar& UsedBar = BarWidget->BarToDraw;
+
   FVector2D Size = USlateBlueprintLibrary::GetLocalSize(BarWidget->BarImage->GetPaintSpaceGeometry());
   FVector2D Position = USlateBlueprintLibrary::GetLocalTopLeft(BarWidget->BarImage->GetPaintSpaceGeometry());
-  Size.X /= 2;
 
-  UWidgetBlueprintLibrary::DrawBox
-  (
-    Context,
-    Position,
-    Size,
-    BarWidget->ActiveSlotsBrush,
-    FLinearColor(255, 255, 255)
-  );
+  for (size_t LimitIndex = 1; LimitIndex < UsedBar.BarLimits.Num() - 1; LimitIndex += 2)
+  {
+    // Odd indexes match the starts of active zones
+    // Even indexes match the ends
+
+    FVector2D ZoneSize = Size;
+    ZoneSize.X = ZoneSize.X * (UsedBar.BarLimits[LimitIndex + 1] - UsedBar.BarLimits[LimitIndex]);
+    FVector2D ZonePosition = Position;
+    ZonePosition.X += Size.X * UsedBar.BarLimits[LimitIndex];
+
+    UWidgetBlueprintLibrary::DrawBox
+    (
+      Context,
+      ZonePosition,
+      ZoneSize,
+      BarWidget->ActiveSlotsBrush,
+      FLinearColor(255, 255, 255)
+    );
+  }
 }

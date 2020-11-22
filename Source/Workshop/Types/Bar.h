@@ -10,9 +10,10 @@ struct WORKSHOP_API FBar
 {
   GENERATED_BODY()
 
-  // Sorted array which defines in which value bar is active.
+  // Sorted array which defines between which values the bar is active.
   // Values are from 0 and 1.
-  UPROPERTY(EditDefaultsOnly, meta = (ClampMin="0.0", ClampMax="1.0"))
+  // Value 0 and value 1 must be included.
+  UPROPERTY(EditDefaultsOnly, meta = (UIMin="0.0", UIMax="1.0"))
   TArray<float> BarLimits;
 
   UPROPERTY(EditDefaultsOnly)
@@ -25,5 +26,5 @@ struct WORKSHOP_API FBar
 
   void ResetBar();
 
-  bool IsActive();
+  bool IsActive() const;
 };
