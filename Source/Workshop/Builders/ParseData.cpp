@@ -4,7 +4,9 @@
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Blueprint/SlateBlueprintLibrary.h"
+#include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "Slate/SlateBrushAsset.h"
+#include "Kismet/KismetMathLibrary.h"
 
 /*
 FString UParseData::CollectAccumulatedEffects(AInteractiveObject* TargetObject)
@@ -46,5 +48,48 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
       BarWidget->ActiveSlotsBrush,
       FLinearColor(255, 255, 255)
     );
+
+    UWidgetBlueprintLibrary::DrawTextFormatted(
+      Context,
+      FText::FromString(FString::FromInt(UKismetMathLibrary::FCeil(UsedBar.BarLimits[LimitIndex] * BAR_MAX_VALUE))),
+      { ZonePosition.X, ZonePosition.Y - SMALL_PADDING },
+      BarWidget->BarTextFont,
+      FONT_SMALL_SIZE,
+      FName(TEXT("Regular")),
+      FLinearColor::Red);
+
+    if (UsedBar.BarLimits[LimitIndex + 1] == 1.f)
+    {
+      break;
+    }
+
+    UWidgetBlueprintLibrary::DrawTextFormatted(
+      Context,
+      FText::FromString(FString::FromInt(UKismetMathLibrary::FCeil(UsedBar.BarLimits[LimitIndex + 1] * BAR_MAX_VALUE))),
+      { Position.X + Size.X * UsedBar.BarLimits[LimitIndex + 1], ZonePosition.Y - SMALL_PADDING },
+      BarWidget->BarTextFont,
+      FONT_SMALL_SIZE,
+      FName(TEXT("Regular")),
+      FLinearColor::Red);
   }
+
+  FVector2D CurrentValuePosition = Position;
+  CurrentValuePosition.X += UsedBar.CurrentValue * Size.X;
+
+  UWidgetBlueprintLibrary::DrawLine(
+    Context,
+    CurrentValuePosition, 
+    { CurrentValuePosition.X, CurrentValuePosition.Y + Size.Y },
+    FLinearColor::Red, 
+    true, 
+    LINE_THICKNESS);
+
+  UWidgetBlueprintLibrary::DrawTextFormatted(
+    Context,
+    FText::FromString(FString::FromInt(UKismetMathLibrary::FCeil(UsedBar.CurrentValue * BAR_MAX_VALUE))),
+    { CurrentValuePosition.X, CurrentValuePosition.Y + SMALL_PADDING },
+    BarWidget->BarTextFont,
+    FONT_MIDDLE_SIZE,
+    FName(TEXT("Regular")),
+    FLinearColor::Red);
 }

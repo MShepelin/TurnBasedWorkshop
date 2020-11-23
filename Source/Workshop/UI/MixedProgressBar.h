@@ -16,6 +16,8 @@ class WORKSHOP_API UMixedProgressBar : public UUserWidget
 public:
   UPROPERTY(meta = (BindWidget)) UImage* BarImage;
 
+  UPROPERTY(EditAnywhere, BlueprintReadOnly) UFont* BarTextFont;
+
   UPROPERTY(EditAnywhere, BlueprintReadOnly) FBar BarToDraw;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) USlateBrushAsset* ActiveSlotsBrush;

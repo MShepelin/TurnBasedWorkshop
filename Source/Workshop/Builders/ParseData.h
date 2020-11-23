@@ -9,6 +9,7 @@
 #include "Workshop/Types/Effects/AdvantageEffectData.h"
 #include "Workshop/Types/Effects/ChangeStatEffectData.h"
 #include "Workshop/UI/MixedProgressBar.h"
+#include "Components/RichTextBlock.h"
 #include "ParseData.generated.h"
 
 // Functions from UBuildAbility should be added to CustomEffect 
@@ -17,9 +18,8 @@ UCLASS()
 class WORKSHOP_API UParseData : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
-  
-public:
 
+public:
   UFUNCTION(BlueprintCallable)
   static void DrawBar(const UMixedProgressBar* BarWidget, UPARAM(ref) FPaintContext& Context);
 
