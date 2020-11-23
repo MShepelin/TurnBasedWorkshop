@@ -30,6 +30,29 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
   }
 }
 
+void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars)
+{
+  size_t SlotsIndex = 0;
+  for (const FBar& Bar : Bars)
+  {
+    if (SlotsIndex == BarsSlots.Num())
+    {
+      AddBarSlot();
+    }
+
+    BarsSlots[SlotsIndex]->SetBar(Bar);
+    BarsLayout->InvalidateLayoutAndVolatility();
+
+    SlotsIndex++;
+  }
+
+  while (BarsSlots.Num() > Bars.Num())
+  {
+    BarsSlots[BarsSlots.Num() - 1]->RemoveFromParent();
+    BarsSlots.Pop();
+  }
+}
+
 void UAbilitiesWidget::NativePreConstruct()
 {
   if (!AbilitySlotClass)
@@ -60,6 +83,16 @@ void UAbilitiesWidget::AddAbilitySlot()
   AbilitiesLayout->InvalidateLayoutAndVolatility();
 }
 
+void UAbilitiesWidget::AddBarSlot()
+{
+  UMixedProgressBar* NewBarSlot = WidgetTree->ConstructWidget<UMixedProgressBar>(BarSlotClass);
+  BarsSlots.Add(NewBarSlot);
+
+  UVerticalBoxSlot* NewSlot = BarsLayout->AddChildToVerticalBox(NewBarSlot);
+  NewSlot->SetSize(FSlateChildSize(ESlateSizeRule::Type::Fill));
+  BarsLayout->InvalidateLayoutAndVolatility();
+}
+
 void UAbilitiesWidget::RemoveAbilitySlot()
 {
   VerticalBoxSlots[VerticalBoxSlots.Num() - 1]->RemoveFromParent();
@@ -79,9 +112,25 @@ void UAbilitiesWidget::HideAbilitySlots()
   }
 }
 
+void UAbilitiesWidget::HideBarsSlots()
+{
+  for (UAbilitySlot* SlotToHide : VerticalBoxSlots)
+  {
+    SlotToHide->SetVisibility(ESlateVisibility::Hidden);
+  }
+}
+
 void UAbilitiesWidget::ShowAbilitySlots()
 {
   for (UAbilitySlot* SlotToHide : VerticalBoxSlots)
+  {
+    SlotToHide->SetVisibility(ESlateVisibility::Visible);
+  }
+}
+
+void UAbilitiesWidget::ShowBarsSlots()
+{
+  for (UMixedProgressBar* SlotToHide : BarsSlots)
   {
     SlotToHide->SetVisibility(ESlateVisibility::Visible);
   }

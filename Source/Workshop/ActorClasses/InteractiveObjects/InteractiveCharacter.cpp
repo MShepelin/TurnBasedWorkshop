@@ -90,8 +90,10 @@ void AInteractiveCharacter::PickedAsCentral()
   if (AbilitiesWidget)
   {
     AbilitiesWidget->FillAbilitySlots(Abilities, MainManager);
+    AbilitiesWidget->FillBarSlots(CharacterDataCore.CharacterStats);
     // AbilitiesWidget->DrawBars(...)
     AbilitiesWidget->ShowAbilitySlots();
+    AbilitiesWidget->ShowBarsSlots();
   }
 }
 
@@ -104,8 +106,8 @@ void AInteractiveCharacter::UnpickedAsCentral()
     UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetAbilitiesWidget();
   if (AbilitiesWidget)
   {
-    //AbilitiesWidget->SetVisibility(ESlateVisibility::Hidden);
     AbilitiesWidget->HideAbilitySlots();
+    AbilitiesWidget->HideBarsSlots();
   }
 }
 

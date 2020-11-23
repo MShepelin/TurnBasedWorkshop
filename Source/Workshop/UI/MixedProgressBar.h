@@ -23,5 +23,5 @@ public:
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) USlateBrushAsset* ActiveSlotsBrush;
 
 public:
-  UFUNCTION(BlueprintCallable) void SetBar(FBar& Bar);
+  UFUNCTION(BlueprintCallable) void SetBar(const FBar& Bar);
 };

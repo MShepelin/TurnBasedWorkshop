@@ -1,7 +1,7 @@
 #include "MixedProgressBar.h"
 
 
-void UMixedProgressBar::SetBar(FBar& Bar)
+void UMixedProgressBar::SetBar(const FBar& Bar)
 {
   BarToDraw = Bar;
 }

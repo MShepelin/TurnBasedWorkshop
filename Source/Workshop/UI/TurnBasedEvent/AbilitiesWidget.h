@@ -13,6 +13,7 @@
 #include "Components/RichTextBlock.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "HAL/ThreadSafeCounter.h"
+#include "../MixedProgressBar.h"
 #include "AbilitiesWidget.generated.h"
 
 class UAbilitySlot;
@@ -26,9 +27,14 @@ class WORKSHOP_API UAbilitiesWidget : public UUserWidget
 protected:
   UPROPERTY(EditDefaultsOnly)
   TSubclassOf<UAbilitySlot> AbilitySlotClass;
+  UPROPERTY(EditDefaultsOnly)
+  TSubclassOf<UMixedProgressBar> BarSlotClass;
 
   UPROPERTY() TArray<UAbilitySlot*> VerticalBoxSlots;
   UPROPERTY(meta = (BindWidget)) UVerticalBox* AbilitiesLayout;
+
+  UPROPERTY() TArray<UMixedProgressBar*> BarsSlots;
+  UPROPERTY(meta = (BindWidget)) UVerticalBox* BarsLayout;
 
 public:
   UPROPERTY(meta = (BindWidget)) UButton* NextPhaseButton;
@@ -45,6 +51,7 @@ public:
 
 protected:
   UFUNCTION() void AddAbilitySlot();
+  UFUNCTION() void AddBarSlot();
 
   UFUNCTION() void RemoveAbilitySlot();
 
@@ -52,12 +59,15 @@ public:
   UFUNCTION() void NativePreConstruct() override;
 
   UFUNCTION() void HideAbilitySlots();
+  UFUNCTION() void HideBarsSlots();
   UFUNCTION() void ShowAbilitySlots();
+  UFUNCTION() void ShowBarsSlots();
 
   UFUNCTION() void FailToInteract();
   UFUNCTION() void ShowBasicText();
 
   UFUNCTION() void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager);
+  UFUNCTION() void FillBarSlots(const TArray<FBar>& Bars);
 };
 
 //++++ add function to set abilities of new character:
