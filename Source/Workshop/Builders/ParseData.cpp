@@ -58,7 +58,7 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
       FName(TEXT("Regular")),
       FLinearColor::Red);
 
-    if (UsedBar.BarLimits[LimitIndex + 1] == 1.f)
+    if (UsedBar.BarLimits[LimitIndex + 1] >= 1.f)
     {
       break;
     }

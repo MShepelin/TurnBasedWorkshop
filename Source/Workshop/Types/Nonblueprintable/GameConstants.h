@@ -40,9 +40,9 @@
 #define MaxIconSize 512.0
 #define MinIconSize 256.0
 #define LINE_THICKNESS 10.0f
-#define FONT_SMALL_SIZE 64
-#define SMALL_PADDING 100
-#define FONT_MIDDLE_SIZE 80
+#define FONT_SMALL_SIZE 32
+#define SMALL_PADDING 44
+#define FONT_MIDDLE_SIZE 64
 #define BAR_MAX_VALUE 100
 
 // Some used difinitions:
