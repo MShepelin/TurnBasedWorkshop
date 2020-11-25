@@ -101,11 +101,6 @@ void UAbilitiesWidget::RemoveAbilitySlot()
 
 void UAbilitiesWidget::HideAbilitySlots()
 {
-  for (size_t NewSlotIndex = VerticalBoxSlots.Num(); NewSlotIndex <= DefaultNumberOfSlots; NewSlotIndex++)
-  {
-    AddAbilitySlot();
-  }
-
   for (UAbilitySlot* SlotToHide : VerticalBoxSlots)
   {
     SlotToHide->SetVisibility(ESlateVisibility::Hidden);
@@ -114,7 +109,7 @@ void UAbilitiesWidget::HideAbilitySlots()
 
 void UAbilitiesWidget::HideBarsSlots()
 {
-  for (UAbilitySlot* SlotToHide : VerticalBoxSlots)
+  for (UMixedProgressBar* SlotToHide : BarsSlots)
   {
     SlotToHide->SetVisibility(ESlateVisibility::Hidden);
   }

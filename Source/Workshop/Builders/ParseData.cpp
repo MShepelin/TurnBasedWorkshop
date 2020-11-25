@@ -46,17 +46,17 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
       ZonePosition,
       ZoneSize,
       BarWidget->ActiveSlotsBrush,
-      FLinearColor(255, 255, 255)
+      BarWidget->WidgetColor
     );
 
     UWidgetBlueprintLibrary::DrawTextFormatted(
       Context,
-      FText::FromString(FString::FromInt(UKismetMathLibrary::FCeil(UsedBar.BarLimits[LimitIndex] * BAR_MAX_VALUE))),
+      FText::FromString(FString::FromInt(UKismetMathLibrary::FFloor(UsedBar.BarLimits[LimitIndex] * BAR_MAX_VALUE))),
       { ZonePosition.X, ZonePosition.Y - SMALL_PADDING },
       BarWidget->BarTextFont,
       FONT_SMALL_SIZE,
       FName(TEXT("Regular")),
-      FLinearColor::Red);
+      BarWidget->WidgetColor);
 
     if (UsedBar.BarLimits[LimitIndex + 1] >= 1.f)
     {
@@ -65,12 +65,12 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
 
     UWidgetBlueprintLibrary::DrawTextFormatted(
       Context,
-      FText::FromString(FString::FromInt(UKismetMathLibrary::FCeil(UsedBar.BarLimits[LimitIndex + 1] * BAR_MAX_VALUE))),
+      FText::FromString(FString::FromInt(UKismetMathLibrary::FFloor(UsedBar.BarLimits[LimitIndex + 1] * BAR_MAX_VALUE))),
       { Position.X + Size.X * UsedBar.BarLimits[LimitIndex + 1], ZonePosition.Y - SMALL_PADDING },
       BarWidget->BarTextFont,
       FONT_SMALL_SIZE,
       FName(TEXT("Regular")),
-      FLinearColor::Red);
+      BarWidget->WidgetColor);
   }
 
   FVector2D CurrentValuePosition = Position;
@@ -80,16 +80,16 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
     Context,
     CurrentValuePosition, 
     { CurrentValuePosition.X, CurrentValuePosition.Y + Size.Y },
-    FLinearColor::Red, 
+    BarWidget->WidgetColor,
     true, 
     LINE_THICKNESS);
 
   UWidgetBlueprintLibrary::DrawTextFormatted(
     Context,
-    FText::FromString(FString::FromInt(UKismetMathLibrary::FCeil(UsedBar.CurrentValue * BAR_MAX_VALUE))),
-    { CurrentValuePosition.X, CurrentValuePosition.Y + SMALL_PADDING },
+    FText::FromString(FString::FromInt(UKismetMathLibrary::FFloor(UsedBar.CurrentValue * BAR_MAX_VALUE))),
+    { (UsedBar.CurrentValue > 0.5) ? CurrentValuePosition.X - SMALL_PADDING * 1.5f : CurrentValuePosition.X + SMALL_PADDING * 0.1f, CurrentValuePosition.Y },
     BarWidget->BarTextFont,
     FONT_MIDDLE_SIZE,
     FName(TEXT("Regular")),
-    FLinearColor::Red);
+    BarWidget->WidgetColor);
 }

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "InteractiveObject.h"
+#include "Workshop/Types/Bar.h"
 
 // Sets default values
 AInteractiveObject::AInteractiveObject()
@@ -29,6 +30,11 @@ void AInteractiveObject::OnConstruction(const FTransform & Transform)
 void AInteractiveObject::PostInitProperties()
 {
   Super::PostInitProperties();
+
+  for (FBar& Stat : InteractiveDataCore.Stats)
+  {
+    Stat.ResetBar();
+  }
 }
 
 void AInteractiveObject::BeginPlay()

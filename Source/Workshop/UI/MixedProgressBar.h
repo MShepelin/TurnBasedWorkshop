@@ -18,6 +18,8 @@ public:
 
   UPROPERTY(EditAnywhere, BlueprintReadOnly) UFont* BarTextFont;
 
+  UPROPERTY(EditAnywhere, BlueprintReadOnly) FLinearColor WidgetColor;
+
   UPROPERTY(EditAnywhere, BlueprintReadOnly) FBar BarToDraw;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) USlateBrushAsset* ActiveSlotsBrush;

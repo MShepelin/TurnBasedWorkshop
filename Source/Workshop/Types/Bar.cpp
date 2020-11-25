@@ -6,8 +6,10 @@
 void FBar::ChangeBarBy(float Value)
 {
   CurrentValue = FMath::Clamp(CurrentValue + Value, 0.f, 1.f);
+  
+  check(BarLimits.Num());
 
-  size_t LeftLimit = 0, RightLimit = BarLimits.Num();
+  size_t LeftLimit = 0, RightLimit = BarLimits.Num() - 1;
   while (LeftLimit < RightLimit - 1)
   {
     size_t MidLimit = LeftLimit + (RightLimit - LeftLimit) / 2;

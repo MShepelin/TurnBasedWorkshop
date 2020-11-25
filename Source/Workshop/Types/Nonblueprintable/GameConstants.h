@@ -34,17 +34,17 @@
 #define DefaultNumberOfSlots 4
 #define MaxActorSize 1000
 #define RayCastLength 1000
-#define AVERAGE_MANAGED_OBJECTS 12
+#define AVERAGE_MANAGED_OBJECTS 8
 #define COLLISION_INTERACTIVE ECollisionChannel::ECC_GameTraceChannel1
 
 // 4. UI
 #define MaxIconSize 512.0
 #define MinIconSize 256.0
 #define LINE_THICKNESS 10.0f
-#define FONT_SMALL_SIZE 32
-#define SMALL_PADDING 44
-#define FONT_MIDDLE_SIZE 64
-#define BAR_MAX_VALUE 100
+#define FONT_SMALL_SIZE 64
+#define SMALL_PADDING 90
+#define FONT_MIDDLE_SIZE 80
+#define BAR_MAX_VALUE 100 // Describes precision
 
 // Some used difinitions:
 // Interactive with capital I is a name of class and not this word itself
@@ -52,9 +52,3 @@
 // //++++ comment means that some code must be added
 // //???? comment means that some code may be useful to add
 // Nonpositive values of CTs and stats are reserved and should not be used
-
-// Agreements:
-//  Bars:
-//   Bars use values with 2 decimals precision
-//   BarLimits of a Bar must be sorted and contain 0.f and 1.f
-// 
