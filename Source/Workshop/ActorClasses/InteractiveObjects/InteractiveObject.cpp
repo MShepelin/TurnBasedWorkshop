@@ -27,9 +27,9 @@ void AInteractiveObject::OnConstruction(const FTransform & Transform)
   RefreshInteractive();
 }
 
-void AInteractiveObject::PostInitProperties()
+void AInteractiveObject::PostInitializeComponents()
 {
-  Super::PostInitProperties();
+  Super::PostInitializeComponents();
 
   for (FBar& Stat : InteractiveDataCore.Stats)
   {

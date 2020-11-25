@@ -6,7 +6,6 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GenericPlatform/GenericPlatformMath.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
-#include "Workshop/Types/Effects/AdvantageEffectData.h"
 #include "Workshop/Types/Effects/ChangeStatEffectData.h"
 #include "BuildAbility.generated.h"
 

@@ -25,6 +25,7 @@ FString UParseData::CollectAccumulatedEffects(AInteractiveObject* TargetObject)
 
 void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Context)
 {
+  // BRING CUSTOMIZATION VALUES TO EDITOR
   const FBar& UsedBar = BarWidget->BarToDraw;
 
   FVector2D Size = USlateBlueprintLibrary::GetLocalSize(BarWidget->BarImage->GetPaintSpaceGeometry());
@@ -46,7 +47,7 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
       ZonePosition,
       ZoneSize,
       BarWidget->ActiveSlotsBrush,
-      BarWidget->WidgetColor
+      FLinearColor(255, 255, 255)
     );
 
     UWidgetBlueprintLibrary::DrawTextFormatted(
