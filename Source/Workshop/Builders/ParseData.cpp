@@ -30,7 +30,7 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
   FVector2D Size = USlateBlueprintLibrary::GetLocalSize(BarWidget->BarImage->GetPaintSpaceGeometry());
   FVector2D Position = USlateBlueprintLibrary::GetLocalTopLeft(BarWidget->BarImage->GetPaintSpaceGeometry());
 
-  for (size_t LimitIndex = 1; LimitIndex < UsedBar.BarLimits.Num() - 1; LimitIndex += 2)
+  for (int LimitIndex = 1; LimitIndex < UsedBar.BarLimits.Num() - 1; LimitIndex += 2)
   {
     // Odd indexes match the starts of active zones
     // Even indexes match the ends
