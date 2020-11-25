@@ -51,19 +51,6 @@ void AInteractiveCharacter::PostInitProperties()
   {
     UE_LOG(LogTemp, Error, TEXT("%d animation id (IdleAnimation) must be set"), IdleAnimation);
   }
-
-#ifdef WITH_EDITOR
-  check(CharacterDataCore.CharacterStats.Num() == CharacterIntegerStats);
-
-  //Check if any of already used stat IDs are met.
-  for (TTuple<int32, FBar>& NecessaryStat : InteractiveDataCore.IntegerStats)
-  {
-    if (NecessaryStat.Get<0>() >= 0 && NecessaryStat.Get<0>() < CharacterIntegerStats)
-    {
-      UE_LOG(LogTemp, Error, TEXT("Stat IDs from 0 to %d are allocated and can't be used!"), CharacterIntegerStats - 1);
-    }
-  }
-#endif
 }
 
 void AInteractiveCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent)
@@ -90,8 +77,8 @@ void AInteractiveCharacter::PickedAsCentral()
   if (AbilitiesWidget)
   {
     AbilitiesWidget->FillAbilitySlots(Abilities, MainManager);
-    AbilitiesWidget->FillBarSlots(CharacterDataCore.CharacterStats);
-    // AbilitiesWidget->DrawBars(...)
+    AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats);
+
     AbilitiesWidget->ShowAbilitySlots();
     AbilitiesWidget->ShowBarsSlots();
   }
@@ -140,7 +127,7 @@ void AInteractiveCharacter::RefreshInteractive()
   // ----------------- //
   // Refresh animation //
   // ----------------- //
-  if (!CharacterDataCore.AnimationsMap.Find(IdleAnimation))
+  if (!CharacterDataCore.AnimationsMap.Find(IdleAnimation) || !CharacterDataCore.AnimationsMap.Find(ExhaustAnimation))
   {
     return;
   }
@@ -205,7 +192,7 @@ void AInteractiveCharacter::ClearCentralAbility()
 
 void AInteractiveCharacter::ResolveCharacterActions()
 {
-  if (!CentralAbility)
+  if (!CentralAbility || CharacterDataCore.bIsExhausted)
   {
     return;
   }
@@ -218,18 +205,26 @@ void AInteractiveCharacter::ResolveCharacterActions()
 
 void AInteractiveCharacter::UpdateCharacterStatus()
 {
-  size_t StatIndex = 0;
-  for (uint8 StatusMask = 1; StatIndex < 8; StatIndex++)
+  size_t ActiveBarsCounter = 0;
+  for (FBar& Stat : InteractiveDataCore.Stats)
   {
-    if (CharacterDataCore.CharacterStats[StatIndex].IsActive())
-    {
-      CharacterDataCore.CharacterStatus |= StatusMask;
-    }
-    else
-    {
-      CharacterDataCore.CharacterStatus &= ~StatusMask;
-    }
-
-    StatusMask = StatusMask << 1;
+    ActiveBarsCounter += Stat.bIsActive;
   }
+
+  if (ActiveBarsCounter == InteractiveDataCore.Stats.Num())
+  {
+    // Remove from fight
+    PlayAnimation(ExhaustAnimation);
+    CharacterDataCore.bIsExhausted = true;
+  }
+}
+
+void AInteractiveCharacter::Pick()
+{
+  if (CharacterDataCore.bIsExhausted)
+  {
+    return;
+  }
+
+  Super::Pick();
 }

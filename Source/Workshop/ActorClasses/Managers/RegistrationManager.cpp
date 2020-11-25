@@ -35,17 +35,6 @@ void ARegistrationManager::PostInitProperties()
   {
     CTsSystem->AddCT(CT.Key);
   }
-
-#ifdef WITH_EDITOR
-  //Check if any of already used stat IDs are met.
-  for (TTuple<int32, FString>& NecessaryStat : StatIDToNameMap)
-  {
-    if (NecessaryStat.Get<0>() >= 0 && NecessaryStat.Get<0>() < CharacterIntegerStats)
-    {
-      UE_LOG(LogTemp, Error, TEXT("Stat IDs from 0 to %d are allocated and can't be used!"), CharacterIntegerStats - 1);
-    }
-  }
-#endif
 }
 
 // Find objects with respect to chosen CentralObject.
@@ -63,7 +52,6 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTsWithMask(const
 
   for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num(); ObjectIndex++)
   {
-    //REWORK, remove InteractiveTypeSeparator
     AInteractiveObject* FoundObject = FoundObjects[ObjectIndex];
     int32 AtLeastOneMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & InteractiveTypeSeparator;
     int32 NecessaryMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & ~InteractiveTypeSeparator;

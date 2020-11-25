@@ -14,9 +14,10 @@
 
 // 1.3 Animation
 #define IdleAnimation 1
+#define ExhaustAnimation 2
 
 // 1.4 CharacterStats
-#define CharacterIntegerStats 8
+//#define CharacterIntegerStats 8
 
 // 2. Debug
 // Used for drawing lines, spheres and other shapes.

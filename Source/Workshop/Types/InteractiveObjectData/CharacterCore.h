@@ -19,15 +19,10 @@ struct WORKSHOP_API FCharacterCore
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
   TArray<TSubclassOf<AInteractiveAbility>> AbilitiesClasses;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings", meta = (Bitmask, BitmaskEnum = "ECharacterStatus"))
-  uint8 CharacterStatus = static_cast<uint8>(ECharacterStatus::NoStatus);
-
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "CharacterSettings")
-  TArray<FBar> CharacterStats;
-
   // Map of animations with their integer identifiers.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   TMap<int32, UPaperFlipbook*> AnimationsMap;
 
-  FCharacterCore();
+  UPROPERTY(BlueprintReadOnly)
+  bool bIsExhausted = false;
 };

@@ -81,6 +81,8 @@ public:
 
   virtual void UnpickedAsCentral() override;
 
+  void Pick() override;
+
   // ------------------ //
   // Turn-Based actions //
   // ------------------ //

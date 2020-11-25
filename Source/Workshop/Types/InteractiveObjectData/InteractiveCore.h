@@ -25,13 +25,12 @@ struct WORKSHOP_API FInteractiveCore
   // Object Statistics //
   // ----------------- //
 
-  // Statisctics in form of strings
+  // Name to display.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings")
   FName InteractiveName;
 
-  // Statisctics in form of integers
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings")
-  TMap<int32, FBar> IntegerStats;
+  TArray<FBar> Stats;
 
   // Array of effects which are applied in the current state.
   TMap<ETurnPhase, TArray<UEffectData*>> AccumulatedEffects;

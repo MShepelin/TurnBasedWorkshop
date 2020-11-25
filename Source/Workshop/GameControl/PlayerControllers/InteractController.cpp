@@ -108,7 +108,7 @@ void AInteractController::StartInteract()
 
   AInteractiveCharacter* InteractiveCharacter = Cast<AInteractiveCharacter>(InteractiveObject);
 
-  if (!InteractiveCharacter)
+  if (!InteractiveCharacter || InteractiveCharacter->CharacterDataCore.bIsExhausted)
   {
     return;
   }

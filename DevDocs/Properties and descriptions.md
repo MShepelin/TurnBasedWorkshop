@@ -39,6 +39,3 @@ Here you can find names of used stats and CTs, hyperparameters and other things 
 ##### Code specifics
 
 Channel for InteractiveObjects and their manipulations - ECollisionChannel::ECC_EngineTraceChannel1.
-
-
-

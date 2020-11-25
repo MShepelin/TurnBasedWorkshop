@@ -117,7 +117,7 @@ public:
   bool IsCentralInManager() const;
 
   // Called when player wants to pick this object.
-  UFUNCTION(BlueprintCallable) void Pick();
+  UFUNCTION(BlueprintCallable) virtual void Pick();
 
   // Called when the player wants to pick this object as central (both for view and MainManager).
   UFUNCTION() virtual void PickedAsCentral();

@@ -12,24 +12,14 @@ UChangeStatEffectData::UChangeStatEffectData()
 
 void UChangeStatEffectData::ResolveOn(AInteractiveObject* TargetObject)
 {
-  if (StatID >= 0 && StatID < CharacterIntegerStats)
+  for (FBar& Stat : TargetObject->InteractiveDataCore.Stats)
   {
-    AInteractiveCharacter* TargetCharacter = Cast<AInteractiveCharacter>(TargetObject);
-    check(TargetCharacter);
-
-    check(TargetCharacter->CharacterDataCore.CharacterStats.Num() > StatID);
-    TargetCharacter->CharacterDataCore.CharacterStats[StatID].ChangeBarBy(EffectValue);
-    return;
+    if (Stat.StatID == StatID)
+    {
+      Stat.ChangeBarBy(EffectValue);
+      break;
+    }
   }
-
-  if (TargetObject->InteractiveDataCore.IntegerStats.Find(StatID))
-  {
-    TargetObject->InteractiveDataCore.IntegerStats[StatID].ChangeBarBy(EffectValue);
-  }
-  //else if (bIsForciblyAdded)
-  //{
-  //  TargetObject->InteractiveDataCore.IntegerStats.Add(StatID, EffectValue);
-  //}
 }
 
 FString UChangeStatEffectData::GetInfoString(ARegistrationManager* UsedManager)
