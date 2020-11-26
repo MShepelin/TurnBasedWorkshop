@@ -32,16 +32,19 @@ public:
   // If Effect is ambigous, it will pass from ability to ability as bonus effect.
   // Example: Health +10 can is ambiguous beacause it can be both an effect on a character and
   // bonus effect to another ability.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
-  bool bIsAmbiguous = false;
+
+  // DEPRECATED
+
+  //UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
+  //bool bIsAmbiguous = false;
 
   // If true this effect will affect target regardless of existing target stats.
   // Example: Fire Resistance -10 can be applicable even if target object doesn't have Fire Resistance stat
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
-  bool bIsForciblyAdded = false;
 
-  //++++ make flag mask from all bool variables
-  //++++ add visualisation
+  // DEPRECATED
+
+  //UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
+  //bool bIsForciblyAdded = false;
 
   // Used when duration is nonzero to choose when to resolve effect on object.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")

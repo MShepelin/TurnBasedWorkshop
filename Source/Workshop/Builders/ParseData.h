@@ -21,8 +21,4 @@ class WORKSHOP_API UParseData : public UBlueprintFunctionLibrary
 public:
   UFUNCTION(BlueprintCallable)
   static void DrawBar(const UMixedProgressBar* BarWidget, UPARAM(ref) FPaintContext& Context);
-
-  // Parse information about AccumulatedEffects.
-  //UFUNCTION(BlueprintCallable)
-  //FString CollectAccumulatedEffects(AInteractiveObject* TargetObject);
 };
