@@ -17,7 +17,6 @@ AInteractiveCharacter::AInteractiveCharacter()
   CharacterPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
   CharacterPresentation->SetupAttachment(RootComponent);
   CharacterPresentation->SetRelativeLocation(FVector(0, -1, 0)); // y-order
-  CharacterPresentation->SetLooping(false);
 
   CentralAbilityPositionVisual = CreateDefaultSubobject<UBillboardComponent>(TEXT("CentralAbility"));
   CentralAbilityPositionVisual->SetupAttachment(CollisionBox);
@@ -33,9 +32,9 @@ void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
 
   if (FoundFlipbook)
   {
+    CharacterPresentation->SetLooping(false);
     CharacterPresentation->SetFlipbook(*FoundFlipbook);
-    FPlatformProcess::Sleep(CharacterPresentation->GetFlipbookLength());
-    CharacterPresentation->SetFlipbook(*CharacterDataCore.AnimationsMap.Find(IdleAnimation));
+    CharacterPresentation->OnFinishedPlaying.AddDynamic(this, &AInteractiveCharacter::ResetAnimation);
   }
   else
   {
@@ -132,7 +131,7 @@ void AInteractiveCharacter::RefreshInteractive()
     return;
   }
 
-  CharacterPresentation->SetFlipbook(CharacterDataCore.AnimationsMap[IdleAnimation]);
+  ResetAnimation();
 
   // ----------- //
   // Set y-order //
@@ -226,4 +225,10 @@ void AInteractiveCharacter::Pick()
   }
 
   Super::Pick();
+}
+
+void AInteractiveCharacter::ResetAnimation()
+{
+  CharacterPresentation->SetLooping(true);
+  CharacterPresentation->SetFlipbook(*CharacterDataCore.AnimationsMap.Find(IdleAnimation));
 }

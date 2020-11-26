@@ -82,16 +82,6 @@ void ATurnBasedManager::NextPhase()
 
   if (CurrentTurnPhase == ETurnPhase::Start)
   {
-    // All abilities should be updated
-    for (AInteractiveObject* Object : GetAllConnectedObjects())
-    {
-      AInteractiveAbility* Ability = Cast<AInteractiveAbility>(Object);
-      if (Ability)
-      {
-        Ability->UpdateEffects();
-      }
-    }
-
     // Change current controller
     JoinedControllers[CurrentControllerIndex]->TurnIsOutOfControl.ExecuteIfBound();
     

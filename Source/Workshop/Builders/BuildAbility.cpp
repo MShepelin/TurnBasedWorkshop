@@ -30,5 +30,7 @@ AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* Tar
     }
   }
 
+  TargetObject->UpdateCharacterStatus();
+
   return TargetObject;
 }

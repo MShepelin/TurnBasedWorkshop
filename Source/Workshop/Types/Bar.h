@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Misc/ScopeLock.h"
 #include "Bar.generated.h"
 
 USTRUCT(BlueprintType)
@@ -24,7 +25,15 @@ struct WORKSHOP_API FBar
   UPROPERTY(BlueprintReadOnly) float CurrentValue;
   UPROPERTY(BlueprintReadOnly) bool bIsActive;
 
+  FCriticalSection Change;
+
   void ChangeBarBy(float Value);
   void ResetBar();
   bool IsActive() const;
+
+  FBar();
+
+  FBar(const FBar & AnotherBar);
+
+  FBar& operator=(const FBar & AnotherBar);
 };

@@ -159,6 +159,9 @@ public:
   // Others //
   // ------ //
 
+  UFUNCTION(BlueprintCallable)
+  virtual void UpdateCharacterStatus(); //RENAME
+
   // Called to refresh appearance.
   UFUNCTION() virtual void RefreshInteractive();
 

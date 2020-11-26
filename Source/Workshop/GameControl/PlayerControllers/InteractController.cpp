@@ -4,6 +4,7 @@
 #include "Workshop/ActorClasses/Managers/TurnBasedManager.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
+#include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
 #include "Workshop/ActorClasses/CameraWork/SpryCamera.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/UObjectBaseUtility.h"
@@ -264,9 +265,10 @@ void AInteractController::PlayerWantsToChangePhase()
 {
   if (!bTurnIsControlled)
   {
+    CantPickCallback();
     return;
   }
-
+  
   bTurnIsControlled = false;
 
   ATurnBasedManager* Manager;
@@ -285,21 +287,34 @@ void AInteractController::PlayerWantsToChangePhase()
       Manager->GetCentralObject()->UnpickedAsCentral();
     }
 
-    if (ResolveThread)
-    {
-      // PlayerWantsToChangePhase can't be called until ResolveThread changes bTurnIsControlled. 
-      ResolveThread->Kill(false);
-      ResolveRunnable.reset();
-    }
+    //if (ResolveThread)
+    //{
+     // // PlayerWantsToChangePhase can't be called until ResolveThread changes bTurnIsControlled. 
+    //  ResolveThread->Kill(false);
+    //  ResolveRunnable.reset();
+    //}
 
-    ResolveRunnable = std::make_shared<FCharactersResolve>(this);
-    ResolveThread = FRunnableThread::Create(ResolveRunnable.get(), TEXT("Characters Resolvement"));
+    //ResolveRunnable = std::make_shared<FCharactersResolve>(this);
+    //ResolveThread = FRunnableThread::Create(ResolveRunnable.get(), TEXT("Characters Resolvement"));
 
-    Manager->NextPhase();
-    UpdatePhaseInfo();
+    ResolveCharactersAbilities();
+
+    //Manager->NextPhase();
+    //UpdatePhaseInfo();
 
     // bTurnIsControlled changed by the thread
-    return;
+    //return;
+  }
+
+  if (Manager->GetPhase() == ETurnPhase::End)
+  {
+    for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
+    {
+      for (AInteractiveAbility* Ability : PlacableCharacter->Abilities)
+      {
+        Ability->UpdateEffects();
+      }
+    }
   }
 
   Manager->NextPhase();

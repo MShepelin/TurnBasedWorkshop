@@ -70,8 +70,13 @@ public:
   // Animations //
   // ---------- //
 
-  // Play animation by its ID
+  // Play animation by its ID.
+  UFUNCTION(BlueprintCallable)
   void PlayAnimation(int32 AnimationID);
+
+  // Return to playing default animation.
+  UFUNCTION(BlueprintCallable)
+  void ResetAnimation();
 
   // ----------------------- //
   // Connection with Manager //
@@ -91,8 +96,7 @@ public:
   void ResolveCharacterActions();
 
   // Checks stats and apply conditions based on their values.
-  UFUNCTION(BlueprintCallable)
-  void UpdateCharacterStatus();
+  void UpdateCharacterStatus() override; // RENAME!
 
   // ----------------- //
   // UI with abilities //

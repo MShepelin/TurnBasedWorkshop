@@ -5,6 +5,7 @@
 
 void FBar::ChangeBarBy(float Value)
 {
+  FScopeLock Lock(&Change);
   CurrentValue = FMath::Clamp(CurrentValue + Value, 0.f, 1.f);
   
   check(BarLimits.Num());
@@ -36,4 +37,29 @@ void FBar::ResetBar()
 bool FBar::IsActive() const
 {
   return bIsActive;
+}
+
+FBar::FBar()
+{
+  
+}
+
+FBar::FBar(const FBar & AnotherBar)
+{
+  BarLimits = AnotherBar.BarLimits;
+  DefaultValue = AnotherBar.DefaultValue;
+  StatID = AnotherBar.StatID;
+  CurrentValue = AnotherBar.CurrentValue;
+  bIsActive = AnotherBar.bIsActive;
+}
+
+FBar& FBar::operator=(const FBar & AnotherBar)
+{
+  BarLimits = AnotherBar.BarLimits;
+  DefaultValue = AnotherBar.DefaultValue;
+  StatID = AnotherBar.StatID;
+  CurrentValue = AnotherBar.CurrentValue;
+  bIsActive = AnotherBar.bIsActive;
+
+  return *this;
 }

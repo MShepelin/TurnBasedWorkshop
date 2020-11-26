@@ -114,7 +114,7 @@ int32 AInteractiveAbility::GetTargetTypeMask() const
   return AbilityDataCore.TargetTypeMask;
 }
 
-void AInteractiveAbility::UpdateEffects() //ETurnPhase TurnPhase)
+void AInteractiveAbility::UpdateEffects()
 {
   for (int EffectIndex = AbilityDataCore.UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
   {

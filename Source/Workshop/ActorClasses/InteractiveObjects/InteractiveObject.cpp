@@ -239,3 +239,8 @@ void AInteractiveObject::RefreshInteractive()
   CollisionBox->SetRelativeLocation(FVector(
     BoxLocation[0], MainSpriteYOrder, BoxLocation[2]));
 }
+
+void AInteractiveObject::UpdateCharacterStatus()
+{
+
+}
