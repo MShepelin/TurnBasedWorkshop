@@ -162,7 +162,6 @@ void AInteractiveCharacter::RefreshInteractive()
       GetWorld()->SpawnActor<AInteractiveAbility>(
         AbilityClass, HiddenLocation, FRotator(0, 0, 0));
     AbilityObject->SetCharacterOwner(this);
-    //AbilityObject->SetActorHiddenInGame(true);
     Abilities.Add(AbilityObject);
   }
 }

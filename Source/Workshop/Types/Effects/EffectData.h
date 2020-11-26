@@ -47,8 +47,8 @@ public:
   //bool bIsForciblyAdded = false;
 
   // Used when duration is nonzero to choose when to resolve effect on object.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
-  ETurnPhase TurnPhaseToResolve = ETurnPhase::Start;
+  // UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "EffectSettings")
+  // ETurnPhase TurnPhaseToResolve = ETurnPhase::Start;
 
   UEffectData();
 

@@ -95,6 +95,7 @@ private:
   using iterator = typename std::initializer_list<CT>::iterator;
 
   TMap<CT, std::shared_ptr<NodeType>> CTToNodeMap;
+  TArray<std::weak_ptr<NodeType>> ObjectNodes;
 
 public:
   void AddCT(CT CTToAdd)
@@ -129,6 +130,8 @@ public:
     std::shared_ptr<NodeType>& ObjectNode = ObjectToAdd->GetNodeForCT();
     ObjectNode = std::make_shared<NodeType>();
     ObjectNode->Origin = ObjectToAdd;
+
+    ObjectNodes.Add(ObjectNode);
 
     for (CT CTOfObject : *(ObjectToAdd->GetCTs()))
     {
@@ -189,12 +192,22 @@ public:
     return FoundNodes;
   }
 
-  TArray<Object*> GetAllObjects() const
+  TArray<Object*> GetAllObjects()
   {
     TArray<Object*> AllObjects;
-    for (const TPair<CT, std::shared_ptr<NodeType>>& MapPair : CTToNodeMap)
+    
+    size_t Index = 0;
+    while (Index < ObjectNodes.Num())
     {
-      AllObjects.Add(MapPair.Value->Origin);
+      if (ObjectNodes[Index].expired())
+      {
+        ObjectNodes.RemoveAtSwap(Index);
+      }
+      else
+      {
+        AllObjects.Add(ObjectNodes[Index].lock()->Origin);
+        Index++;
+      }
     }
 
     return AllObjects;

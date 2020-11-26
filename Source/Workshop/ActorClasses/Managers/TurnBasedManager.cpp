@@ -5,6 +5,7 @@
 #include "Components/TextRenderComponent.h"
 #include "Workshop/GameControl/GameModes/FightGameMode.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
+#include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
 
 ATurnBasedManager::ATurnBasedManager()
 {
@@ -79,10 +80,18 @@ void ATurnBasedManager::NextPhase()
     CurrentTurnPhase = static_cast<ETurnPhase>(static_cast<uint8>(CurrentTurnPhase) + 1);
   }
 
-  switch (CurrentTurnPhase)
+  if (CurrentTurnPhase == ETurnPhase::Start)
   {
-  case ETurnPhase::Start:
-  {
+    // All abilities should be updated
+    for (AInteractiveObject* Object : GetAllConnectedObjects())
+    {
+      AInteractiveAbility* Ability = Cast<AInteractiveAbility>(Object);
+      if (Ability)
+      {
+        Ability->UpdateEffects();
+      }
+    }
+
     // Change current controller
     JoinedControllers[CurrentControllerIndex]->TurnIsOutOfControl.ExecuteIfBound();
     
@@ -93,10 +102,6 @@ void ATurnBasedManager::NextPhase()
     }
 
     JoinedControllers[CurrentControllerIndex]->TurnIsTakenUnderControl.ExecuteIfBound();
-    break;
-  }
-  default:
-    break;
   }
 }
 

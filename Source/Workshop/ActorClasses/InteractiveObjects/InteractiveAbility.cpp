@@ -114,16 +114,11 @@ int32 AInteractiveAbility::GetTargetTypeMask() const
   return AbilityDataCore.TargetTypeMask;
 }
 
-void AInteractiveAbility::UpdateEffects(ETurnPhase TurnPhase)
+void AInteractiveAbility::UpdateEffects() //ETurnPhase TurnPhase)
 {
-  for (size_t EffectIndex = AbilityDataCore.UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
+  for (int EffectIndex = AbilityDataCore.UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
   {
     UEffectData* ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
-
-    if (ChosenEffect->TurnPhaseToResolve != TurnPhase)
-    {
-      continue;
-    }
 
     if (!ChosenEffect->bIsBonusEffect)
     {
