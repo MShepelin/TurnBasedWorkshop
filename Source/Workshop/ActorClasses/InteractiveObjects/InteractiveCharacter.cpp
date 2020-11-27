@@ -29,12 +29,20 @@ AInteractiveCharacter::AInteractiveCharacter()
 void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
 {
   UPaperFlipbook** FoundFlipbook = CharacterDataCore.AnimationsMap.Find(AnimationId);
-
+  
   if (FoundFlipbook)
   {
+    // Temporary fix:
+    if (AnimationId == ExhaustAnimation)
+    {
+      CharacterPresentation->SetLooping(true);
+      CharacterPresentation->SetFlipbook(*FoundFlipbook);
+      return;
+    }
+
     CharacterPresentation->SetLooping(false);
     CharacterPresentation->SetFlipbook(*FoundFlipbook);
-    CharacterPresentation->OnFinishedPlaying.AddDynamic(this, &AInteractiveCharacter::ResetAnimation);
+    FPlatformProcess::Sleep(CharacterPresentation->GetFlipbookLength());
   }
   else
   {
@@ -192,21 +200,26 @@ void AInteractiveCharacter::ResolveCharacterActions()
 {
   if (!CentralAbility || CharacterDataCore.bIsExhausted)
   {
+    if (!CharacterDataCore.bIsExhausted)
+      UpdateCharacterStatus();
     return;
   }
 
   //++++ add movement
   //ClearCentralAbility();
   CentralAbility->ResolveAbility();
+  UpdateCharacterStatus();
   //++++ add movement
 }
 
 void AInteractiveCharacter::UpdateCharacterStatus()
 {
+  ResetAnimation();
   size_t ActiveBarsCounter = 0;
-  for (FBar& Stat : InteractiveDataCore.Stats)
+  for (FBar& Stat : InteractiveDataCore.GetStats())
   {
-    ActiveBarsCounter += Stat.bIsActive;
+    if (Stat.bIsActive)
+      ActiveBarsCounter += 1;
   }
 
   if (ActiveBarsCounter == InteractiveDataCore.Stats.Num())

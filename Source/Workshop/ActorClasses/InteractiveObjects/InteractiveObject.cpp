@@ -210,6 +210,7 @@ void AInteractiveObject::Pick()
   }
 }
 
+/*
 void AInteractiveObject::ResolveAccumulatedEffects(ETurnPhase TurnPhase)
 {
   for (size_t EffectIndex = 0; EffectIndex < InteractiveDataCore.AccumulatedEffects[TurnPhase].Num(); EffectIndex++)
@@ -226,7 +227,7 @@ void AInteractiveObject::ResolveAccumulatedEffects(ETurnPhase TurnPhase)
       InteractiveDataCore.AccumulatedEffects[TurnPhase].Pop();
     }
   }
-}
+}*/
 
 void AInteractiveObject::RefreshInteractive()
 {

@@ -6,7 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GenericPlatform/GenericPlatformMath.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
-#include "Workshop/Types/Effects/ChangeStatEffectData.h"
+#include "Workshop/Types/Effects/EffectData.h"
 #include "Workshop/UI/MixedProgressBar.h"
 #include "Components/RichTextBlock.h"
 #include "ParseData.generated.h"

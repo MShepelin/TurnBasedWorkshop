@@ -166,7 +166,7 @@ public:
   UFUNCTION() virtual void RefreshInteractive();
 
   // Resolve effects depeding on their resolve phase.
-  UFUNCTION() void ResolveAccumulatedEffects(ETurnPhase TurnPhase);
+  // UFUNCTION() void ResolveAccumulatedEffects(ETurnPhase TurnPhase);
 
   // Interactive objects often exchange information, 
   // so friend status is used for optimisation and code clearness.

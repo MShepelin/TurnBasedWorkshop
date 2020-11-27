@@ -23,14 +23,14 @@ void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrati
 
   FString CollectedEffectsInfo = "";
 
-  for (UEffectData* Effect : NewAbility->AbilityDataCore.UsedEffects)
+  for (FEffectData Effect : NewAbility->AbilityDataCore.UsedEffects)
   {
-    if (Effect->bIsBonusEffect)
+    if (Effect.bIsBonusEffect)
     {
       CollectedEffectsInfo += "<BonusEffect>";
     }
-    CollectedEffectsInfo += Effect->GetInfoString(UsedManager);
-    if (Effect->bIsBonusEffect)
+    CollectedEffectsInfo += Effect.GetInfoString(UsedManager);
+    if (Effect.bIsBonusEffect)
     {
       CollectedEffectsInfo += "</>";
     }

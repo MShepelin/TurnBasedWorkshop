@@ -50,7 +50,7 @@ FBar::FBar(const FBar & AnotherBar)
   DefaultValue = AnotherBar.DefaultValue;
   StatID = AnotherBar.StatID;
   CurrentValue = AnotherBar.CurrentValue;
-  bIsActive = AnotherBar.bIsActive;
+  bIsActive = (AnotherBar.bIsActive) ? true : false;
 }
 
 FBar& FBar::operator=(const FBar & AnotherBar)
@@ -59,7 +59,7 @@ FBar& FBar::operator=(const FBar & AnotherBar)
   DefaultValue = AnotherBar.DefaultValue;
   StatID = AnotherBar.StatID;
   CurrentValue = AnotherBar.CurrentValue;
-  bIsActive = AnotherBar.bIsActive;
+  bIsActive = (AnotherBar.bIsActive) ? true : false;
 
   return *this;
 }

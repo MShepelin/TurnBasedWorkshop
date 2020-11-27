@@ -9,6 +9,7 @@
 #include "Workshop/Types/Components/TurnBasedComponent.h"
 #include "HAL/Runnable.h"
 #include <memory>
+#include "HAL/ThreadSafeBool.h"
 #include "InteractController.generated.h"
 
 class ATurnBasedManager;
@@ -35,8 +36,7 @@ protected:
   FRunnableThread* ResolveThread = nullptr;
   
 public:
-  // WARNING: not thread-safe => REWORK
-  UPROPERTY() bool bTurnIsControlled = false; //++++ change to private
+  FThreadSafeBool bTurnIsControlled = false; //++++ change to private
   UPROPERTY() bool bCanPick = false; //++++ change to private
 
 protected:

@@ -38,7 +38,12 @@ void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* Target
 
 void AInteractiveAbility::ResolveAbility()
 {
-  check(CharacterOwner != nullptr)
+  check(CharacterOwner != nullptr);
+
+  for (FEffectData Effect : AbilityDataCore.UsedEffects)
+  {
+    AbilityDataCore.EffectsToResolve.Enqueue(Effect);
+  }
 
   CharacterOwner->PlayAnimation(AbilityDataCore.AbilityAnimationId);
   
@@ -114,28 +119,11 @@ int32 AInteractiveAbility::GetTargetTypeMask() const
   return AbilityDataCore.TargetTypeMask;
 }
 
+/*
 void AInteractiveAbility::UpdateEffects()
 {
-  for (int EffectIndex = AbilityDataCore.UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
-  {
-    UEffectData* ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
-
-    if (!ChosenEffect->bIsBonusEffect)
-    {
-      // BonusEffects always go after basic effects.
-      break;
-    }
-
-    ChosenEffect->DecreaseDuration();
-
-    // Remove effect if it is no longer present
-    if (!ChosenEffect->Duration)
-    {
-      AbilityDataCore.UsedEffects.Swap(EffectIndex, AbilityDataCore.UsedEffects.Num() - 1);
-      AbilityDataCore.UsedEffects.Pop();
-    }
-  }
-}
+  
+}*/
 
 void AInteractiveAbility::CenterInCharacterOwner()
 {
@@ -146,4 +134,27 @@ void AInteractiveAbility::CenterInCharacterOwner()
 UTexture2D* AInteractiveAbility::GetIconUI() const
 {
   return AbilityDataCore.IconUI;
+}
+
+void AInteractiveAbility::UpdateCharacterStatus()
+{
+  // Receive additional effects.
+  while (!AbilityDataCore.EffectsToReceive.IsEmpty())
+  {
+    AbilityDataCore.UsedEffects.Add(FEffectData());
+    AbilityDataCore.EffectsToReceive.Dequeue(AbilityDataCore.UsedEffects.Last());
+  }
+
+  for (int EffectIndex = AbilityDataCore.UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
+  {
+    FEffectData& ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
+
+    // BonusEffects always go after basic effects.
+    if (!ChosenEffect.bIsBonusEffect)
+      break;
+
+    // Remove effect if it is no longer present
+    if (!ChosenEffect.DecreaseDuration())
+      AbilityDataCore.UsedEffects.RemoveAtSwap(EffectIndex);
+  }
 }

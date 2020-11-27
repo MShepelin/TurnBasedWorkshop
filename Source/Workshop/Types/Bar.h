@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Misc/ScopeLock.h"
+#include "HAL/ThreadSafeBool.h"
 #include "Bar.generated.h"
 
 USTRUCT(BlueprintType)
@@ -23,7 +24,7 @@ struct WORKSHOP_API FBar
 
   UPROPERTY(BlueprintReadOnly) int32 StatID;
   UPROPERTY(BlueprintReadOnly) float CurrentValue;
-  UPROPERTY(BlueprintReadOnly) bool bIsActive;
+  FThreadSafeBool bIsActive;
 
   FCriticalSection Change;
 

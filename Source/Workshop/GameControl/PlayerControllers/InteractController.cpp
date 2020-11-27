@@ -287,23 +287,21 @@ void AInteractController::PlayerWantsToChangePhase()
       Manager->GetCentralObject()->UnpickedAsCentral();
     }
 
-    //if (ResolveThread)
-    //{
-     // // PlayerWantsToChangePhase can't be called until ResolveThread changes bTurnIsControlled. 
-    //  ResolveThread->Kill(false);
-    //  ResolveRunnable.reset();
-    //}
+    if (ResolveThread)
+    {
+      // PlayerWantsToChangePhase can't be called until ResolveThread changes bTurnIsControlled. 
+      ResolveThread->Kill(false);
+      ResolveRunnable.reset();
+    }
 
-    //ResolveRunnable = std::make_shared<FCharactersResolve>(this);
-    //ResolveThread = FRunnableThread::Create(ResolveRunnable.get(), TEXT("Characters Resolvement"));
+    ResolveRunnable = std::make_shared<FCharactersResolve>(this);
+    ResolveThread = FRunnableThread::Create(ResolveRunnable.get(), TEXT("Characters Resolvement"));
 
-    ResolveCharactersAbilities();
+    Manager->NextPhase();
+    UpdatePhaseInfo();
 
-    //Manager->NextPhase();
-    //UpdatePhaseInfo();
-
-    // bTurnIsControlled changed by the thread
-    //return;
+    //bTurnIsControlled changed by the thread
+    return;
   }
 
   if (Manager->GetPhase() == ETurnPhase::End)
@@ -312,7 +310,7 @@ void AInteractController::PlayerWantsToChangePhase()
     {
       for (AInteractiveAbility* Ability : PlacableCharacter->Abilities)
       {
-        Ability->UpdateEffects();
+        Ability->UpdateCharacterStatus();
       }
     }
   }

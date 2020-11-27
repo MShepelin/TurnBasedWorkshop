@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "../Effects/EffectData.h"
+#include "../InteractiveType.h"
 #include "PaperFlipbookComponent.h"
+#include "Containers/Queue.h"
 #include "AbilityCore.generated.h"
 
 USTRUCT(BlueprintType)
@@ -21,8 +23,11 @@ struct WORKSHOP_API FAbilityCore
   int32 AbilityAnimationId;
 
   // This array collectes all effects used in ability.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Instanced, Category = "AbilitySettings")
-  TArray<UEffectData*> UsedEffects;
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings")
+  TArray<FEffectData> UsedEffects;
+
+  TQueue<FEffectData> EffectsToResolve;
+  TQueue<FEffectData> EffectsToReceive;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings")
   TArray<int32> CTsToAffect;
@@ -46,4 +51,6 @@ struct WORKSHOP_API FAbilityCore
   // Icon of Ability on scene.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   UPaperFlipbook* IconScene;
+
+  FAbilityCore& operator=(const FAbilityCore& AnotherCore);
 };

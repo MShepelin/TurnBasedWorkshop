@@ -11,26 +11,37 @@ AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* Tar
     return TargetObject;
   }
 
-  for (UEffectData* Effect : Ability->AbilityDataCore.UsedEffects)
+  if (TargetObject->GetInteractiveType() & static_cast<int32>(EInteractiveType::Ability))
   {
-    // Apply instant effect
-    if (!Effect->Duration)
+    AInteractiveAbility* TargetAbility = Cast<AInteractiveAbility>(TargetObject);
+    while (!Ability->AbilityDataCore.EffectsToResolve.IsEmpty())
     {
-      Effect->ResolveOn(TargetObject);
-      continue;
+      FEffectData Effect;
+      Ability->AbilityDataCore.EffectsToResolve.Dequeue(Effect);
+      Effect.bIsBonusEffect = true;
+      TargetAbility->AbilityDataCore.EffectsToResolve.Enqueue(Effect);
+      TargetAbility->AbilityDataCore.EffectsToReceive.Enqueue(Effect);
     }
 
-    // Transfer temporary effect
-    UEffectData* DublicatedEffect = DuplicateObject(Effect, TargetObject);
-    DublicatedEffect->bIsBonusEffect = true;
+    TargetObject->UpdateCharacterStatus();
+    return TargetObject;
+  }
 
-    if (TargetObject->GetInteractiveType() & static_cast<int32>(EInteractiveType::Ability))
+  while (!Ability->AbilityDataCore.EffectsToResolve.IsEmpty())
+  {
+    FEffectData Effect;
+    Ability->AbilityDataCore.EffectsToResolve.Dequeue(Effect);
+
+    for (FBar& Stat : TargetObject->InteractiveDataCore.Stats)
     {
-      Cast<AInteractiveAbility>(TargetObject)->AbilityDataCore.UsedEffects.Add(DublicatedEffect);
+      if (Stat.StatID == Effect.StatID)
+      {
+        Stat.ChangeBarBy(Effect.EffectValue);
+        break;
+      }
     }
   }
 
   TargetObject->UpdateCharacterStatus();
-
   return TargetObject;
 }

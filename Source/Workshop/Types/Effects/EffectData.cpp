@@ -2,22 +2,17 @@
 
 #include "EffectData.h"
 
-UEffectData::UEffectData()
-{
-
-}
-
-void UEffectData::DecreaseDuration(int32 OnValue)
+int32 FEffectData::DecreaseDuration(int32 OnValue)
 {
   if (Duration == -1)
   {
-    return;
+    return Duration;
   }
 
   if (OnValue < 0)
   {
     UE_LOG(LogTemp, Error, TEXT("Can't use negative value here!!!"));
-    return;
+    return Duration;
   }
 
   if (OnValue >= Duration)
@@ -28,29 +23,27 @@ void UEffectData::DecreaseDuration(int32 OnValue)
   {
     Duration -= OnValue;
   }
+
+  return Duration;
 }
 
-void UEffectData::DecreaseDuration()
+int32 FEffectData::DecreaseDuration()
 {
-  DecreaseDuration(1);
+  return DecreaseDuration(1);
 }
 
-void UEffectData::ResolveOn(AInteractiveObject* TargetObject)
+FString FEffectData::GetInfoString(ARegistrationManager* UsedManager)
 {
-
-}
-
-FString UEffectData::GetInfoString(ARegistrationManager* UsedManager)
-{
-  if (!Duration)
-  {
-    return "";
-  }
+  FString InfoString = UsedManager->GetStatNameByID(StatID) + " " + ((EffectValue > 0) ? "+" : "") + " " + FString::FromInt(EffectValue);
 
   if (Duration == -1)
   {
-    return "(inf)";
+    InfoString += "(inf)";
+  }
+  else if (Duration)
+  {
+    InfoString += "(" + FString::FromInt(Duration) + ")";
   }
 
-  return "(" + FString::FromInt(Duration) + ")";
+  return InfoString;
 }

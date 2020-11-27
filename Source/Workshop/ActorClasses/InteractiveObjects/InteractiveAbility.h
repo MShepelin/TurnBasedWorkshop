@@ -84,8 +84,8 @@ public:
   void ResolveAbility();
 
   // Decrease duration of temporary effects depending on their resolve phase.
-  UFUNCTION(BlueprintCallable)
-  void UpdateEffects();
+  //UFUNCTION(BlueprintCallable)
+  //void UpdateEffects();
 
   // ------------------- //
   // Ability's variables //
@@ -98,6 +98,8 @@ public:
   // ------ //
   // Others //
   // ------ //
+
+  void UpdateCharacterStatus() override;
 
   // REMAKE
   // virtual FString GatherInformation() const override;

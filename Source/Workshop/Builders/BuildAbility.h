@@ -6,9 +6,8 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GenericPlatform/GenericPlatformMath.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
-#include "Workshop/Types/Effects/ChangeStatEffectData.h"
+#include "Workshop/Types/Effects/EffectData.h"
 #include "BuildAbility.generated.h"
-
 
 // Functions from UBuildAbility should be added to CustomEffect 
 // of AInteractiveAbility to implement needed gameplay.
