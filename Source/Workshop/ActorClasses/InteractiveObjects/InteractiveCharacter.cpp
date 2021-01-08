@@ -17,6 +17,7 @@ AInteractiveCharacter::AInteractiveCharacter()
   CharacterPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
   CharacterPresentation->SetupAttachment(RootComponent);
   CharacterPresentation->SetRelativeLocation(FVector(0, -1, 0)); // y-order
+  CharacterPresentation->SetLooping(true);
 
   CentralAbilityPositionVisual = CreateDefaultSubobject<UBillboardComponent>(TEXT("CentralAbility"));
   CentralAbilityPositionVisual->SetupAttachment(CollisionBox);
@@ -26,23 +27,15 @@ AInteractiveCharacter::AInteractiveCharacter()
   CentralAbilityRelativePositionInput = FVector2D(0, ScaledBoxExtent[0]);
 }
 
-void AInteractiveCharacter::PlayAnimation(int32 AnimationId)
+void AInteractiveCharacter::PlayAnimation(int32 AnimationId, bool bWaitUntilEnds)
 {
   UPaperFlipbook** FoundFlipbook = CharacterDataCore.AnimationsMap.Find(AnimationId);
-  
-  if (FoundFlipbook)
+  if (FoundFlipbook && *FoundFlipbook)
   {
-    // Temporary fix:
-    if (AnimationId == ExhaustAnimation)
-    {
-      CharacterPresentation->SetLooping(true);
-      CharacterPresentation->SetFlipbook(*FoundFlipbook);
-      return;
-    }
+    CharacterDataCore.AnimationQueue.Enqueue(*FoundFlipbook);
 
-    CharacterPresentation->SetLooping(false);
-    CharacterPresentation->SetFlipbook(*FoundFlipbook);
-    FPlatformProcess::Sleep(CharacterPresentation->GetFlipbookLength());
+    if (bWaitUntilEnds)
+      FPlatformProcess::Sleep((**FoundFlipbook).GetTotalDuration() * SLEEP_MULTIPLIER);
   }
   else
   {
@@ -219,13 +212,12 @@ void AInteractiveCharacter::UpdateCharacterStatus()
   for (FBar& Stat : InteractiveDataCore.GetStats())
   {
     if (Stat.bIsActive)
-      ActiveBarsCounter += 1;
+      ActiveBarsCounter++;
   }
 
   if (ActiveBarsCounter == InteractiveDataCore.Stats.Num())
   {
-    // Remove from fight
-    PlayAnimation(ExhaustAnimation);
+    PlayAnimation(ExhaustAnimation, false);
     CharacterDataCore.bIsExhausted = true;
   }
 }
@@ -242,6 +234,16 @@ void AInteractiveCharacter::Pick()
 
 void AInteractiveCharacter::ResetAnimation()
 {
-  CharacterPresentation->SetLooping(true);
-  CharacterPresentation->SetFlipbook(*CharacterDataCore.AnimationsMap.Find(IdleAnimation));
+  PlayAnimation(IdleAnimation, false);
+}
+
+void AInteractiveCharacter::Tick(float DeltaTime)
+{
+  Super::Tick(DeltaTime);
+
+  UPaperFlipbook* FoundFlipbook = nullptr;
+  while (CharacterDataCore.AnimationQueue.Dequeue(FoundFlipbook)) {};
+
+  if (FoundFlipbook)
+    CharacterPresentation->SetFlipbook(FoundFlipbook);
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PaperSpriteComponent.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperFlipbook.h"
 #include "Workshop/Types/Effects/EffectData.h"
 #include "InteractiveObject.h"
 #include "Components/BoxComponent.h"
@@ -27,8 +28,6 @@ class WORKSHOP_API AInteractiveCharacter : public AInteractiveObject
 	GENERATED_BODY()
   
 protected:
-  //???? add state machine support functions
-
   UPROPERTY(VisibleDefaultsOnly)
   UPaperFlipbookComponent* CharacterPresentation;
 
@@ -66,13 +65,16 @@ public:
 
   virtual void PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent);
 
+  virtual void Tick(float DeltaTime) override;
+
   // ---------- //
   // Animations //
   // ---------- //
 
-  // Play animation by its ID.
+  // Play animation by it's ID thread-safely.
+  // Returns true if ID was found, and false if not.
   UFUNCTION(BlueprintCallable)
-  void PlayAnimation(int32 AnimationID);
+  void PlayAnimation(int32 AnimationId, bool bWaitUntilEnds);
 
   // Return to playing default animation.
   UFUNCTION(BlueprintCallable)

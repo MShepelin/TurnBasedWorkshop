@@ -36,6 +36,7 @@
 #define RayCastLength 1000
 #define AVERAGE_MANAGED_OBJECTS 8
 #define COLLISION_INTERACTIVE ECollisionChannel::ECC_GameTraceChannel1
+#define SLEEP_MULTIPLIER 0.9f
 
 // 4. UI
 #define MaxIconSize 512.0

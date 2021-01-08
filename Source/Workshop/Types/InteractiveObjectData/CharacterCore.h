@@ -7,6 +7,7 @@
 #include "../CharacterStatus.h"
 #include "Workshop/Types/Bar.h"
 #include "HAL/ThreadSafeBool.h"
+#include "PaperFlipbook.h"
 #include "CharacterCore.generated.h"
 
 class AInteractiveAbility;
@@ -24,7 +25,14 @@ struct WORKSHOP_API FCharacterCore
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   TMap<int32, UPaperFlipbook*> AnimationsMap;
 
-  FThreadSafeBool bIsExhausted = false;
+  TQueue<UPaperFlipbook*> AnimationQueue;
+
+  FThreadSafeBool bIsExhausted;
+
+
+  FCharacterCore();
+
+  FCharacterCore(const FCharacterCore& AnotherCore);
 
   FCharacterCore& operator=(const FCharacterCore& AnotherCore);
 };

@@ -374,7 +374,7 @@ FCharactersResolve::FCharactersResolve(AInteractController* Controller) : UsedCo
 
 uint32 FCharactersResolve::Run()
 {
-  UE_LOG(LogTemp, Warning, TEXT("Thread is running"));
+  // UE_LOG(LogTemp, Warning, TEXT("Thread is running"));
   UsedController->ResolveCharactersAbilities();
   UsedController->bTurnIsControlled = true;
   return 0;

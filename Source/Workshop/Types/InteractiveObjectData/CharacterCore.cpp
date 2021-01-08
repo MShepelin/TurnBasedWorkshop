@@ -7,5 +7,18 @@ FCharacterCore& FCharacterCore::operator=(const FCharacterCore& AnotherCore)
 {
   AbilitiesClasses = AnotherCore.AbilitiesClasses;
   AnimationsMap = AnotherCore.AnimationsMap;
+  bIsExhausted.AtomicSet(AnotherCore.bIsExhausted);
   return *this;
+}
+
+FCharacterCore::FCharacterCore()
+{
+  bIsExhausted = false;
+}
+
+FCharacterCore::FCharacterCore(const FCharacterCore& AnotherCore)
+{
+  AbilitiesClasses = AnotherCore.AbilitiesClasses;
+  AnimationsMap = AnotherCore.AnimationsMap;
+  bIsExhausted.AtomicSet(AnotherCore.bIsExhausted);
 }

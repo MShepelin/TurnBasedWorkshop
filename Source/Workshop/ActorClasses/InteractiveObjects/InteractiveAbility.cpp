@@ -47,9 +47,8 @@ void AInteractiveAbility::ResolveAbility()
     AbilityDataCore.EffectsToResolve.Enqueue(Effect);
   }
 
-  CharacterOwner->PlayAnimation(AbilityDataCore.AbilityAnimationId);
-  
-  //++++ add movememt
+  CharacterOwner->PlayAnimation(AbilityDataCore.AbilityAnimationId, true);
+  //++++ add movement
 
   for (AInteractiveObject* DependentObject : InfluencesOn)
   {
