@@ -78,22 +78,16 @@ void AInteractController::ConnectionHappened()
 void AInteractController::StartInteract()
 {
   if (CurrentCamera)
-  {
     CurrentCamera->PlayerPressedClick();
-  }
 
   AActor* ChosenObject = GeneralRayCast();
   if (!ChosenObject)
-  {
     return;
-  }
 
   AInteractiveObject* InteractiveObject = Cast<AInteractiveObject>(ChosenObject);
 
   if (!InteractiveObject)
-  {
     return;
-  }
 
   if (!bCanPick)
   {
@@ -107,23 +101,18 @@ void AInteractController::StartInteract()
     return;
   }
 
+  // If the object is InteractiveCharacter, try to apply swap
   AInteractiveCharacter* InteractiveCharacter = Cast<AInteractiveCharacter>(InteractiveObject);
 
   if (!InteractiveCharacter || InteractiveCharacter->CharacterDataCore.bIsExhausted)
-  {
     return;
-  }
 
-  if (FirstToSwap[0] == nullptr)
-  {
-    FirstToSwap[0] = InteractiveCharacter;
-  }
-  else
+  if (FirstToSwap[0])
   {
     FirstToSwap[1] = InteractiveCharacter;
-     
+
     PlacableCharacters.Swap(PlacableCharacters.Find(FirstToSwap[0]), PlacableCharacters.Find(FirstToSwap[1]));
-      
+
     //++++ add movement
     FTransform FirstTransform = FirstToSwap[0]->GetActorTransform();
     FirstToSwap[0]->SetActorTransform(FirstToSwap[1]->GetActorTransform());
@@ -131,6 +120,10 @@ void AInteractController::StartInteract()
 
     FirstToSwap[0] = FirstToSwap[1] = nullptr;
   }
+  else
+    FirstToSwap[0] = InteractiveCharacter;
+
+  //++++ you can store one pointer in FirstToSwap except of 2
 
   //++++ make two functions: one for rmb, other for lmb, 
   //     so that player can pick just to look info (without target choosing)
