@@ -210,25 +210,6 @@ void AInteractiveObject::Pick()
   }
 }
 
-/*
-void AInteractiveObject::ResolveAccumulatedEffects(ETurnPhase TurnPhase)
-{
-  for (size_t EffectIndex = 0; EffectIndex < InteractiveDataCore.AccumulatedEffects[TurnPhase].Num(); EffectIndex++)
-  {
-    UEffectData* ChosenEffect = InteractiveDataCore.AccumulatedEffects[TurnPhase][EffectIndex];
-
-    ChosenEffect->ResolveOn(this);
-    ChosenEffect->DecreaseDuration();
-
-    // Remove effect if it is no longer present
-    if (!ChosenEffect->Duration)
-    {
-      InteractiveDataCore.AccumulatedEffects[TurnPhase].Swap(EffectIndex, InteractiveDataCore.AccumulatedEffects[TurnPhase].Num() - 1);
-      InteractiveDataCore.AccumulatedEffects[TurnPhase].Pop();
-    }
-  }
-}*/
-
 void AInteractiveObject::RefreshInteractive()
 {
   // Change Y-Extent

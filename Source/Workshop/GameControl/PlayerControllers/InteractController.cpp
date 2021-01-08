@@ -121,7 +121,9 @@ void AInteractController::StartInteract()
     FirstToSwap[0] = FirstToSwap[1] = nullptr;
   }
   else
+  {
     FirstToSwap[0] = InteractiveCharacter;
+  }
 
   //++++ you can store one pointer in FirstToSwap except of 2
 
