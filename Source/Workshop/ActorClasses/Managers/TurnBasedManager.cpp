@@ -102,7 +102,7 @@ void ATurnBasedManager::MakeObjectsReady()
 
   GameMode->FightManager = this;
   GameMode->FightControllers.Sort(
-    [](const TPair<int32, AFightController*>& Left, const TPair<int32, AFightController*>& Right) { return Left.Key < Right.Key; });
+    [](const TPair<int32, AFightAI*>& Left, const TPair<int32, AFightAI*>& Right) { return Left.Key < Right.Key; });
   GameMode->RegisterAllSpawnLocations.Broadcast();
   GameMode->ObjectsReady.Broadcast();
 }
