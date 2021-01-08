@@ -14,25 +14,25 @@ struct WORKSHOP_API FBar
 
   // Sorted array which defines between which values the bar is active.
   // Active and inactive zones alternate, but the first zone is always inactive.
-  // Values are in the range from 0 and 1.
-  // Value 0 and value 1 must be included.
-  UPROPERTY(EditDefaultsOnly, meta = (UIMin="0.0", UIMax="1.0"))
-  TArray<float> BarLimits;
+  // Values are in the range from 0 and 100.
+  // WARNING: Value 0 and value 100 must be included.
+  UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "0", ClampMax = "100"))
+  TArray<int8> BarLimits;
 
   UPROPERTY(EditDefaultsOnly)
-  float DefaultValue = 0;
+  int8 DefaultValue = 0;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
   int32 StatID;
 
-  UPROPERTY(BlueprintReadOnly) 
-  float CurrentValue;
+  UPROPERTY() 
+  int8 CurrentValue;
 
   FThreadSafeBool bIsActive;
 
   FCriticalSection Change;
 
-  void ChangeBarBy(float Value);
+  void ChangeBarBy(int8 Value);
   void ResetBar();
   bool IsActive() const;
 
