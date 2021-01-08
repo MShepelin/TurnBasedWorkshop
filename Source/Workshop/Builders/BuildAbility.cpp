@@ -27,11 +27,9 @@ AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* Tar
     return TargetObject;
   }
 
-  while (!Ability->AbilityDataCore.EffectsToResolve.IsEmpty())
+  FEffectData Effect;
+  while (Ability->AbilityDataCore.EffectsToResolve.Dequeue(Effect))
   {
-    FEffectData Effect;
-    Ability->AbilityDataCore.EffectsToResolve.Dequeue(Effect);
-
     for (FBar& Stat : TargetObject->InteractiveDataCore.Stats)
     {
       if (Stat.StatID == Effect.StatID)

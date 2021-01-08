@@ -22,8 +22,12 @@ struct WORKSHOP_API FBar
   UPROPERTY(EditDefaultsOnly)
   float DefaultValue = 0;
 
-  UPROPERTY(BlueprintReadOnly) int32 StatID;
-  UPROPERTY(BlueprintReadOnly) float CurrentValue;
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+  int32 StatID;
+
+  UPROPERTY(BlueprintReadOnly) 
+  float CurrentValue;
+
   FThreadSafeBool bIsActive;
 
   FCriticalSection Change;
