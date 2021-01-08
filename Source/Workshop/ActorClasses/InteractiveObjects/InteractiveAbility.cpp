@@ -3,6 +3,8 @@
 #include "InteractiveAbility.h"
 #include "Workshop/Builders/BuildAbility.h"
 #include "InteractiveCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Workshop/GameControl/PlayerControllers/InteractController.h"
 
 void AInteractiveAbility::ShowInfluences() const
 {
@@ -95,11 +97,32 @@ void AInteractiveAbility::PickedAsCentral()
 #endif
 
   MainManager->AwakeByCenterObject(FoundObjects);
+
+  // Add list of abilities to the AbilitiesWidget.
+  UAbilitiesWidget* AbilitiesWidget = Cast<AInteractController>(
+    UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetAbilitiesWidget();
+  if (AbilitiesWidget)
+  {
+    AbilitiesWidget->FillAbilitySlots({ this }, MainManager);
+    AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats);
+
+    AbilitiesWidget->ShowAbilitySlots();
+    AbilitiesWidget->ShowBarsSlots();
+  }
 }
 
 void AInteractiveAbility::UnpickedAsCentral()
 {
   Super::UnpickedAsCentral();
+
+  // Remove the ability from AbilitiesWidget.
+  UAbilitiesWidget* AbilitiesWidget = Cast<AInteractController>(
+    UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetAbilitiesWidget();
+  if (AbilitiesWidget)
+  {
+    AbilitiesWidget->HideAbilitySlots();
+    AbilitiesWidget->HideBarsSlots();
+  }
 
   MainManager->PutToSleepManagedObjects(MainManager);
 }
@@ -118,12 +141,6 @@ int32 AInteractiveAbility::GetTargetTypeMask() const
 {
   return AbilityDataCore.TargetTypeMask;
 }
-
-/*
-void AInteractiveAbility::UpdateEffects()
-{
-  
-}*/
 
 void AInteractiveAbility::CenterInCharacterOwner()
 {
