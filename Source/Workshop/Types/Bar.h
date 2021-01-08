@@ -32,7 +32,7 @@ struct WORKSHOP_API FBar
 
   FCriticalSection Change;
 
-  void ChangeBarBy(int8 Value);
+  bool ChangeBarBy(int8 Value);
   void ResetBar();
   bool IsActive() const;
 

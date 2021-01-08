@@ -47,9 +47,9 @@ void AInteractiveCharacter::PostInitProperties()
 {
   Super::PostInitProperties();
 
-  if (!CharacterDataCore.AnimationsMap.Find(IdleAnimation))
+  if (!CharacterDataCore.AnimationsMap.Find(IDLE_ANIMATION_ID))
   {
-    UE_LOG(LogTemp, Error, TEXT("%d animation id (IdleAnimation) must be set"), IdleAnimation);
+    UE_LOG(LogTemp, Error, TEXT("%d animation id (IDLE_ANIMATION_ID) must be set"), IDLE_ANIMATION_ID);
   }
 }
 
@@ -63,7 +63,7 @@ void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
   Super::OnConstruction(Transform);
 
   CentralAbilityRelativePosition = FVector(
-    CentralAbilityRelativePositionInput[0], WidgetComponentYOrder, CentralAbilityRelativePositionInput[1]);
+    CentralAbilityRelativePositionInput[0], WIDGET_Y_ORDER, CentralAbilityRelativePositionInput[1]);
   CentralAbilityPositionVisual->SetRelativeLocation(CentralAbilityRelativePosition);
 }
 
@@ -127,7 +127,7 @@ void AInteractiveCharacter::RefreshInteractive()
   // ----------------- //
   // Refresh animation //
   // ----------------- //
-  if (!CharacterDataCore.AnimationsMap.Find(IdleAnimation) || !CharacterDataCore.AnimationsMap.Find(ExhaustAnimation))
+  if (!CharacterDataCore.AnimationsMap.Find(IDLE_ANIMATION_ID) || !CharacterDataCore.AnimationsMap.Find(EXHAUST_ANIMATION_ID))
   {
     return;
   }
@@ -140,7 +140,7 @@ void AInteractiveCharacter::RefreshInteractive()
 
   FVector PresentationLocation = CharacterPresentation->GetRelativeLocation();
   CharacterPresentation->SetRelativeLocation(FVector(
-    PresentationLocation[0], MainSpriteYOrder, PresentationLocation[2]));
+    PresentationLocation[0], SPRITE_Y_ORDER, PresentationLocation[2]));
 
   // ----------------- //
   // Refresh abilities //
@@ -217,7 +217,7 @@ void AInteractiveCharacter::UpdateCharacterStatus()
 
   if (ActiveBarsCounter == InteractiveDataCore.Stats.Num())
   {
-    PlayAnimation(ExhaustAnimation, false);
+    PlayAnimation(EXHAUST_ANIMATION_ID, false);
     CharacterDataCore.bIsExhausted = true;
   }
 }
@@ -234,7 +234,7 @@ void AInteractiveCharacter::Pick()
 
 void AInteractiveCharacter::ResetAnimation()
 {
-  PlayAnimation(IdleAnimation, false);
+  PlayAnimation(IDLE_ANIMATION_ID, false);
 }
 
 void AInteractiveCharacter::Tick(float DeltaTime)

@@ -8,24 +8,9 @@
 #include "Slate/SlateBrushAsset.h"
 #include "Kismet/KismetMathLibrary.h"
 
-/*
-FString UParseData::CollectAccumulatedEffects(AInteractiveObject* TargetObject)
-{
-  ARegistrationManager* Manager = TargetObject->GetManager();
-
-  FString ParsedString = "";
-  for (TTuple<int32, FBar> IntegerStat : TargetObject->InteractiveDataCore.IntegerStats)
-  {
-    ParsedString += Manager->GetStatNameByID(IntegerStat.Get<0>()) + " " + FString::FromInt(IntegerStat.Get<1>().CurrentValue) + "\n";
-  }
-
-  return ParsedString;
-}
-*/
-
 void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Context)
 {
-  // BRING CUSTOMIZATION VALUES TO EDITOR
+  //++++ BRING CUSTOMIZATION VALUES TO EDITOR
   const FBar& UsedBar = BarWidget->BarToDraw;
 
   FVector2D Size = USlateBlueprintLibrary::GetLocalSize(BarWidget->BarImage->GetPaintSpaceGeometry());

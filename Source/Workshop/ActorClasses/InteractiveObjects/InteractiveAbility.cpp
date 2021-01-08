@@ -91,7 +91,7 @@ void AInteractiveAbility::PickedAsCentral()
   for (AInteractiveObject* FoundObject : FoundObjects)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), FoundObject->GetActorLocation(),
-      DEBUG_COLOR, false, DebugTime);
+      DEBUG_COLOR, false, DEBUG_TIME);
   }
 #endif
 

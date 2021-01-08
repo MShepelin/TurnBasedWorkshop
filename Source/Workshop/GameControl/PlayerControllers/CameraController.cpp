@@ -31,13 +31,13 @@ AActor* ACameraController::GeneralRayCast()
   GetWorld()->LineTraceSingleByChannel(
     Hit,
     CameraLocation,
-    CameraLocation + CameraPawn->GetCameraDirection() * RayCastLength,
+    CameraLocation + CameraPawn->GetCameraDirection() * RAY_CAST_LENGTH,
     COLLISION_INTERACTIVE,
     CollisionParams,
     ResponseParams
   );
 
-  //DrawDebugLine(GetWorld(), CameraLocation, CameraLocation + CameraPawn->GetCameraDirection() * RayCastLength, FColor(0, 255, 0), false, 10);
+  //DrawDebugLine(GetWorld(), CameraLocation, CameraLocation + CameraPawn->GetCameraDirection() * RAY_CAST_LENGTH, FColor(0, 255, 0), false, 10);
 
   return Hit.GetActor();
 }

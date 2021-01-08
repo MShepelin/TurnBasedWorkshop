@@ -35,7 +35,7 @@ void ASpryCamera::OnConstruction(const FTransform & Transform)
   Super::OnConstruction(Transform);
 
   FVector CameraDirection = Camera->GetRelativeRotation().Vector();
-  HiddenLocation = Camera->GetRelativeLocation() - CameraDirection*MaxActorSize;
+  HiddenLocation = Camera->GetRelativeLocation() - CameraDirection * MAX_OBJECT_SIZE;
 }
 
 void ASpryCamera::PossessedBy(AController * NewController)

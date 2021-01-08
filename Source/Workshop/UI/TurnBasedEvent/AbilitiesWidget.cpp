@@ -62,8 +62,8 @@ void UAbilitiesWidget::NativePreConstruct()
     return;
   }
 
-  // Add DefaultNumberOfSlots to vertical box; 
-  for (size_t SlotsIndex = 0; SlotsIndex < DefaultNumberOfSlots; SlotsIndex++)
+  // Add DEFAULT_SLOTS_COUNT to vertical box; 
+  for (size_t SlotsIndex = 0; SlotsIndex < DEFAULT_SLOTS_COUNT; SlotsIndex++)
   {
     AddAbilitySlot();
   }

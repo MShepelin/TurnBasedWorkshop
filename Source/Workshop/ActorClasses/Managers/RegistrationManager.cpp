@@ -47,14 +47,14 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTsWithMask(const
 {
   TArray<AInteractiveObject*> FoundObjects = CTsSystem->FindByCTs(CTsArray, EnoughNumberOfCTs);
 
-  int32 AtLeastOneMask = TargetTypeMask & InteractiveTypeSeparator;
-  int32 NecessaryMask = TargetTypeMask & ~InteractiveTypeSeparator;
+  int32 AtLeastOneMask = TargetTypeMask & INTERACTIVE_TYPE_SEPARATOR_MASK;
+  int32 NecessaryMask = TargetTypeMask & ~INTERACTIVE_TYPE_SEPARATOR_MASK;
 
   for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num(); ObjectIndex++)
   {
     AInteractiveObject* FoundObject = FoundObjects[ObjectIndex];
-    int32 AtLeastOneMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & InteractiveTypeSeparator;
-    int32 NecessaryMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & ~InteractiveTypeSeparator;
+    int32 AtLeastOneMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & INTERACTIVE_TYPE_SEPARATOR_MASK;
+    int32 NecessaryMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & ~INTERACTIVE_TYPE_SEPARATOR_MASK;
 
     // Target must have type included in NecessaryMask's possible types
     if ((AtLeastOneMaskTarget & AtLeastOneMask) && ((NecessaryMaskTarget & NecessaryMask) == NecessaryMaskTarget) && CentralObject != FoundObject)

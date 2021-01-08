@@ -17,7 +17,7 @@ enum class EInteractiveType : int32
   NotPlayerControlled = 16
 };
 
-// In search all bits starting from log(InteractiveTypeSeparator)+1
-// must meet and at least one of first log(InteractiveTypeSeparator)
+// In search all bits starting from log(INTERACTIVE_TYPE_SEPARATOR_MASK)+1
+// must meet and at least one of first log(INTERACTIVE_TYPE_SEPARATOR_MASK)
 
 ENUM_CLASS_FLAGS(EInteractiveType)

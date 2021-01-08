@@ -4,7 +4,7 @@
 #include "Nonblueprintable/GameConstants.h"
 #include "Math/UnrealMathUtility.h"
 
-void FBar::ChangeBarBy(int8 Value)
+bool FBar::ChangeBarBy(int8 Value)
 {
   FScopeLock Lock(&Change);
 
@@ -25,7 +25,7 @@ void FBar::ChangeBarBy(int8 Value)
     (CurrentValue >= BarLimits[MidLimit]) ? LeftLimit = MidLimit : RightLimit = MidLimit;
   }
 
-  bIsActive = (LeftLimit % 2) ? true : false;
+  return (bIsActive = (LeftLimit % 2) ? true : false);
 }
 
 void FBar::ResetBar()

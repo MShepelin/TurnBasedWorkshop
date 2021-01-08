@@ -82,7 +82,7 @@ void AInteractiveObject::ShowInfluences() const
   for (AInteractiveObject* DependentObject : InfluencesOn)
   {
     DrawDebugLine(GetWorld(), GetActorLocation(), DependentObject->GetActorLocation(),
-      DEBUG_COLOR, false, DebugTime);
+      DEBUG_COLOR, false, DEBUG_TIME);
   }
 }
 #endif
@@ -214,12 +214,12 @@ void AInteractiveObject::RefreshInteractive()
 {
   // Change Y-Extent
   FVector ScaledBoxExtent(CollisionBox->GetScaledBoxExtent());
-  CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], CollisionBoxWidth, ScaledBoxExtent[2]));
+  CollisionBox->SetBoxExtent(FVector(ScaledBoxExtent[0], COLLISION_BOX_WIDTH, ScaledBoxExtent[2]));
 
   // Set Y-order
   FVector BoxLocation = CollisionBox->GetRelativeLocation();
   CollisionBox->SetRelativeLocation(FVector(
-    BoxLocation[0], MainSpriteYOrder, BoxLocation[2]));
+    BoxLocation[0], SPRITE_Y_ORDER, BoxLocation[2]));
 }
 
 void AInteractiveObject::UpdateCharacterStatus()

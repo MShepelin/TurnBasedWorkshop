@@ -326,7 +326,7 @@ void AInteractController::UpdatePhaseInfo() //???? move to AbilitiesWidget
   }
 
   ETurnPhase Phase = Manager->GetPhase();
-  UsedAbilitiesWidget->PhaseText->SetText(FText::FromString(UEnum::GetValueAsString(Phase).RightChop(LengthOfPhaseTypeName)));
+  UsedAbilitiesWidget->PhaseText->SetText(FText::FromString(UEnum::GetValueAsString(Phase).RightChop(PHASE_ENUM_NAME_LENGTH)));
 
   if (Phase == ETurnPhase::End)
   {
@@ -338,7 +338,7 @@ void AInteractController::UpdatePhaseInfo() //???? move to AbilitiesWidget
     Phase = static_cast<ETurnPhase>(static_cast<uint8>(Phase) + 1);
   }
 
-  UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString(UEnum::GetValueAsString(Phase).RightChop(LengthOfPhaseTypeName)));
+  UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString(UEnum::GetValueAsString(Phase).RightChop(PHASE_ENUM_NAME_LENGTH)));
 }
 
 void AInteractController::EndPlay(const EEndPlayReason::Type EndPlayReason)
