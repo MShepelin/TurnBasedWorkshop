@@ -10,7 +10,7 @@
 
 void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Context)
 {
-  //++++ BRING CUSTOMIZATION VALUES TO EDITOR
+  const FBarColorScheme& ColorScheme = BarWidget->ColorScheme;
   const FBar& UsedBar = BarWidget->BarToDraw;
 
   FVector2D Size = USlateBlueprintLibrary::GetLocalSize(BarWidget->BarImage->GetPaintSpaceGeometry());
@@ -42,17 +42,17 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
       ZonePosition,
       ZoneSize,
       BarWidget->ActiveSlotsBrush,
-      FLinearColor(255, 255, 255)
+      ColorScheme.ActiveColor
     );
 
     UWidgetBlueprintLibrary::DrawTextFormatted(
       Context,
       FText::FromString(FString::FromInt(UsedBar.BarLimits[LimitIndex])),
-      { ZonePosition.X, ZonePosition.Y - SMALL_PADDING },
-      BarWidget->BarTextFont,
-      FONT_SMALL_SIZE,
-      FName(TEXT("Regular")),
-      BarWidget->WidgetColor);
+      { ZonePosition.X, ZonePosition.Y - ColorScheme.TopPadding },
+      ColorScheme.TextFont,
+      ColorScheme.FontSizeNormal,
+      ColorScheme.FontType,
+      ColorScheme.TextColor);
 
     if (BarLimits[LimitIndex + 1] >= 1.f)
     {
@@ -62,11 +62,11 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
     UWidgetBlueprintLibrary::DrawTextFormatted(
       Context,
       FText::FromString(FString::FromInt(UsedBar.BarLimits[LimitIndex + 1])),
-      { Position.X + Size.X * BarLimits[LimitIndex + 1], ZonePosition.Y - SMALL_PADDING },
-      BarWidget->BarTextFont,
-      FONT_SMALL_SIZE,
-      FName(TEXT("Regular")),
-      BarWidget->WidgetColor);
+      { Position.X + Size.X * BarLimits[LimitIndex + 1], ZonePosition.Y - ColorScheme.TopPadding },
+      ColorScheme.TextFont,
+      ColorScheme.FontSizeNormal,
+      ColorScheme.FontType,
+      ColorScheme.TextColor);
   }
 
   // Current value of the bar in the form of a float number from 0 to 1
@@ -79,16 +79,19 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
     Context,
     CurrentValuePosition, 
     { CurrentValuePosition.X, CurrentValuePosition.Y + Size.Y },
-    BarWidget->WidgetColor,
+    ColorScheme.TextColor,
     true, 
     LINE_THICKNESS);
+
+  float NumOfDigits = 0;
+  for (int8 ValueToCheck = UsedBar.CurrentValue; ValueToCheck > 0; ValueToCheck /= 10, NumOfDigits += 1.f) {};
 
   UWidgetBlueprintLibrary::DrawTextFormatted(
     Context,
     FText::FromString(FString::FromInt(UsedBar.CurrentValue)),
-    { (UsedBar.CurrentValue > (BAR_MAX_VALUE / 2)) ? CurrentValuePosition.X - SMALL_PADDING * 1.5f : CurrentValuePosition.X + SMALL_PADDING * 0.1f, CurrentValuePosition.Y },
-    BarWidget->BarTextFont,
-    FONT_MIDDLE_SIZE,
-    FName(TEXT("Regular")),
-    BarWidget->WidgetColor);
+    { (UsedBar.CurrentValue > (BAR_MAX_VALUE / 2)) ? CurrentValuePosition.X - ColorScheme.FontSizeNormal * NumOfDigits * 0.75f - ColorScheme.PaddingFromLine : CurrentValuePosition.X + ColorScheme.PaddingFromLine, CurrentValuePosition.Y },
+    ColorScheme.TextFont,
+    ColorScheme.FontSizeNormal,
+    ColorScheme.FontType,
+    ColorScheme.TextColor);
 }

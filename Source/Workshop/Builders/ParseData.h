@@ -9,6 +9,7 @@
 #include "Workshop/Types/Effects/EffectData.h"
 #include "Workshop/UI/MixedProgressBar.h"
 #include "Components/RichTextBlock.h"
+#include "Workshop/Types/BarColorScheme.h"
 #include "ParseData.generated.h"
 
 // Functions from UBuildAbility should be added to CustomEffect 

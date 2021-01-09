@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
 #include "Workshop/Types/Bar.h"
+#include "Workshop/Types/BarColorScheme.h"
 #include "MixedProgressBar.generated.h"
 
 UCLASS(Abstract)
@@ -16,11 +17,9 @@ class WORKSHOP_API UMixedProgressBar : public UUserWidget
 public:
   UPROPERTY(meta = (BindWidget)) UImage* BarImage;
 
-  UPROPERTY(EditAnywhere, BlueprintReadOnly) UFont* BarTextFont;
-
-  UPROPERTY(EditAnywhere, BlueprintReadOnly) FLinearColor WidgetColor;
-
   UPROPERTY(EditAnywhere, BlueprintReadOnly) FBar BarToDraw;
+
+  UPROPERTY(EditAnywhere, BlueprintReadOnly) FBarColorScheme ColorScheme;
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) USlateBrushAsset* ActiveSlotsBrush;
 
