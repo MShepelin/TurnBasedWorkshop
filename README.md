@@ -34,4 +34,4 @@ https://craftpix.net/freebies/free-horizontal-2d-game-backgrounds/
 
 ### Screenshots
 
-![Screenshot](\AdditionalMaterials\Screenshot.png)
+![Screenshot](./AdditionalMaterials/Screenshot.png)
