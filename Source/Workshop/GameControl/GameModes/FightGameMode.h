@@ -21,6 +21,8 @@ public:
   FRegisterSpawns RegisterAllSpawnLocations;
   FObjectsReady ObjectsReady;
   TArray<TPair<int32, AFightAI*>> FightControllers;
+
+  UPROPERTY(BlueprintReadOnly)
   ATurnBasedManager* FightManager;
 
 public:

@@ -77,7 +77,7 @@ void AInteractiveCharacter::PickedAsCentral()
   if (AbilitiesWidget)
   {
     AbilitiesWidget->FillAbilitySlots(Abilities, MainManager);
-    AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats);
+    AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats, MainManager);
 
     AbilitiesWidget->ShowAbilitySlots();
     AbilitiesWidget->ShowBarsSlots();

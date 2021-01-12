@@ -67,7 +67,7 @@ public:
   UFUNCTION() void ShowBasicText();
 
   UFUNCTION() void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager);
-  UFUNCTION() void FillBarSlots(const TArray<FBar>& Bars);
+  UFUNCTION() void FillBarSlots(const TArray<FBar>& Bars, ARegistrationManager* UsedManager);
 };
 
 //++++ add function to set abilities of new character:

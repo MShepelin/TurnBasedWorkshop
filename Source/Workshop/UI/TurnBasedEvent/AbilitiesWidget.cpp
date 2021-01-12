@@ -30,7 +30,7 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
   }
 }
 
-void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars)
+void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars, ARegistrationManager* UsedManager)
 {
   size_t SlotsIndex = 0;
   for (const FBar& Bar : Bars)
@@ -40,7 +40,7 @@ void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars)
       AddBarSlot();
     }
 
-    BarsSlots[SlotsIndex]->SetBar(Bar);
+    BarsSlots[SlotsIndex]->SetBarAndText(Bar, UsedManager);
     BarsLayout->InvalidateLayoutAndVolatility();
 
     SlotsIndex++;

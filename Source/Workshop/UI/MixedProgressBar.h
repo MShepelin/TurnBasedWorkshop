@@ -7,6 +7,7 @@
 #include "Components/Image.h"
 #include "Workshop/Types/Bar.h"
 #include "Workshop/Types/BarColorScheme.h"
+#include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "MixedProgressBar.generated.h"
 
 UCLASS(Abstract)
@@ -23,6 +24,9 @@ public:
 
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) USlateBrushAsset* ActiveSlotsBrush;
 
+  UPROPERTY(BlueprintReadOnly) FText BackgroundText;
+
 public:
   UFUNCTION(BlueprintCallable) void SetBar(const FBar& Bar);
+  UFUNCTION(BlueprintCallable) void SetBarAndText(const FBar& Bar, ARegistrationManager *Manager);
 };

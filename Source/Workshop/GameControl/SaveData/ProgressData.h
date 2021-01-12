@@ -6,9 +6,7 @@
 #include "GameFramework/SaveGame.h"
 #include "ProgressData.generated.h"
 
-
 class AInteractiveCharacter;
-
 
 UCLASS()
 class WORKSHOP_API UProgressData : public USaveGame
