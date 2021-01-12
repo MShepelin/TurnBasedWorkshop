@@ -75,6 +75,15 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
   FVector2D CurrentValuePosition = Position;
   CurrentValuePosition.X += CurrentValue * Size.X;
 
+  UWidgetBlueprintLibrary::DrawTextFormatted(
+    Context,
+    BarWidget->BackgroundText,
+    { Position.X + ColorScheme.PaddingFromLine, CurrentValuePosition.Y },
+    ColorScheme.TextFont,
+    ColorScheme.FontSizeNormal,
+    FName("Bold"),
+    ColorScheme.BackgroundColor);
+
   UWidgetBlueprintLibrary::DrawLine(
     Context,
     CurrentValuePosition, 
@@ -89,7 +98,12 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
   UWidgetBlueprintLibrary::DrawTextFormatted(
     Context,
     FText::FromString(FString::FromInt(UsedBar.CurrentValue)),
-    { (UsedBar.CurrentValue > (BAR_MAX_VALUE / 2)) ? CurrentValuePosition.X - ColorScheme.FontSizeNormal * NumOfDigits * 0.75f - ColorScheme.PaddingFromLine : CurrentValuePosition.X + ColorScheme.PaddingFromLine, CurrentValuePosition.Y },
+    { 
+      (UsedBar.CurrentValue > (BAR_MAX_VALUE / 2)) ? \
+        CurrentValuePosition.X - ColorScheme.FontSizeNormal * NumOfDigits * 0.75f - ColorScheme.PaddingFromLine : \
+        CurrentValuePosition.X + ColorScheme.PaddingFromLine, 
+      CurrentValuePosition.Y + Size.Y + ColorScheme.BottomPadding
+    },
     ColorScheme.TextFont,
     ColorScheme.FontSizeNormal,
     ColorScheme.FontType,
