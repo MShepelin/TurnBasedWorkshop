@@ -7,7 +7,7 @@
 
 void UAbilitySlot::AbilityClicked()
 {
-  if (!ChosenAbility)
+  if (!ChosenAbility || !bIsControlledByPlayer)
   {
     return;
   }
@@ -16,8 +16,9 @@ void UAbilitySlot::AbilityClicked()
   //++++ add usage of EmptySlot texture
 }
 
-void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager)
+void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager, bool bIsControlled)
 {
+  bIsControlledByPlayer = bIsControlled;
   ChosenAbility = NewAbility;
   AbilityIcon->SetBrushFromTexture(ChosenAbility->GetIconUI());
 

@@ -24,7 +24,7 @@ FInteractiveCore& FInteractiveCore::operator=(const FInteractiveCore & AnotherCo
 
 TArray<FBar> FInteractiveCore::GetStats()
 {
-  FScopeLock Lock(&Change);
+  FScopeLock Lock(&GettingStats);
   return Stats;
 }
 

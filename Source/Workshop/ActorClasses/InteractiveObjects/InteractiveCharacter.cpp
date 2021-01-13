@@ -71,12 +71,14 @@ void AInteractiveCharacter::PickedAsCentral()
 {
   Super::PickedAsCentral();
 
+  int32 CheckControll = InteractiveDataCore.InteractiveType & static_cast<int32>(EInteractiveType::PlayerControlled);
+
   // Add list of abilities to the AbilitiesWidget.
   UAbilitiesWidget* AbilitiesWidget = Cast<AInteractController>(
     UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetAbilitiesWidget();
   if (AbilitiesWidget)
   {
-    AbilitiesWidget->FillAbilitySlots(Abilities, MainManager);
+    AbilitiesWidget->FillAbilitySlots(Abilities, MainManager, CheckControll);
     AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats, MainManager);
 
     AbilitiesWidget->ShowAbilitySlots();

@@ -9,6 +9,8 @@ AInteractiveObject::AInteractiveObject()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+  InteractiveDataCore.InteractiveType = 0;
+
   RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("MainScene"));;
 
   CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));

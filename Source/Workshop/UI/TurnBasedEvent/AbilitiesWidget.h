@@ -66,7 +66,7 @@ public:
   UFUNCTION() void FailToInteract();
   UFUNCTION() void ShowBasicText();
 
-  UFUNCTION() void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager);
+  UFUNCTION() void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager, bool bIsControlled);
   UFUNCTION() void FillBarSlots(const TArray<FBar>& Bars, ARegistrationManager* UsedManager);
 };
 

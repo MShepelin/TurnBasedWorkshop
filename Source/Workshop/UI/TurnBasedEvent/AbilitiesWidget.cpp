@@ -6,7 +6,7 @@
 #include "Components/SlateWrapperTypes.h"
 #include "TimerManager.h"
 
-void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager)
+void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager, bool bIsControlled)
 {
   check(AbilitySlotClass != nullptr);
 
@@ -18,7 +18,7 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
       AddAbilitySlot();
     }
 
-    VerticalBoxSlots[SlotsIndex]->SetChosenAbility(Ability, UsedManager);
+    VerticalBoxSlots[SlotsIndex]->SetChosenAbility(Ability, UsedManager, bIsControlled);
     AbilitiesLayout->InvalidateLayoutAndVolatility();
     
     SlotsIndex++;

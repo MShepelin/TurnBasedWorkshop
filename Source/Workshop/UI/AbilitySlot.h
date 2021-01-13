@@ -20,7 +20,7 @@ class WORKSHOP_API UAbilitySlot : public UUserWidget
 {
   GENERATED_BODY()
 
-private:
+protected:
   UPROPERTY(EditDefaultsOnly, Category = "SlotSettings") 
   UTexture* EmptySlot;
 
@@ -31,8 +31,10 @@ private:
 
   UPROPERTY() AInteractiveAbility* ChosenAbility;
 
+  UPROPERTY(BlueprintReadOnly) bool bIsControlledByPlayer;
+
 public:
-  void SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager);
+  void SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager, bool bIsControlled);
 
   UFUNCTION() void AbilityClicked();
 

@@ -17,7 +17,8 @@ struct WORKSHOP_API FInteractiveCore
   // Interactive Properties //
   // ---------------------- //
 
-  UPROPERTY() int32 InteractiveType;
+  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings", meta = (Bitmask, BitmaskEnum = "EInteractiveType"))
+  int32 InteractiveType;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings", meta = (ClampMin = "1"));
   TArray<int32> CTsOfObject;
@@ -33,7 +34,7 @@ struct WORKSHOP_API FInteractiveCore
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings")
   TArray<FBar> Stats;
 
-  FCriticalSection Change;
+  FCriticalSection GettingStats;
 
   TArray<FBar> GetStats();
 
