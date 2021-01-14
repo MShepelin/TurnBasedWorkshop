@@ -80,6 +80,10 @@ public:
   UFUNCTION(BlueprintCallable)
   void ResetAnimation();
 
+  UFUNCTION(BlueprintNativeEvent)
+  void ActionWithAnimation(float Duration, int32 AnimationID);
+  virtual void ActionWithAnimation_Implementation(float Duration, int32 AnimationID);
+
   // ----------------------- //
   // Connection with Manager //
   // ----------------------- //

@@ -35,7 +35,7 @@
 #define RAY_CAST_LENGTH 1000
 #define AVERAGE_MANAGED_OBJECTS 8
 #define COLLISION_INTERACTIVE ECollisionChannel::ECC_GameTraceChannel1
-#define SLEEP_MULTIPLIER 0.9f
+#define THREAD_SLEEP(Time) ((Time) * 0.9f)
 
 //++++ This comment means that some code must be added
 //???? This comment means that some code may be useful to add

@@ -25,7 +25,7 @@ struct WORKSHOP_API FCharacterCore
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
   TMap<int32, UPaperFlipbook*> AnimationsMap;
 
-  TQueue<UPaperFlipbook*> AnimationQueue;
+  TQueue<TTuple<UPaperFlipbook*, float, int32>> AnimationQueue;
 
   FThreadSafeBool bIsExhausted;
 

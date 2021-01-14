@@ -32,10 +32,11 @@ void AInteractiveCharacter::PlayAnimation(int32 AnimationId, bool bWaitUntilEnds
   UPaperFlipbook** FoundFlipbook = CharacterDataCore.AnimationsMap.Find(AnimationId);
   if (FoundFlipbook && *FoundFlipbook)
   {
-    CharacterDataCore.AnimationQueue.Enqueue(*FoundFlipbook);
+    float AnimationDuration = (**FoundFlipbook).GetTotalDuration();
+    CharacterDataCore.AnimationQueue.Enqueue(TTuple<UPaperFlipbook*, float, int32>{ *FoundFlipbook, AnimationDuration, AnimationId });
 
     if (bWaitUntilEnds)
-      FPlatformProcess::Sleep((**FoundFlipbook).GetTotalDuration() * SLEEP_MULTIPLIER);
+      FPlatformProcess::Sleep(THREAD_SLEEP(AnimationDuration));
   }
   else
   {
@@ -244,8 +245,17 @@ void AInteractiveCharacter::Tick(float DeltaTime)
   Super::Tick(DeltaTime);
 
   UPaperFlipbook* FoundFlipbook = nullptr;
-  while (CharacterDataCore.AnimationQueue.Dequeue(FoundFlipbook)) {};
+  TTuple<UPaperFlipbook*, float, int32> FoundAnimationData{ nullptr, 0, 0 };
+  while (CharacterDataCore.AnimationQueue.Dequeue(FoundAnimationData)) {};
 
-  if (FoundFlipbook)
+  if (FoundAnimationData.Get<0>())
+  {
     CharacterPresentation->SetFlipbook(FoundFlipbook);
+    ActionWithAnimation(FoundAnimationData.Get<1>(), FoundAnimationData.Get<2>());
+  }
+}
+
+void AInteractiveCharacter::ActionWithAnimation_Implementation(float Duration, int32 AnimationID)
+{
+
 }
