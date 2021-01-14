@@ -244,13 +244,12 @@ void AInteractiveCharacter::Tick(float DeltaTime)
 {
   Super::Tick(DeltaTime);
 
-  UPaperFlipbook* FoundFlipbook = nullptr;
   TTuple<UPaperFlipbook*, float, int32> FoundAnimationData{ nullptr, 0, 0 };
   while (CharacterDataCore.AnimationQueue.Dequeue(FoundAnimationData)) {};
 
   if (FoundAnimationData.Get<0>())
   {
-    CharacterPresentation->SetFlipbook(FoundFlipbook);
+    CharacterPresentation->SetFlipbook(FoundAnimationData.Get<0>());
     ActionWithAnimation(FoundAnimationData.Get<1>(), FoundAnimationData.Get<2>());
   }
 }

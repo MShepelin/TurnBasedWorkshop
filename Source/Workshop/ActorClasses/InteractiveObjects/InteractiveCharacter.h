@@ -11,6 +11,8 @@
 #include "Components/BoxComponent.h"
 #include "Workshop/Types/InteractiveObjectData/CharacterCore.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
+#include "Components/TimelineComponent.h"
+#include "Components/SplineComponent.h"
 #include "InteractiveCharacter.generated.h"
 
 class AInteractiveAbility;
@@ -28,7 +30,7 @@ class WORKSHOP_API AInteractiveCharacter : public AInteractiveObject
 	GENERATED_BODY()
   
 protected:
-  UPROPERTY(VisibleDefaultsOnly)
+  UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
   UPaperFlipbookComponent* CharacterPresentation;
 
   UPROPERTY() AInteractiveAbility* CentralAbility = nullptr;

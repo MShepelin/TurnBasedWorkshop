@@ -6,6 +6,7 @@
 #include "Blueprint/SlateBlueprintLibrary.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "Slate/SlateBrushAsset.h"
+#include "GenericPlatform/GenericPlatformMath.h"
 #include "Kismet/KismetMathLibrary.h"
 
 void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Context)
@@ -135,4 +136,17 @@ void UParseData::CompleteSplineToDestination(UCurveFloat* Curve, USplineComponen
   }
 
   Spline->UpdateSpline();
+}
+
+void UParseData::MoveFlipbookAcrossSpline(USplineComponent*& ObjectSplineReference, USplineComponent* SplineToUse, UTimelineComponent* Timeline, float Duration)
+{
+  if (!Duration || FGenericPlatformMath::IsNaN(Duration))
+  {
+    UE_LOG(LogTemp, Error, TEXT("Incorrect Duration for MoveFlipbookAcrossSpline!"));
+    return;
+  }
+
+  ObjectSplineReference = SplineToUse;
+  Timeline->SetPlayRate(1 / Duration);
+  Timeline->PlayFromStart();
 }

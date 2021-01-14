@@ -13,6 +13,8 @@
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "Components/SplineComponent.h"
 #include "Curves/CurveFloat.h"
+#include "PaperFlipbookComponent.h"
+#include "Components/TimelineComponent.h"
 #include "ParseData.generated.h"
 
 // Functions from UBuildAbility should be added to CustomEffect 
@@ -28,4 +30,7 @@ public:
 
   UFUNCTION(BlueprintCallable)
   static void CompleteSplineToDestination(UCurveFloat* Curve, USplineComponent* Spline, FVector Destination);
+
+  UFUNCTION(BlueprintCallable)
+    static void MoveFlipbookAcrossSpline(UPARAM(ref)  USplineComponent*& ObjectSplineReference, USplineComponent* SplineToUse, UTimelineComponent* Timeline, float Duration);
 };
