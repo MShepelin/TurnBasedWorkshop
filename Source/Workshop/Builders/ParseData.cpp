@@ -109,3 +109,28 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
     ColorScheme.FontType,
     ColorScheme.TextColor);
 }
+
+void UParseData::CompleteSplineToDestination(UCurveFloat* Curve, USplineComponent* Spline, FVector Destination)
+{
+  int32 NumberOfSplinePoints = Spline->GetNumberOfSplinePoints();
+  FVector StartPoint = Spline->GetLocationAtSplinePoint(NumberOfSplinePoints - 1, ESplineCoordinateSpace::Type::World);
+
+  TArray<FRichCurveKey> CurveKeys = Curve->FloatCurve.GetCopyOfKeys();
+  if (CurveKeys.Num() < 2)
+  {
+    UE_LOG(LogTemp, Error, TEXT("A Curve must have at least 2 key points to perform CompleteSplineToDestination"));
+    return;
+  }
+
+  float MinTime = CurveKeys[0].Time;
+  float DeltaTime = CurveKeys.Last(0).Time - MinTime;
+  for (FRichCurveKey& CurveKey : CurveKeys)
+  {
+    float TimeFraction = (CurveKey.Time - MinTime) / DeltaTime;
+    FVector NewPointLocation = StartPoint + (Destination - StartPoint) * TimeFraction;
+    NewPointLocation.Z += CurveKey.Value;
+    Spline->AddSplinePoint(NewPointLocation, ESplineCoordinateSpace::Type::World, false);
+  }
+
+  Spline->UpdateSpline();
+}

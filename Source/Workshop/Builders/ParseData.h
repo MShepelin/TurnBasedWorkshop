@@ -11,6 +11,8 @@
 #include "Components/RichTextBlock.h"
 #include "Workshop/Types/BarColorScheme.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
+#include "Components/SplineComponent.h"
+#include "Curves/CurveFloat.h"
 #include "ParseData.generated.h"
 
 // Functions from UBuildAbility should be added to CustomEffect 
@@ -23,4 +25,7 @@ class WORKSHOP_API UParseData : public UBlueprintFunctionLibrary
 public:
   UFUNCTION(BlueprintCallable)
   static void DrawBar(const UMixedProgressBar* BarWidget, UPARAM(ref) FPaintContext& Context);
+
+  UFUNCTION(BlueprintCallable)
+  static void CompleteSplineToDestination(UCurveFloat* Curve, USplineComponent* Spline, FVector Destination);
 };
