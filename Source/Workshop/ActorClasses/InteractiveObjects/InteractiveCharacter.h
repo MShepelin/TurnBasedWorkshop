@@ -75,8 +75,7 @@ public:
 
   // Play animation by it's ID thread-safely.
   // Returns true if ID was found, and false if not.
-  UFUNCTION(BlueprintCallable)
-  void PlayAnimation(int32 AnimationId, bool bWaitUntilEnds);
+  virtual void PlayAnimation(int32 AnimationId, bool bWaitUntilEnds) override;
 
   // Return to playing default animation.
   UFUNCTION(BlueprintCallable)

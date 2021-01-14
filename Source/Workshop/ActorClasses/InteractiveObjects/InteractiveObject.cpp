@@ -228,3 +228,8 @@ void AInteractiveObject::UpdateCharacterStatus()
 {
 
 }
+
+void AInteractiveObject::PlayAnimation(int32 AnimationId, bool bWaitUntilEnds)
+{
+
+}

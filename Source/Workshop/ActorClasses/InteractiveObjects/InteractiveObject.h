@@ -160,7 +160,10 @@ public:
   // ------ //
 
   UFUNCTION(BlueprintCallable)
-  virtual void UpdateCharacterStatus(); //RENAME
+  virtual void PlayAnimation(int32 AnimationId, bool bWaitUntilEnds);
+
+  UFUNCTION(BlueprintCallable)
+  virtual void UpdateCharacterStatus(); //++++ RENAME
 
   // Called to refresh appearance.
   UFUNCTION() virtual void RefreshInteractive();
