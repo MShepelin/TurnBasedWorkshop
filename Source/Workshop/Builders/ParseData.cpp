@@ -124,11 +124,13 @@ void UParseData::CompleteSplineToDestination(UCurveFloat* Curve, USplineComponen
 
   float MinTime = CurveKeys[0].Time;
   float DeltaTime = CurveKeys.Last(0).Time - MinTime;
-  for (FRichCurveKey& CurveKey : CurveKeys)
+  float ValueStart = CurveKeys[0].Value;
+  for (int32 CurveKeyIndex = 1; CurveKeyIndex < CurveKeys.Num(); ++CurveKeyIndex)
   {
+    FRichCurveKey& CurveKey = CurveKeys[CurveKeyIndex];
     float TimeFraction = (CurveKey.Time - MinTime) / DeltaTime;
     FVector NewPointLocation = StartPoint + (Destination - StartPoint) * TimeFraction;
-    NewPointLocation.Z += CurveKey.Value;
+    NewPointLocation.Z += CurveKey.Value - ValueStart;
     Spline->AddSplinePoint(NewPointLocation, ESplineCoordinateSpace::Type::World, false);
   }
 
