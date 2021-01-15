@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Workshop/WorkshopGameModeBase.h"
 #include "HubGameMode.generated.h"
 
 UCLASS()
-class WORKSHOP_API AHubGameMode : public AGameModeBase
+class WORKSHOP_API AHubGameMode : public AWorkshopGameModeBase
 {
   GENERATED_BODY()
 
