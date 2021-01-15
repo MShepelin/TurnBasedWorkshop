@@ -3,7 +3,7 @@
 
 #include "WorkshopGameModeBase.h"
 
-FCTData AWorkshopGameModeBase::GetCTData(int32 CT)
+FCTData AWorkshopGameModeBase::GetCTData(int32 CT) const
 {
   if (CTDataTable == nullptr)
   {
@@ -35,10 +35,29 @@ FCTData AWorkshopGameModeBase::GetCTData(int32 CT)
 
   FName CTAsName = FName(NumChars, CharPtr);
   FCTData *CTDataPtr = nullptr;
-  if (nullptr != (CTDataPtr = CTDataTable->FindRow<FCTData>(CTAsName, TEXT("Get CT Data from GameMode"))))
+  if (nullptr != (CTDataPtr = CTDataTable->FindRow<FCTData>(CTAsName, TEXT("Get CT Data by ID from GameMode"))))
   {
     return *CTDataPtr;
   }
 
   return FCTData();
+}
+
+TArray<int32> AWorkshopGameModeBase::GetCTIDs() const
+{
+  if (CTDataTable == nullptr)
+  {
+    UE_LOG(LogTemp, Error, TEXT("CT Data Table must be chosen for the GameMode!"));
+    return {};
+  }
+
+  TArray<int32> CTIDs;
+  TCHAR CTAsChars[1024];
+  for (FName CTAsName : CTDataTable->GetRowNames())
+  {
+    CTAsName.GetPlainNameString(CTAsChars);
+    CTIDs.Add(FCString::Atoi(CTAsChars));
+  }
+
+  return CTIDs;
 }

@@ -4,7 +4,7 @@
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveObject.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
-
+#include "Workshop/WorkshopGameModeBase.h"
 
 ARegistrationManager::ARegistrationManager()
 {
@@ -18,22 +18,31 @@ ARegistrationManager::ARegistrationManager()
   CTsSystem = new CTsGraph<int32, AInteractiveObject>();
 }
 
-void ARegistrationManager::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void ARegistrationManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-void ARegistrationManager::PostInitProperties()
+void ARegistrationManager::BeginPlay()
 {
-  Super::PostInitProperties();
-  for (TPair<int32, FString>& CT : CTsToNameMap)
+  Super::BeginPlay();
+
+  UWorld* World = GetWorld();
+  if (!World)
   {
-    CTsSystem->AddCT(CT.Key);
+    return;
+  }
+
+  AWorkshopGameModeBase* GameMode = Cast<AWorkshopGameModeBase>(World->GetAuthGameMode());
+  if (!GameMode)
+  {
+    UE_LOG(LogTemp, Error, TEXT("Manager tried to use GameMode but it isn't inherited from WorkshopGameModeBase"));
+    return;
+  }
+
+  for (int32 CT : GameMode->GetCTIDs())
+  {
+    CTsSystem->AddCT(CT);
   }
 }
 
@@ -72,17 +81,6 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTsWithMask(const
 TArray<AInteractiveObject*> ARegistrationManager::GetAllConnectedObjects() const
 {
   return CTsSystem->GetAllObjects();
-}
-
-FString ARegistrationManager::GetCTName(int32 CTIdentifier) const
-{
-  if (!CTsToNameMap.Find(CTIdentifier))
-  {
-    UE_LOG(LogTemp, Error, TEXT("Wrong CT identifier!"));
-    return "";
-  }
-  
-  return CTsToNameMap[CTIdentifier];
 }
 
 FString ARegistrationManager::GetStatNameByID(int32 StatIdentifier) const

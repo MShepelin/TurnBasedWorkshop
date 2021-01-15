@@ -63,7 +63,7 @@ public:
 	// Called every frame.
 	virtual void Tick(float DeltaTime) override;
 
-  void PostInitProperties() override;
+  //void PostInitProperties() override;
 
   //---------- //
   // CTs usage //
@@ -99,9 +99,6 @@ public:
 
   UFUNCTION(BlueprintCallable)
   TArray<AInteractiveObject*> GetAllConnectedObjects() const;
-
-  UFUNCTION(BlueprintCallable)
-  FString GetCTName(int32 CTIdentifier) const;
 
   UFUNCTION(BlueprintCallable)
   FString GetStatNameByID(int32 StatIdentifier) const;

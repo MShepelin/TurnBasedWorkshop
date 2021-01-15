@@ -17,5 +17,8 @@ protected:
   UDataTable* CTDataTable;
 
 public:
-  FCTData GetCTData(int32 CT);
+  UFUNCTION(BlueprintCallable)
+  FCTData GetCTData(int32 CT) const;
+
+  TArray<int32> GetCTIDs() const;
 };
