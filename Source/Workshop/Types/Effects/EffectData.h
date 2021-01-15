@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
+#include "Workshop/WorkshopGameModeBase.h"
 #include "EffectData.generated.h"
 
 USTRUCT(BlueprintType)
@@ -33,5 +34,5 @@ public:
   int32 DecreaseDuration(int32 OnValue);
   int32 DecreaseDuration();
 
-  FString GetInfoString(ARegistrationManager* UsedManager);
+  FString GetInfoString(AWorkshopGameModeBase* GameMode);
 };

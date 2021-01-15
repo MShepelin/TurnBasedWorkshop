@@ -102,8 +102,8 @@ void AInteractiveAbility::PickedAsCentral()
     UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetAbilitiesWidget();
   if (AbilitiesWidget)
   {
-    AbilitiesWidget->FillAbilitySlots({ this }, MainManager, false);
-    AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats, MainManager);
+    AbilitiesWidget->FillAbilitySlots({ this }, false);
+    AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats);
 
     AbilitiesWidget->ShowAbilitySlots();
     AbilitiesWidget->ShowBarsSlots();

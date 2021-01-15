@@ -17,7 +17,7 @@ void UAbilitySlot::AbilityClicked()
   //++++ add usage of EmptySlot texture
 }
 
-void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager, bool bIsControlled)
+void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, bool bIsControlled)
 {
   bIsControlledByPlayer = bIsControlled;
   ChosenAbility = NewAbility;
@@ -55,7 +55,7 @@ void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrati
     {
       CollectedEffectsInfo += "<BonusEffect>"; //++++ define BonusEffect
     }
-    CollectedEffectsInfo += Effect.GetInfoString(UsedManager);
+    CollectedEffectsInfo += Effect.GetInfoString(GameMode);
     if (Effect.bIsBonusEffect)
     {
       CollectedEffectsInfo += "</>";

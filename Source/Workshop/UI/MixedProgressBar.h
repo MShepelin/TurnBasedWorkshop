@@ -8,6 +8,7 @@
 #include "Workshop/Types/Bar.h"
 #include "Workshop/Types/BarColorScheme.h"
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
+#include "Workshop/WorkshopGameModeBase.h"
 #include "MixedProgressBar.generated.h"
 
 UCLASS(Abstract)
@@ -28,5 +29,5 @@ public:
 
 public:
   UFUNCTION(BlueprintCallable) void SetBar(const FBar& Bar);
-  UFUNCTION(BlueprintCallable) void SetBarAndText(const FBar& Bar, ARegistrationManager *Manager);
+  UFUNCTION(BlueprintCallable) void SetBarAndText(const FBar& Bar, AWorkshopGameModeBase *GameMode);
 };

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "EffectData.h"
+#include "Workshop/WorkshopGameModeBase.h"
 
 int32 FEffectData::DecreaseDuration(int32 OnValue)
 {
@@ -32,9 +33,9 @@ int32 FEffectData::DecreaseDuration()
   return DecreaseDuration(1);
 }
 
-FString FEffectData::GetInfoString(ARegistrationManager* UsedManager)
+FString FEffectData::GetInfoString(AWorkshopGameModeBase* GameMode)
 {
-  FString InfoString = UsedManager->GetStatNameByID(StatID) + " " + ((EffectValue > 0) ? "+" : "") + " " + FString::FromInt(EffectValue);
+  FString InfoString = GameMode->GetStatNameByID(StatID) + " " + ((EffectValue > 0) ? "+" : "") + " " + FString::FromInt(EffectValue);
 
   if (Duration == -1)
   {

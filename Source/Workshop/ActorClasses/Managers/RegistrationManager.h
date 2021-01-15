@@ -27,19 +27,11 @@ protected:
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerVisuals")
   UBillboardComponent* ManagerIcon;
 
-  // Here are all CTs available in this manager.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings", meta = (ClampMin = "1"));
-  TMap<int32, FString> CTsToNameMap;
-
   // Used to store managed InteractiveObjects.
   // Agreement: changed only by Awake/PutToSleep functions of InteractiveObjects.
   TArray<AInteractiveObject*, TInlineAllocator<AVERAGE_MANAGED_OBJECTS>> AwakenObjects;
   //???? change every used in this case tarray to tarray with TInlineAllocator
   //???? use TQueue?
-
-  // Here are all stats available in this manager.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ManagerSettings")
-  TMap<int32, FString> StatIDToNameMap;
 
   // Used for search by CTs.
   CTsGraph<int32, AInteractiveObject>* CTsSystem;
@@ -62,8 +54,6 @@ public:
 
 	// Called every frame.
 	virtual void Tick(float DeltaTime) override;
-
-  //void PostInitProperties() override;
 
   //---------- //
   // CTs usage //
@@ -99,9 +89,6 @@ public:
 
   UFUNCTION(BlueprintCallable)
   TArray<AInteractiveObject*> GetAllConnectedObjects() const;
-
-  UFUNCTION(BlueprintCallable)
-  FString GetStatNameByID(int32 StatIdentifier) const;
 
   UFUNCTION(BlueprintCallable)
   bool HasCentralObject() const;

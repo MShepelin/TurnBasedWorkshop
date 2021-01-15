@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "Workshop/Types/CTdata.h"
+#include "Workshop/Types/CTData.h"
+#include "Workshop/Types/StatData.h"
 #include "WorkshopGameModeBase.generated.h"
 
 UCLASS()
@@ -16,9 +17,16 @@ protected:
   UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
   UDataTable* CTDataTable;
 
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+  UDataTable* StatDataTable;
+
 public:
+  static FName IntToFName(int32 Value);
+
   UFUNCTION(BlueprintCallable)
   FCTData GetCTData(int32 CT) const;
 
   TArray<int32> GetCTIDs() const;
+
+  FString GetStatNameByID(int32 StatID) const;
 };

@@ -79,8 +79,8 @@ void AInteractiveCharacter::PickedAsCentral()
     UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetAbilitiesWidget();
   if (AbilitiesWidget)
   {
-    AbilitiesWidget->FillAbilitySlots(Abilities, MainManager, CheckControll);
-    AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats, MainManager);
+    AbilitiesWidget->FillAbilitySlots(Abilities, CheckControll);
+    AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats);
 
     AbilitiesWidget->ShowAbilitySlots();
     AbilitiesWidget->ShowBarsSlots();

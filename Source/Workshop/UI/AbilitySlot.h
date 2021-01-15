@@ -35,7 +35,7 @@ protected:
   UPROPERTY(BlueprintReadOnly) bool bIsControlledByPlayer;
 
 public:
-  void SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrationManager* UsedManager, bool bIsControlled);
+  void SetChosenAbility(AInteractiveAbility* NewAbility, bool bIsControlled);
 
   UFUNCTION() void AbilityClicked();
 

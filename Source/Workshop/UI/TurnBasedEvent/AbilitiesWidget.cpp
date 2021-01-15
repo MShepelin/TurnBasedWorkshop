@@ -6,7 +6,7 @@
 #include "Components/SlateWrapperTypes.h"
 #include "TimerManager.h"
 
-void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, ARegistrationManager* UsedManager, bool bIsControlled)
+void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, bool bIsControlled)
 {
   check(AbilitySlotClass != nullptr);
 
@@ -18,7 +18,7 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
       AddAbilitySlot();
     }
 
-    VerticalBoxSlots[SlotsIndex]->SetChosenAbility(Ability, UsedManager, bIsControlled);
+    VerticalBoxSlots[SlotsIndex]->SetChosenAbility(Ability, bIsControlled);
     AbilitiesLayout->InvalidateLayoutAndVolatility();
     
     SlotsIndex++;
@@ -30,8 +30,15 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
   }
 }
 
-void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars, ARegistrationManager* UsedManager)
+void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars)
 {
+  AWorkshopGameModeBase* GameMode = Cast<AWorkshopGameModeBase>(GetWorld()->GetAuthGameMode());
+  if (!GameMode)
+  {
+    UE_LOG(LogTemp, Error, TEXT("UAbilitiesWidget tried to FillBarSlots but GameMode isn't inherited from WorkshopGameModeBase"));
+    return;
+  }
+
   size_t SlotsIndex = 0;
   for (const FBar& Bar : Bars)
   {
@@ -40,7 +47,7 @@ void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars, ARegistrationManag
       AddBarSlot();
     }
 
-    BarsSlots[SlotsIndex]->SetBarAndText(Bar, UsedManager);
+    BarsSlots[SlotsIndex]->SetBarAndText(Bar, GameMode);
     BarsLayout->InvalidateLayoutAndVolatility();
 
     SlotsIndex++;

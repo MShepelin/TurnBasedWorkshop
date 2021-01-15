@@ -83,17 +83,6 @@ TArray<AInteractiveObject*> ARegistrationManager::GetAllConnectedObjects() const
   return CTsSystem->GetAllObjects();
 }
 
-FString ARegistrationManager::GetStatNameByID(int32 StatIdentifier) const
-{
-  if (!StatIDToNameMap.Find(StatIdentifier))
-  {
-    UE_LOG(LogTemp, Error, TEXT("Wrong Stat identifier!"));
-    return "";
-  }
-
-  return StatIDToNameMap[StatIdentifier];
-}
-
 void ARegistrationManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
   Super::EndPlay(EndPlayReason);
