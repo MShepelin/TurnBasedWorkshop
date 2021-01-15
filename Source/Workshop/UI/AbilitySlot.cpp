@@ -3,6 +3,7 @@
 #include "AbilitySlot.h"
 #include "Blueprint/WidgetTree.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
+#include "Workshop/WorkshopGameModeBase.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
 
 void UAbilitySlot::AbilityClicked()
@@ -23,6 +24,23 @@ void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrati
   AbilityIcon->SetBrushFromTexture(ChosenAbility->GetIconUI());
 
   FString CollectedEffectsInfo = "";
+
+  AWorkshopGameModeBase* GameMode = Cast<AWorkshopGameModeBase>(GetWorld()->GetAuthGameMode());
+  if (!GameMode)
+  {
+    UE_LOG(LogTemp, Error, TEXT("AbilitySlot tried to SetChosenAbility but GameMode isn't inherited from WorkshopGameModeBase"));
+    return;
+  }
+
+  for (int32 CTToAffect : NewAbility->AbilityDataCore.CTsToAffect)
+  {
+    FCTData CTData = GameMode->GetCTData(CTToAffect);
+
+    CollectedEffectsInfo += \
+      " <" + CTData.TextStyle.ToString() + ">" + CTData.ShownName.ToString() + "</>";
+  }
+
+  CollectedEffectsInfo += ":\n";
 
   for (FEffectData Effect : NewAbility->AbilityDataCore.UsedEffects)
   {
