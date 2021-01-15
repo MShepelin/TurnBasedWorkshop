@@ -37,16 +37,23 @@ void UAbilitySlot::SetChosenAbility(AInteractiveAbility* NewAbility, ARegistrati
     FCTData CTData = GameMode->GetCTData(CTToAffect);
 
     CollectedEffectsInfo += \
-      " <" + CTData.TextStyle.ToString() + ">" + CTData.ShownName.ToString() + "</>";
+      "<" + CTData.TextStyle.ToString() + ">" + CTData.ShownName.ToString() + "</> ";
   }
 
-  CollectedEffectsInfo += ":\n";
+  if (NewAbility->AbilityDataCore.CTsToAffect.Num())
+  {
+    CollectedEffectsInfo += "gets\n";
+  }
+  else
+  {
+    CollectedEffectsInfo += TEXT("Any target gets\n");
+  }
 
   for (FEffectData Effect : NewAbility->AbilityDataCore.UsedEffects)
   {
     if (Effect.bIsBonusEffect)
     {
-      CollectedEffectsInfo += "<BonusEffect>";
+      CollectedEffectsInfo += "<BonusEffect>"; //++++ define BonusEffect
     }
     CollectedEffectsInfo += Effect.GetInfoString(UsedManager);
     if (Effect.bIsBonusEffect)
