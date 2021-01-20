@@ -84,17 +84,6 @@ void AInteractiveAbility::PickedAsCentral()
 
   TArray<AInteractiveObject*> FoundObjects = MainManager->FindObjectsByCTsWithMask(AbilityDataCore.CTsToAffect, 1, AbilityDataCore.TargetTypeMask);
 
-#if WITH_EDITOR
-  UE_LOG(LogTemp, Warning, TEXT("%d targets found"), FoundObjects.Num());
-
-  // Show what objects were found
-  for (AInteractiveObject* FoundObject : FoundObjects)
-  {
-    DrawDebugLine(GetWorld(), GetActorLocation(), FoundObject->GetActorLocation(),
-      DEBUG_COLOR, false, DEBUG_TIME);
-  }
-#endif
-
   MainManager->AwakeByCenterObject(FoundObjects);
 
   // Add list of abilities to the AbilitiesWidget.
