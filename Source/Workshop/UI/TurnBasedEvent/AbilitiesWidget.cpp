@@ -75,6 +75,8 @@ void UAbilitiesWidget::NativePreConstruct()
     AddAbilitySlot();
   }
 
+  HideName();
+
   Super::NativePreConstruct();
 
   //++++ AbilitiesLayout -> set standart indent
@@ -157,7 +159,9 @@ void UAbilitiesWidget::SetInteractiveObjectData(const FInteractiveCore& Data)
     return;
   }
 
-  FString CollectedObjectInfo = Data.InteractiveName.ToString();
+  NameText->SetVisibility(ESlateVisibility::Visible);
+
+  FString CollectedObjectInfo = "";
 
   for (int32 CT : Data.CTsOfObject)
   {
@@ -167,5 +171,10 @@ void UAbilitiesWidget::SetInteractiveObjectData(const FInteractiveCore& Data)
       " <" + CTData.TextStyle.ToString() + ">" + CTData.ShownName.ToString() + "</>";
   }
 
-  NameText->SetText(FText::FromString(CollectedObjectInfo));
+  NameText->SetText(FText::FromString(CollectedObjectInfo + Data.InteractiveName.ToString()));
+}
+
+void UAbilitiesWidget::HideName()
+{
+  NameText->SetVisibility(ESlateVisibility::Hidden);
 }

@@ -84,6 +84,8 @@ void AInteractiveCharacter::PickedAsCentral()
 
     AbilitiesWidget->ShowAbilitySlots();
     AbilitiesWidget->ShowBarsSlots();
+
+    AbilitiesWidget->SetInteractiveObjectData(InteractiveDataCore);
   }
 }
 
@@ -98,6 +100,7 @@ void AInteractiveCharacter::UnpickedAsCentral()
   {
     AbilitiesWidget->HideAbilitySlots();
     AbilitiesWidget->HideBarsSlots();
+    AbilitiesWidget->HideName();
   }
 }
 

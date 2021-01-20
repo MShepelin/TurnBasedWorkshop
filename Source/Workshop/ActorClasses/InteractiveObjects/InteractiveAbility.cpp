@@ -107,6 +107,8 @@ void AInteractiveAbility::PickedAsCentral()
 
     AbilitiesWidget->ShowAbilitySlots();
     AbilitiesWidget->ShowBarsSlots();
+
+    AbilitiesWidget->SetInteractiveObjectData(InteractiveDataCore);
   }
 }
 
@@ -121,6 +123,7 @@ void AInteractiveAbility::UnpickedAsCentral()
   {
     AbilitiesWidget->HideAbilitySlots();
     AbilitiesWidget->HideBarsSlots();
+    AbilitiesWidget->HideName();
   }
 
   MainManager->PutToSleepManagedObjects(MainManager);

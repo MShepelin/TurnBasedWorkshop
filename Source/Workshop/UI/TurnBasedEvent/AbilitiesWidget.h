@@ -72,6 +72,7 @@ public:
   UFUNCTION() void FillBarSlots(const TArray<FBar>& Bars);
 
   UFUNCTION() void SetInteractiveObjectData(const FInteractiveCore& Data);
+  UFUNCTION() void HideName();
 };
 
 //++++ add function to set abilities of new character:
