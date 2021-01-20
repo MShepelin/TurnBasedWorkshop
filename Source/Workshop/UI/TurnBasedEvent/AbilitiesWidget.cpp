@@ -147,3 +147,25 @@ void UAbilitiesWidget::ShowBasicText()
 {
   MassageText->SetText(FText::FromString("<BigText> Info </>"));
 }
+
+void UAbilitiesWidget::SetInteractiveObjectData(const FInteractiveCore& Data)
+{
+  AWorkshopGameModeBase* GameMode = Cast<AWorkshopGameModeBase>(GetWorld()->GetAuthGameMode());
+  if (!GameMode)
+  {
+    UE_LOG(LogTemp, Error, TEXT("AbilitiesWidget tried to SetObjectName but GameMode isn't inherited from WorkshopGameModeBase"));
+    return;
+  }
+
+  FString CollectedObjectInfo = Data.InteractiveName.ToString();
+
+  for (int32 CT : Data.CTsOfObject)
+  {
+    FCTData CTData = GameMode->GetCTData(CT);
+
+    CollectedObjectInfo += \
+      " <" + CTData.TextStyle.ToString() + ">" + CTData.ShownName.ToString() + "</>";
+  }
+
+  NameText->SetText(FText::FromString(CollectedObjectInfo));
+}

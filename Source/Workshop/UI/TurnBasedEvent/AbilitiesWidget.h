@@ -14,6 +14,7 @@
 #include "Workshop/ActorClasses/Managers/RegistrationManager.h"
 #include "HAL/ThreadSafeCounter.h"
 #include "../MixedProgressBar.h"
+#include "Workshop/Types/InteractiveObjectData/InteractiveCore.h"
 #include "AbilitiesWidget.generated.h"
 
 class UAbilitySlot;
@@ -45,6 +46,7 @@ public:
   UPROPERTY(meta = (BindWidget)) URichTextBlock* SwapText;
 
   UPROPERTY(meta = (BindWidget)) URichTextBlock* MassageText;
+  UPROPERTY(meta = (BindWidget)) URichTextBlock* NameText;
 
   UPROPERTY(BlueprintReadOnly) FText SwapIsActiveText = FText::FromString("Stop Swap");
   UPROPERTY(BlueprintReadOnly) FText SwapIsInactiveText = FText::FromString("Start Swap");;
@@ -68,6 +70,8 @@ public:
 
   UFUNCTION() void FillAbilitySlots(const TArray<AInteractiveAbility*>& Abilities, bool bIsControlled);
   UFUNCTION() void FillBarSlots(const TArray<FBar>& Bars);
+
+  UFUNCTION() void SetInteractiveObjectData(const FInteractiveCore& Data);
 };
 
 //++++ add function to set abilities of new character:
