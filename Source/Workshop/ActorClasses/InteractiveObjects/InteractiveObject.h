@@ -133,13 +133,13 @@ public:
   // --------------------------- //
 
   // Called to start influence on other object.
-  UFUNCTION() void AddInfluenceOn(AInteractiveObject* object);
+  UFUNCTION() virtual void AddInfluenceOn(AInteractiveObject* object);
   // Called to stop influence on this object by another one.
-  UFUNCTION() void RemoveDependenceFrom(AInteractiveObject * object);
+  UFUNCTION() virtual void RemoveDependenceFrom(AInteractiveObject * object);
   // Called to remove influence of this obejct.
-  UFUNCTION() void ClearInflunces();
+  UFUNCTION() virtual void ClearInflunces();
   // Called to stop any influence on this obejct.
-  UFUNCTION() void ClearDependencies();
+  UFUNCTION() virtual void ClearDependencies();
 
   // --------------- //
   // Get information //

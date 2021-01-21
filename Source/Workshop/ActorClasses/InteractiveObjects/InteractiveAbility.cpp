@@ -20,6 +20,9 @@ AInteractiveAbility::AInteractiveAbility()
 
   // y-order
   AbilityPresentation->SetRelativeLocation(FVector(0, -1, 0)); 
+
+  AvailableTargets = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("AvailableTargets"));
+  AvailableTargets->SetupAttachment(RootComponent);
 }
 
 void AInteractiveAbility::SetCharacterOwner(AInteractiveCharacter* NewCharacterOwner)
@@ -76,6 +79,8 @@ void AInteractiveAbility::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AInteractiveAbility::BeginPlay()
 {
   Super::BeginPlay();
+
+  ResetAvailableTargets();
 }
 
 void AInteractiveAbility::PickedAsCentral()
@@ -164,5 +169,17 @@ void AInteractiveAbility::UpdateCharacterStatus()
     // Remove effect if it is no longer present
     if (!ChosenEffect.DecreaseDuration())
       AbilityDataCore.UsedEffects.RemoveAtSwap(EffectIndex);
+  }
+}
+
+void AInteractiveAbility::ResetAvailableTargets()
+{
+  AvailableTargets->ClearInstances();
+
+  FTransform TargetLocalLocation;
+  for (int TargetIndex = 0; TargetIndex < AbilityDataCore.NumOfTargets; ++TargetIndex)
+  {
+    AvailableTargets->AddInstance(TargetLocalLocation);
+    TargetLocalLocation.AddToTranslation(AvailableTargetsDirection);
   }
 }

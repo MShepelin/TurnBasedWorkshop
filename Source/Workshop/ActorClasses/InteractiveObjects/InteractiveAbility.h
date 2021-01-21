@@ -7,6 +7,7 @@
 #include "Templates/SharedPointer.h"
 #include "InteractiveCharacter.h"
 #include "Workshop/Types/InteractiveObjectData/AbilityCore.h"
+#include "Components/InstancedStaticMeshComponent.h"
 #include "InteractiveAbility.generated.h"
 
 class AInteractiveCharacter;
@@ -26,6 +27,13 @@ protected:
 
   UPROPERTY(VisibleDefaultsOnly)
   UPaperFlipbookComponent* AbilityPresentation;
+
+  UPROPERTY(EditDefaultsOnly)
+  UInstancedStaticMeshComponent* AvailableTargets;
+
+  // Used to create instances for AvailableTargets in a certain direction. 
+  UPROPERTY(EditDefaultsOnly)
+  FVector AvailableTargetsDirection;
 
   // ---------------- //
   // Owning character //
@@ -71,6 +79,15 @@ public:
 
   virtual void UnpickedAsTarget() override;
 
+  // --------------------------- //
+  // Influences and dependencies //
+  // --------------------------- //
+
+  //virtual void AddInfluenceOn() override;
+  //virtual void RemoveDependenceFrom() override;
+  //virtual void ClearInflunces() override;
+  //virtual void ClearDependencies() override;
+
   // ----------------- //
   // Ability's actions //
   // ----------------- //
@@ -83,9 +100,10 @@ public:
   UFUNCTION(BlueprintCallable)
   void ResolveAbility();
 
-  // Decrease duration of temporary effects depending on their resolve phase.
-  //UFUNCTION(BlueprintCallable)
-  //void UpdateEffects();
+  // Reset the counter of the number of available targets.
+  // It only changes the counter and visuals without editting the influence on other objects.
+  UFUNCTION(BlueprintCallable)
+  void ResetAvailableTargets();
 
   // ------------------- //
   // Ability's variables //
