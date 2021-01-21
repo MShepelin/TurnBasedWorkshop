@@ -28,7 +28,6 @@ protected:
   UPROPERTY(meta = (BindWidget)) UImage* AbilityIcon;
 
   UPROPERTY(meta = (BindWidget)) URichTextBlock* EffectsInfo;
-  UPROPERTY(meta = (BindWidget)) URichTextBlock* NumberOfTargets;
 
   UPROPERTY() AInteractiveAbility* ChosenAbility;
 

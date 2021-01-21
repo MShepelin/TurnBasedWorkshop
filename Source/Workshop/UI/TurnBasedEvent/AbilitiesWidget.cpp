@@ -168,7 +168,7 @@ void UAbilitiesWidget::SetInteractiveObjectData(const FInteractiveCore& Data)
     FCTData CTData = GameMode->GetCTData(CT);
 
     CollectedObjectInfo += \
-      " <" + CTData.TextStyle.ToString() + ">" + CTData.ShownName.ToString() + "</>";
+      "<" + CTData.TextStyle.ToString() + ">" + CTData.ShownName.ToString() + "</> ";
   }
 
   NameText->SetText(FText::FromString(CollectedObjectInfo + Data.InteractiveName.ToString()));
