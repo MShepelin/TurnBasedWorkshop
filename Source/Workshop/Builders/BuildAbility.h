@@ -27,4 +27,7 @@ public:
 
   UFUNCTION(BlueprintCallable)
   static TArray<FEffectData> GatherEffects(AInteractiveAbility* Ability);
+
+  UFUNCTION(BlueprintCallable)
+  static TArray<AInteractiveObject*> GetTargets(const AInteractiveAbility* Ability);
 };

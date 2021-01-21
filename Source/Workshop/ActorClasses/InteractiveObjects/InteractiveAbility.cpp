@@ -36,25 +36,18 @@ void AInteractiveAbility::SetCharacterOwner(AInteractiveCharacter* NewCharacterO
   CharacterOwner = NewCharacterOwner;
 }
 
-void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* TargetObject)
+void AInteractiveAbility::ResolveAbility_Implementation()
 {
-  //UBuildAbility::AddAllEffectsToObject(TargetObject, this);
-}
-
-void AInteractiveAbility::ResolveAbility() // make implenetable
-{
-  check(CharacterOwner != nullptr);
-
+  UE_LOG(LogTemp, Warning, TEXT("HEY!"));
   // Gather and remove all effects from EffectsToResolve
   TArray<FEffectData> ResolveEffects = UBuildAbility::GatherEffects(this);
 
+  CharacterOwner->PlayAnimation(AbilityDataCore.AbilityAnimationId, true);
+
   for (AInteractiveObject* DependentObject : InfluencesOn)
-  {
-    CharacterOwner->PlayAnimation(AbilityDataCore.AbilityAnimationId, true);
+  {  
     UBuildAbility::AddAllEffectsToObject(ResolveEffects, DependentObject);
   }
-
-  //ClearInflunces();
 }
 
 void AInteractiveAbility::PostInitProperties()

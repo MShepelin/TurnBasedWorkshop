@@ -217,7 +217,11 @@ void AInteractiveCharacter::ResolveCharacterActions()
 
 void AInteractiveCharacter::UpdateCharacterStatus()
 {
-  ResetAnimation();
+  if (CharacterDataCore.bIsExhausted)
+  {
+    return;
+  }
+
   size_t ActiveBarsCounter = 0;
   for (FBar& Stat : InteractiveDataCore.GetStats())
   {
@@ -227,8 +231,13 @@ void AInteractiveCharacter::UpdateCharacterStatus()
 
   if (ActiveBarsCounter == InteractiveDataCore.Stats.Num())
   {
+
     PlayAnimation(EXHAUST_ANIMATION_ID, false);
     CharacterDataCore.bIsExhausted = true;
+  }
+  else
+  {
+    PlayAnimation(IDLE_ANIMATION_ID, false);
   }
 }
 
@@ -252,7 +261,15 @@ void AInteractiveCharacter::Tick(float DeltaTime)
   Super::Tick(DeltaTime);
 
   TTuple<UPaperFlipbook*, float, int32> FoundAnimationData{ nullptr, 0, 0 };
-  while (CharacterDataCore.AnimationQueue.Dequeue(FoundAnimationData)) {};
+  while (CharacterDataCore.AnimationQueue.Dequeue(FoundAnimationData)) 
+  {
+    if (FoundAnimationData.Get<2>() == EXHAUST_ANIMATION_ID)
+    {
+      while (CharacterDataCore.AnimationQueue.Pop()) {};
+      CharacterPresentation->SetLooping(false);
+      break;
+    }
+  }
 
   if (FoundAnimationData.Get<0>())
   {

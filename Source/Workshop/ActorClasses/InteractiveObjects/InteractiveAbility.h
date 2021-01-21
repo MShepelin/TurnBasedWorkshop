@@ -44,6 +44,7 @@ protected:
   // Owning character //
   // ---------------- //
 
+  UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
   AInteractiveCharacter* CharacterOwner;
 
 public:
@@ -94,13 +95,13 @@ public:
   // Ability's actions //
   // ----------------- //
 
+  // Defines what happens when the ability must be resolved.
+  // 1) Use BuildAbility function library to create implementation
+  // 2) To get all chosen targets use GetTargets from BuildAbility
+  // 3) Implementation must be thead-safe
   UFUNCTION(BlueprintNativeEvent)
-  void CustomEffect(AInteractiveObject* TargetObject);
-  virtual void CustomEffect_Implementation(AInteractiveObject* TargetObject);
-
-  // Used when all targets are chosen and effects should be transfered.
-  UFUNCTION(BlueprintCallable)
   void ResolveAbility();
+  virtual void ResolveAbility_Implementation();
 
   // Reset the counter of the number of available targets.
   // It only changes the counter and visuals without editting the influence on other objects.

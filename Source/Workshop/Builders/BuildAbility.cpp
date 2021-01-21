@@ -46,3 +46,14 @@ TArray<FEffectData> UBuildAbility::GatherEffects(AInteractiveAbility* Ability)
 
   return ResolvedEffects;
 }
+
+TArray<AInteractiveObject*> UBuildAbility::GetTargets(const AInteractiveAbility* Ability)
+{
+  TArray<AInteractiveObject*> Targets;
+  for (AInteractiveObject* Target : Ability->InfluencesOn)
+  {
+    Targets.Add(Target);
+  }
+
+  return Targets;
+}
