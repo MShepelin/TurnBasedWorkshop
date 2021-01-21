@@ -28,16 +28,17 @@ protected:
   UPROPERTY(VisibleDefaultsOnly)
   UPaperFlipbookComponent* AbilityPresentation;
 
+  // Pins represent the number of targets that the player can choose.
   UPROPERTY(EditDefaultsOnly)
-  UInstancedStaticMeshComponent* AvailableTargets;
+  UInstancedStaticMeshComponent* TargetsPins;
 
-  // Used to create instances for AvailableTargets in a certain direction. 
+  // Used to create instances for TargetsPins in a certain direction. 
   UPROPERTY(EditDefaultsOnly)
-  FVector AvailableTargetsDirection;
+  FVector PinSpawnDirection;
 
-  // Used to create instances for AvailableTargets in a certain direction. 
+  // Transform of the first instance of TargetsPins.
   UPROPERTY(EditDefaultsOnly)
-  FTransform AvailableTargetsBaseTransform;
+  FTransform FirstPinLocalTransform;
 
   // ---------------- //
   // Owning character //

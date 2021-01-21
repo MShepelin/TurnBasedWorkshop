@@ -141,7 +141,7 @@ UTexture2D* AInteractiveAbility::GetIconUI() const
 
 void AInteractiveAbility::UpdateCharacterStatus()
 {
-  // Receive additional effects.
+  // Receive additional effects
   while (!AbilityDataCore.EffectsToReceive.IsEmpty())
   {
     AbilityDataCore.UsedEffects.Add(FEffectData());
@@ -152,7 +152,7 @@ void AInteractiveAbility::UpdateCharacterStatus()
   {
     FEffectData& ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
 
-    // BonusEffects always go after basic effects.
+    // BonusEffects always go after basic effects
     if (!ChosenEffect.bIsBonusEffect)
       break;
 
@@ -164,25 +164,25 @@ void AInteractiveAbility::UpdateCharacterStatus()
 
 void AInteractiveAbility::ResetAvailableTargets()
 {
-  AvailableTargets->ClearInstances();
+  TargetsPins->ClearInstances();
 
-  FTransform TargetLocalLocation = AvailableTargetsBaseTransform;
+  FTransform NewInstanceTransform = FirstPinLocalTransform;
   for (int TargetIndex = 0; TargetIndex < AbilityDataCore.NumOfTargets; ++TargetIndex)
   {
-    AvailableTargets->AddInstance(TargetLocalLocation);
-    TargetLocalLocation.AddToTranslation(AvailableTargetsDirection);
+    TargetsPins->AddInstance(NewInstanceTransform);
+    NewInstanceTransform.AddToTranslation(PinSpawnDirection);
   }
 }
 
 bool AInteractiveAbility::AddInfluenceOn(AInteractiveObject * Object)
 {
-  int NumOfAvailableTargets = AvailableTargets->GetInstanceCount();
+  int NumOfAvailableTargets = TargetsPins->GetInstanceCount();
   if (!NumOfAvailableTargets || !Super::AddInfluenceOn(Object))
   {
     return false;
   }
 
-  AvailableTargets->RemoveInstance(NumOfAvailableTargets - 1);
+  TargetsPins->RemoveInstance(NumOfAvailableTargets - 1);
   return true;
 }
 
@@ -193,16 +193,16 @@ bool AInteractiveAbility::RemoveInfluenceOn(AInteractiveObject* Object)
     return false;
   }
 
-  FTransform NewInstanceTransform = AvailableTargetsBaseTransform;
-  int NumOfAvailableTargets = AvailableTargets->GetInstanceCount();
+  FTransform NewInstanceTransform = FirstPinLocalTransform;
+  int NumOfAvailableTargets = TargetsPins->GetInstanceCount();
 
   if (NumOfAvailableTargets)
   {
-    AvailableTargets->GetInstanceTransform(NumOfAvailableTargets - 1, NewInstanceTransform);
-    NewInstanceTransform.AddToTranslation(AvailableTargetsDirection);
+    TargetsPins->GetInstanceTransform(NumOfAvailableTargets - 1, NewInstanceTransform);
+    NewInstanceTransform.AddToTranslation(PinSpawnDirection);
   }
 
-  AvailableTargets->AddInstance(NewInstanceTransform);
+  TargetsPins->AddInstance(NewInstanceTransform);
 
   return true;
 }

@@ -160,7 +160,7 @@ void AInteractiveObject::PickedAsTarget()
 
   InteractivityIcon->SetIconState(EIconState::ChosenTarget);
 }
-
+ 
 void AInteractiveObject::UnpickedAsTarget()
 {
   check(MainManager != nullptr);
