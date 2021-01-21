@@ -23,5 +23,8 @@ public:
 
   // Adds all effects of ability without checking if ability is applicable.
   UFUNCTION(BlueprintCallable)
-  static AInteractiveObject* AddAllEffectsToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability);
+  static void AddAllEffectsToObject(const TArray<FEffectData>& Effects, AInteractiveObject* TargetObject);
+
+  UFUNCTION(BlueprintCallable)
+  static TArray<FEffectData> GatherEffects(AInteractiveAbility* Ability);
 };

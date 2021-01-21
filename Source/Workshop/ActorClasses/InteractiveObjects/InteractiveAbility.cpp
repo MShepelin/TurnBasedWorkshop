@@ -38,27 +38,23 @@ void AInteractiveAbility::SetCharacterOwner(AInteractiveCharacter* NewCharacterO
 
 void AInteractiveAbility::CustomEffect_Implementation(AInteractiveObject* TargetObject)
 {
-  UBuildAbility::AddAllEffectsToObject(TargetObject, this);
+  //UBuildAbility::AddAllEffectsToObject(TargetObject, this);
 }
 
-void AInteractiveAbility::ResolveAbility()
+void AInteractiveAbility::ResolveAbility() // make implenetable
 {
   check(CharacterOwner != nullptr);
 
-  for (FEffectData Effect : AbilityDataCore.UsedEffects)
-  {
-    AbilityDataCore.EffectsToResolve.Enqueue(Effect);
-  }
-
-  CharacterOwner->PlayAnimation(AbilityDataCore.AbilityAnimationId, true);
-  //++++ add movement
+  // Gather and remove all effects from EffectsToResolve
+  TArray<FEffectData> ResolveEffects = UBuildAbility::GatherEffects(this);
 
   for (AInteractiveObject* DependentObject : InfluencesOn)
   {
-    CustomEffect(DependentObject);
+    CharacterOwner->PlayAnimation(AbilityDataCore.AbilityAnimationId, true);
+    UBuildAbility::AddAllEffectsToObject(ResolveEffects, DependentObject);
   }
 
-  ClearInflunces();
+  //ClearInflunces();
 }
 
 void AInteractiveAbility::PostInitProperties()
@@ -141,13 +137,10 @@ UTexture2D* AInteractiveAbility::GetIconUI() const
 
 void AInteractiveAbility::UpdateCharacterStatus()
 {
-  // Receive additional effects
-  while (!AbilityDataCore.EffectsToReceive.IsEmpty())
-  {
-    AbilityDataCore.UsedEffects.Add(FEffectData());
-    AbilityDataCore.EffectsToReceive.Dequeue(AbilityDataCore.UsedEffects.Last());
-  }
+  // Clear all resolved effects
+  while (AbilityDataCore.EffectsToResolve.Pop()) {};
 
+  // Decrease effects' durations
   for (int EffectIndex = AbilityDataCore.UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
   {
     FEffectData& ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
@@ -159,6 +152,13 @@ void AInteractiveAbility::UpdateCharacterStatus()
     // Remove effect if it is no longer present
     if (!ChosenEffect.DecreaseDuration())
       AbilityDataCore.UsedEffects.RemoveAtSwap(EffectIndex);
+  }
+
+  // Receive additional effects
+  while (!AbilityDataCore.EffectsToReceive.IsEmpty())
+  {
+    AbilityDataCore.UsedEffects.Add(FEffectData());
+    AbilityDataCore.EffectsToReceive.Dequeue(AbilityDataCore.UsedEffects.Last());
   }
 }
 
@@ -209,5 +209,14 @@ bool AInteractiveAbility::RemoveInfluenceOn(AInteractiveObject* Object)
 
 void AInteractiveAbility::ClearInflunces()
 {
+  Super::ClearInflunces();
   ResetAvailableTargets();
+}
+
+void AInteractiveAbility::PrepareToResolve()
+{
+  for (FEffectData Effect : AbilityDataCore.UsedEffects)
+  {
+    AbilityDataCore.EffectsToResolve.Enqueue(Effect);
+  }
 }

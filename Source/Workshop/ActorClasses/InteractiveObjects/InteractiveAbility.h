@@ -107,6 +107,8 @@ public:
   UFUNCTION(BlueprintCallable)
   void ResetAvailableTargets();
 
+  void PrepareToResolve();
+
   // ------------------- //
   // Ability's variables //
   // ------------------- //

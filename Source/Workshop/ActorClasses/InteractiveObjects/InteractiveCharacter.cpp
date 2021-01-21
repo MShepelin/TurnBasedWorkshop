@@ -172,7 +172,7 @@ void AInteractiveCharacter::RefreshInteractive()
   }
 }
 
-void AInteractiveCharacter::ClearCentralAbility()
+void AInteractiveCharacter::ClearCentralAbility(bool bOnlyVisually)
 {
   if (!CentralAbility)
   {
@@ -186,29 +186,33 @@ void AInteractiveCharacter::ClearCentralAbility()
 
   CentralAbility->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-  CentralAbility->ClearDependencies();
-  CentralAbility->ClearInflunces();
   ChangeCentralAbilityVisibility(false);
 
   ACameraController* CurrentController = Cast<ACameraController>(UGameplayStatics::GetPlayerController(this, 0));
   FVector HiddenLocation = CurrentController->GetCurrentCamera()->GetHiddenLocation(); //???? may be save hidden location somewhere
   CentralAbility->SetActorLocation(HiddenLocation);
+
+  if (!bOnlyVisually)
+  {
+    CentralAbility->ClearDependencies();
+    CentralAbility->ClearInflunces();
+    CentralAbility = nullptr;
+  }
 }
 
 void AInteractiveCharacter::ResolveCharacterActions()
 {
-  if (!CentralAbility || CharacterDataCore.bIsExhausted)
+  if (CharacterDataCore.bIsExhausted)
   {
-    if (!CharacterDataCore.bIsExhausted)
-      UpdateCharacterStatus();
     return;
   }
 
-  //++++ add movement
-  //ClearCentralAbility();
-  CentralAbility->ResolveAbility();
+  if (CentralAbility)
+  {
+    CentralAbility->ResolveAbility();
+  }
+
   UpdateCharacterStatus();
-  //++++ add movement
 }
 
 void AInteractiveCharacter::UpdateCharacterStatus()
@@ -260,4 +264,12 @@ void AInteractiveCharacter::Tick(float DeltaTime)
 void AInteractiveCharacter::ActionWithAnimation_Implementation(float Duration, int32 AnimationID)
 {
 
+}
+
+void AInteractiveCharacter::PrepareCentralAbilityToResolve()
+{
+  if (CentralAbility)
+  {
+    CentralAbility->PrepareToResolve();
+  }
 }

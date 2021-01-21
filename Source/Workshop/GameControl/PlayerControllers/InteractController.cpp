@@ -264,6 +264,7 @@ void AInteractController::PlayerWantsToChangePhase()
     return;
   }
   
+  // Take control from the player
   bTurnIsControlled = false;
 
   ATurnBasedManager* Manager;
@@ -282,11 +283,24 @@ void AInteractController::PlayerWantsToChangePhase()
       Manager->GetCentralObject()->UnpickedAsCentral();
     }
 
+    // Reset thread
     if (ResolveThread)
     {
-      // PlayerWantsToChangePhase can't be called until ResolveThread changes bTurnIsControlled. 
       ResolveThread->Kill(false);
       ResolveRunnable.reset();
+    }
+
+    // Remove abilities from the player's screen
+    for (AInteractiveCharacter* ControlledCharacter : PlacableCharacters)
+    {
+      // Pointers to central abilities must stay valid for their characters
+      ControlledCharacter->ClearCentralAbility(true);
+    }
+
+    // To make all effects work, we need to prepare abilities to resolve
+    for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
+    {
+      PlacableCharacter->PrepareCentralAbilityToResolve();
     }
 
     ResolveRunnable = std::make_shared<FCharactersResolve>(this);
@@ -295,7 +309,7 @@ void AInteractController::PlayerWantsToChangePhase()
     Manager->NextPhase();
     UpdatePhaseInfo();
 
-    //bTurnIsControlled changed by the thread
+    //bTurnIsControlled will be changed by the thread
     return;
   }
 
@@ -307,12 +321,15 @@ void AInteractController::PlayerWantsToChangePhase()
       {
         Ability->UpdateCharacterStatus();
       }
+
+      PlacableCharacter->ClearCentralAbility();
     }
   }
 
   Manager->NextPhase();
   UpdatePhaseInfo();
 
+  // Return control to the player
   bTurnIsControlled = true;
 }
 
@@ -330,7 +347,7 @@ void AInteractController::UpdatePhaseInfo() //???? move to AbilitiesWidget
 
   if (Phase == ETurnPhase::End)
   {
-    UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString("Next turn"));
+    UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString("End turn"));
     return;
   }
   else

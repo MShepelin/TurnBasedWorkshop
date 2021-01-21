@@ -105,6 +105,8 @@ public:
   // Checks stats and apply conditions based on their values.
   void UpdateCharacterStatus() override; // RENAME!
 
+  void PrepareCentralAbilityToResolve();
+
   // ----------------- //
   // UI with abilities //
   // ----------------- //
@@ -116,7 +118,7 @@ public:
   void SetCentralAbility(AInteractiveAbility* Ability);
 
   UFUNCTION(BlueprintCallable)
-  void ClearCentralAbility();
+  void ClearCentralAbility(bool bOnlyVisually = false);
 
   // ------ //
   // Others //

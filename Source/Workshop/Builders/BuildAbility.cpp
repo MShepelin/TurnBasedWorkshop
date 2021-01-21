@@ -3,32 +3,23 @@
 
 #include "BuildAbility.h"
 
-AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* TargetObject, AInteractiveAbility* Ability)
+void UBuildAbility::AddAllEffectsToObject(const TArray<FEffectData>& Effects, AInteractiveObject* TargetObject)
 {
-  if (!(TargetObject && Ability))
+  // Check if we should apply special logic to TargetObject
+  AInteractiveAbility* TargetAbility = Cast<AInteractiveAbility>(TargetObject);
+  if (TargetAbility && (TargetObject->GetInteractiveType() & static_cast<int32>(EInteractiveType::Ability)))
   {
-    UE_LOG(LogTemp, Error, TEXT("Invalid input for AddAllEffectsToObject function!"));
-    return TargetObject;
-  }
-
-  if (TargetObject->GetInteractiveType() & static_cast<int32>(EInteractiveType::Ability))
-  {
-    AInteractiveAbility* TargetAbility = Cast<AInteractiveAbility>(TargetObject);
-    while (!Ability->AbilityDataCore.EffectsToResolve.IsEmpty())
+    for (const FEffectData& Effect : Effects)
     {
-      FEffectData Effect;
-      Ability->AbilityDataCore.EffectsToResolve.Dequeue(Effect);
-      Effect.bIsBonusEffect = true;
       TargetAbility->AbilityDataCore.EffectsToResolve.Enqueue(Effect);
       TargetAbility->AbilityDataCore.EffectsToReceive.Enqueue(Effect);
     }
 
-    TargetObject->UpdateCharacterStatus();
-    return TargetObject;
+    // Don't UpdateInteractive() ability
+    return;
   }
 
-  FEffectData Effect;
-  while (Ability->AbilityDataCore.EffectsToResolve.Dequeue(Effect))
+  for (const FEffectData& Effect : Effects)
   {
     for (FBar& Stat : TargetObject->InteractiveDataCore.Stats)
     {
@@ -41,5 +32,17 @@ AInteractiveObject* UBuildAbility::AddAllEffectsToObject(AInteractiveObject* Tar
   }
 
   TargetObject->UpdateCharacterStatus();
-  return TargetObject;
+}
+
+TArray<FEffectData> UBuildAbility::GatherEffects(AInteractiveAbility* Ability)
+{
+  TArray<FEffectData> ResolvedEffects;
+  while (!Ability->AbilityDataCore.EffectsToResolve.IsEmpty())
+  {
+    ResolvedEffects.Add(FEffectData());
+    Ability->AbilityDataCore.EffectsToResolve.Dequeue(ResolvedEffects.Last());
+    ResolvedEffects.Last().bIsBonusEffect = true;
+  }
+
+  return ResolvedEffects;
 }
