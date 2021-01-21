@@ -173,6 +173,10 @@ public:
   // Called to refresh appearance.
   UFUNCTION() virtual void RefreshInteractive();
 
+  UFUNCTION(BlueprintNativeEvent)
+  void OnExhausted();
+  virtual void OnExhausted_Implementation();
+
   // Resolve effects depeding on their resolve phase.
   // UFUNCTION() void ResolveAccumulatedEffects(ETurnPhase TurnPhase);
 

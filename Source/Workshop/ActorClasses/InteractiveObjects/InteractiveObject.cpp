@@ -234,3 +234,8 @@ void AInteractiveObject::PlayAnimation(int32 AnimationId, bool bWaitUntilEnds)
 {
 
 }
+
+void AInteractiveObject::OnExhausted_Implementation()
+{
+
+}

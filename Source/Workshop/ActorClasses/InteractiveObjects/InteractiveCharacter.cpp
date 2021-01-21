@@ -267,6 +267,7 @@ void AInteractiveCharacter::Tick(float DeltaTime)
     {
       while (CharacterDataCore.AnimationQueue.Pop()) {};
       CharacterPresentation->SetLooping(false);
+      OnExhausted();
       break;
     }
   }
