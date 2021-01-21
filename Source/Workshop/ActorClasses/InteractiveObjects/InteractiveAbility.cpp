@@ -176,10 +176,58 @@ void AInteractiveAbility::ResetAvailableTargets()
 {
   AvailableTargets->ClearInstances();
 
-  FTransform TargetLocalLocation;
+  FTransform TargetLocalLocation = AvailableTargetsBaseTransform;
   for (int TargetIndex = 0; TargetIndex < AbilityDataCore.NumOfTargets; ++TargetIndex)
   {
     AvailableTargets->AddInstance(TargetLocalLocation);
     TargetLocalLocation.AddToTranslation(AvailableTargetsDirection);
   }
+}
+
+bool AInteractiveAbility::AddInfluenceOn(AInteractiveObject * Object)
+{
+  int NumOfAvailableTargets = AvailableTargets->GetInstanceCount();
+  if (!NumOfAvailableTargets || !Super::AddInfluenceOn(Object))
+  {
+    return false;
+  }
+
+  AvailableTargets->RemoveInstance(NumOfAvailableTargets - 1);
+  return true;
+}
+
+bool AInteractiveAbility::RemoveDependenceFrom(AInteractiveObject * Object)
+{
+  if (!Super::RemoveDependenceFrom(Object))
+  {
+    return false;
+  }
+
+  return true;
+}
+
+bool AInteractiveAbility::RemoveInfluenceOn(AInteractiveObject* Object)
+{
+  if (!Super::RemoveInfluenceOn(Object))
+  {
+    return false;
+  }
+
+  FTransform NewInstanceTransform = AvailableTargetsBaseTransform;
+  int NumOfAvailableTargets = AvailableTargets->GetInstanceCount();
+
+  if (NumOfAvailableTargets)
+  {
+    AvailableTargets->GetInstanceTransform(NumOfAvailableTargets - 1, NewInstanceTransform);
+    NewInstanceTransform.AddToTranslation(AvailableTargetsDirection);
+  }
+
+  AvailableTargets->AddInstance(NewInstanceTransform);
+
+  return true;
+}
+
+void AInteractiveAbility::ClearInflunces()
+{
+  ResetAvailableTargets();
 }

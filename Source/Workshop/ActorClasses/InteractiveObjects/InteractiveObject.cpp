@@ -51,30 +51,40 @@ void AInteractiveObject::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AInteractiveObject::AddInfluenceOn(AInteractiveObject* TargetObject)
+bool AInteractiveObject::AddInfluenceOn(AInteractiveObject* TargetObject)
 {
   if (!InfluencesOn.Find(TargetObject))
   {
     InfluencesOn.Add(TargetObject);
     TargetObject->DependsOn.Add(this);
+    return true;
   }
-  else
-  {
-    UE_LOG(LogTemp, Warning, TEXT("Addition failed, objects are already connected"));
-  }
+
+  return false;
 }
 
-void AInteractiveObject::RemoveDependenceFrom(AInteractiveObject* TargetObject)
+bool AInteractiveObject::RemoveDependenceFrom(AInteractiveObject* TargetObject)
 {
   if (DependsOn.Find(TargetObject))
   {
     TargetObject->InfluencesOn.Remove(this);
     DependsOn.Remove(TargetObject);
+    return true;
   }
-  else
+
+  return false;
+}
+
+bool AInteractiveObject::RemoveInfluenceOn(AInteractiveObject * TargetObject)
+{
+  if (InfluencesOn.Find(TargetObject))
   {
-    UE_LOG(LogTemp, Warning, TEXT("Removal failed, objects are not connected"));
+    InfluencesOn.Remove(TargetObject);
+    TargetObject->DependsOn.Remove(this);
+    return true;
   }
+
+  return false;
 }
 
 #if WITH_EDITOR

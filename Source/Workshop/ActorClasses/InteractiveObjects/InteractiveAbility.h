@@ -35,6 +35,10 @@ protected:
   UPROPERTY(EditDefaultsOnly)
   FVector AvailableTargetsDirection;
 
+  // Used to create instances for AvailableTargets in a certain direction. 
+  UPROPERTY(EditDefaultsOnly)
+  FTransform AvailableTargetsBaseTransform;
+
   // ---------------- //
   // Owning character //
   // ---------------- //
@@ -83,10 +87,10 @@ public:
   // Influences and dependencies //
   // --------------------------- //
 
-  //virtual void AddInfluenceOn() override;
-  //virtual void RemoveDependenceFrom() override;
-  //virtual void ClearInflunces() override;
-  //virtual void ClearDependencies() override;
+  virtual bool AddInfluenceOn(AInteractiveObject* Object) override;
+  virtual bool RemoveInfluenceOn(AInteractiveObject* Object) override;
+  virtual bool RemoveDependenceFrom(AInteractiveObject * Object) override;
+  virtual void ClearInflunces() override;
 
   // ----------------- //
   // Ability's actions //
