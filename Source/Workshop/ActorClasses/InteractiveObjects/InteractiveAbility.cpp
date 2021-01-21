@@ -21,8 +21,8 @@ AInteractiveAbility::AInteractiveAbility()
   // y-order
   AbilityPresentation->SetRelativeLocation(FVector(0, -1, 0)); 
 
-  AvailableTargets = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("AvailableTargets"));
-  AvailableTargets->SetupAttachment(RootComponent);
+  TargetsPins = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("AvailableTargets"));
+  TargetsPins->SetupAttachment(RootComponent);
 }
 
 void AInteractiveAbility::SetCharacterOwner(AInteractiveCharacter* NewCharacterOwner)
