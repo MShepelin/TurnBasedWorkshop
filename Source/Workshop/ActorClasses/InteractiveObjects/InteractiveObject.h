@@ -136,10 +136,6 @@ public:
   // Returns true if influence was added successfully and false otherwise.
   UFUNCTION() virtual bool AddInfluenceOn(AInteractiveObject* Object);
 
-  // Called to stop influence on this object by another one.
-  // Returns true if dependence was removed successfully and false otherwise.
-  UFUNCTION() virtual bool RemoveDependenceFrom(AInteractiveObject * Object);
-
   // Called to remove influence on the other object.
   // Returns true if dependence was removed successfully and false otherwise.
   UFUNCTION() virtual bool RemoveInfluenceOn(AInteractiveObject * Object);

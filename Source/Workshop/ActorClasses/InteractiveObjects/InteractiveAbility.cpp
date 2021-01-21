@@ -123,16 +123,6 @@ void AInteractiveAbility::UnpickedAsCentral()
   MainManager->PutToSleepManagedObjects(MainManager);
 }
 
-void AInteractiveAbility::PickedAsTarget()
-{
-  Super::PickedAsTarget();
-}
-
-void AInteractiveAbility::UnpickedAsTarget()
-{
-  Super::UnpickedAsTarget();
-}
-
 int32 AInteractiveAbility::GetTargetTypeMask() const
 {
   return AbilityDataCore.TargetTypeMask;
@@ -193,16 +183,6 @@ bool AInteractiveAbility::AddInfluenceOn(AInteractiveObject * Object)
   }
 
   AvailableTargets->RemoveInstance(NumOfAvailableTargets - 1);
-  return true;
-}
-
-bool AInteractiveAbility::RemoveDependenceFrom(AInteractiveObject * Object)
-{
-  if (!Super::RemoveDependenceFrom(Object))
-  {
-    return false;
-  }
-
   return true;
 }
 

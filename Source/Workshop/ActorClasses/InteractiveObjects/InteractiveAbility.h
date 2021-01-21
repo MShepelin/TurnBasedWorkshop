@@ -79,17 +79,14 @@ public:
 
   virtual void UnpickedAsCentral() override;
 
-  virtual void PickedAsTarget() override;
-
-  virtual void UnpickedAsTarget() override;
-
   // --------------------------- //
   // Influences and dependencies //
   // --------------------------- //
 
   virtual bool AddInfluenceOn(AInteractiveObject* Object) override;
+
   virtual bool RemoveInfluenceOn(AInteractiveObject* Object) override;
-  virtual bool RemoveDependenceFrom(AInteractiveObject * Object) override;
+
   virtual void ClearInflunces() override;
 
   // ----------------- //

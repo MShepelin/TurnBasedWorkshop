@@ -63,18 +63,6 @@ bool AInteractiveObject::AddInfluenceOn(AInteractiveObject* TargetObject)
   return false;
 }
 
-bool AInteractiveObject::RemoveDependenceFrom(AInteractiveObject* TargetObject)
-{
-  if (DependsOn.Find(TargetObject))
-  {
-    TargetObject->InfluencesOn.Remove(this);
-    DependsOn.Remove(TargetObject);
-    return true;
-  }
-
-  return false;
-}
-
 bool AInteractiveObject::RemoveInfluenceOn(AInteractiveObject * TargetObject)
 {
   if (InfluencesOn.Find(TargetObject))
@@ -165,7 +153,10 @@ void AInteractiveObject::UnpickedAsCentral()
 void AInteractiveObject::PickedAsTarget()
 {
   check(MainManager != nullptr);
-  MainManager->CentralObject->AddInfluenceOn(this);
+  if (!MainManager->CentralObject->AddInfluenceOn(this))
+  {
+    return;
+  }
 
   InteractivityIcon->SetIconState(EIconState::ChosenTarget);
 }
@@ -173,7 +164,7 @@ void AInteractiveObject::PickedAsTarget()
 void AInteractiveObject::UnpickedAsTarget()
 {
   check(MainManager != nullptr);
-  RemoveDependenceFrom(MainManager->CentralObject);
+  MainManager->CentralObject->RemoveInfluenceOn(this);
 
   InteractivityIcon->SetIconState(EIconState::AvailableTarget);
 }
