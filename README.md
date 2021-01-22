@@ -25,6 +25,7 @@ Used names:
 - **Core** (DataCore) is object's data which describes it regardless of other objects and current game situation and can travel through levels  (for example, rendered models and sprites, numbers and strings, but not pointers to any objects or transform).
 
 ### Assets
+Due to the fact that the art is not ready yet, different assets are used for testing.
 
 [RPG Monster Pack](https://pipoya.itch.io/free-rpg-monster-pack)
 
@@ -33,5 +34,7 @@ https://game-icons.net/
 https://craftpix.net/freebies/free-horizontal-2d-game-backgrounds/
 
 ### Screenshots
+
+Screenshots of testing gameplay features with exported assets.
 
 ![Screenshot](./AdditionalMaterials/Screenshot.png)
