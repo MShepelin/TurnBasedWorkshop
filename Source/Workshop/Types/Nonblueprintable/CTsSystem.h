@@ -86,18 +86,18 @@ struct Node
   }
 };
 
-template<class CT, class Object, class ManagerClass> class CTSearchInterface;
+template<class CT, class Object> class CTSearchInterface;
 
 /**
  * Provides system to search objects by needed CTs.
  */
-template<class CT, class Object, class ManagerClass>
+template<class CT, class Object>
 class CTsSearch
 {
 private:
   using NodeType = Node<Object>;
   using iterator = typename std::initializer_list<CT>::iterator;
-  using SearchInterface = CTSearchInterface<CT, Object, ManagerClass>;
+  using SearchInterface = CTSearchInterface<CT, Object>;
 
   TMap<CT, std::shared_ptr<NodeType>> CTToNodeMap;
   TArray<std::weak_ptr<NodeType>> ObjectNodes;
@@ -131,24 +131,19 @@ public:
 };
 
 /** The Object needs to be derived from CTSearchInterface to be included in a CTsSearch */
-template<class CT, class Object, class ManagerClass>
+template<class CT, class Object>
 class CTSearchInterface
 {
 protected:
-  /** Used to set a node for a graph inside CTsSearch */
+  /** Used to set a node for the graph inside CTsSearch */
   virtual std::shared_ptr<Node<Object>>& GetNodeForCT() = 0;
 
+public:
   /** Used to get all CTs from the object */
   virtual const TArray<CT>* GetCTs() const = 0;
 
-  friend ManagerClass;
-
-  /**
-   * Functions and member variables in the "CTs System Support" section are used by CTsSearch to
-   * implement search mechanism. They shouldn't be used by any other classes, except from
-   * ManagerClass which implements search interface, so to say.
-   */
-  friend class CTsSearch<CT, Object, ManagerClass>;
+  /** Protected members of CTSearchInterface are used to implement search mechanism */
+  friend class CTsSearch<CT, Object>;
 };
 
 // --------------- //
@@ -160,15 +155,15 @@ protected:
 *
 * @note The objects which are already added won't be updated
 */
-template<class CT, class Object, class ManagerClass>
-void CTsSearch<CT, Object, ManagerClass>::AddCT(CT CTToAdd)
+template<class CT, class Object>
+void CTsSearch<CT, Object>::AddCT(CT CTToAdd)
 {
   CTToNodeMap.Add(CTToAdd, std::shared_ptr<NodeType>(new NodeType(true)));
 }
 
 /** Remove all CTs and include several CTs to the search system.  */
-template<class CT, class Object, class ManagerClass>
-void CTsSearch<CT, Object, ManagerClass>::InitialiseCTs(std::initializer_list<CT> AllAvailableCTs)
+template<class CT, class Object>
+void CTsSearch<CT, Object>::InitialiseCTs(std::initializer_list<CT> AllAvailableCTs)
 {
   CTToNodeMap.Empty();
 
@@ -178,21 +173,21 @@ void CTsSearch<CT, Object, ManagerClass>::InitialiseCTs(std::initializer_list<CT
   }
 }
 
-template<class CT, class Object, class ManagerClass>
-CTsSearch<CT, Object, ManagerClass>::CTsSearch()
+template<class CT, class Object>
+CTsSearch<CT, Object>::CTsSearch()
 {
 
 }
 
-template<class CT, class Object, class ManagerClass>
-CTsSearch<CT, Object, ManagerClass>::CTsSearch(std::initializer_list<CT> AllAvailableCTs)
+template<class CT, class Object>
+CTsSearch<CT, Object>::CTsSearch(std::initializer_list<CT> AllAvailableCTs)
 {
   InitialiseCTs(AllAvailableCTs);
 }
 
 /** Connects the object to the search system. */
-template<class CT, class Object, class ManagerClass>
-void CTsSearch<CT, Object, ManagerClass>::AddObject(Object* AdditionalObject)
+template<class CT, class Object>
+void CTsSearch<CT, Object>::AddObject(Object* AdditionalObject)
 {
   SearchInterface* ObjectToAdd;
   if (nullptr == (ObjectToAdd = AdditionalObject))
@@ -224,8 +219,8 @@ void CTsSearch<CT, Object, ManagerClass>::AddObject(Object* AdditionalObject)
 }
 
 /** Removes the object from the search system. */
-template<class CT, class Object, class ManagerClass>
-void CTsSearch<CT, Object, ManagerClass>::RemoveObject(Object* ObjectToRemove)
+template<class CT, class Object>
+void CTsSearch<CT, Object>::RemoveObject(Object* ObjectToRemove)
 {
   SearchInterface* ObjectToRemoveInterface;
   if (nullptr == (ObjectToRemoveInterface = ObjectToRemove))
@@ -238,8 +233,8 @@ void CTsSearch<CT, Object, ManagerClass>::RemoveObject(Object* ObjectToRemove)
 }
 
 /** Finds objects which have enough number of CTs from CTsArray. */
-template<class CT, class Object, class ManagerClass>
-TArray<Object*> CTsSearch<CT, Object, ManagerClass>::FindByCTs(const TArray<int32> CTsArray, int EnoughNumberOfCTs) const
+template<class CT, class Object>
+TArray<Object*> CTsSearch<CT, Object>::FindByCTs(const TArray<int32> CTsArray, int EnoughNumberOfCTs) const
 {
   if (EnoughNumberOfCTs < 0)
   {
@@ -276,8 +271,8 @@ TArray<Object*> CTsSearch<CT, Object, ManagerClass>::FindByCTs(const TArray<int3
 }
 
 /** Get all objects connected to the search system. */
-template<class CT, class Object, class ManagerClass>
-TArray<Object*> CTsSearch<CT, Object, ManagerClass>::GetAllObjects()
+template<class CT, class Object>
+TArray<Object*> CTsSearch<CT, Object>::GetAllObjects()
 {
   TArray<Object*> AllObjects;
 

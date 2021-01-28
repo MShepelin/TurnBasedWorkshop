@@ -15,7 +15,7 @@ ARegistrationManager::ARegistrationManager()
   ManagerIcon->SetupAttachment(RootComponent);
 
   //++++ manage memory in other way, TWeakPtr<>
-  CTsSystem = new CTsSearch<int32, AInteractiveObject, ARegistrationManager>();
+  CTsSystem = std::make_unique<CTsSearch<int32, AInteractiveObject>>();
 }
 
 void ARegistrationManager::Tick(float DeltaTime)
@@ -40,7 +40,7 @@ void ARegistrationManager::BeginPlay()
     return;
   }
 
-  // change to initialiseCTs
+  //++++ change to initialiseCTs
   for (int32 CT : GameMode->GetCTIDs())
   {
     CTsSystem->AddCT(CT);
@@ -88,7 +88,7 @@ void ARegistrationManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
   Super::EndPlay(EndPlayReason);
 
-  delete CTsSystem;
+  CTsSystem.reset();
 }
 
 bool ARegistrationManager::HasCentralObject() const

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <memory>
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Actor.h"
 #include "Containers/Queue.h"
@@ -11,10 +12,8 @@
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
 #include "RegistrationManager.generated.h"
 
-
 class AInteractiveObject;
 class AInteractiveAbility;
-
 
 // Provides search by CTs for connected Interactive objects, stores awaken Interactive objects.
 UCLASS()
@@ -30,11 +29,9 @@ protected:
   // Used to store managed InteractiveObjects.
   // Agreement: changed only by Awake/PutToSleep functions of InteractiveObjects.
   TArray<AInteractiveObject*, TInlineAllocator<AVERAGE_MANAGED_OBJECTS>> AwakenObjects;
-  //???? change every used in this case tarray to tarray with TInlineAllocator
-  //???? use TQueue?
 
   // Used for search by CTs.
-  CTsSearch<int32, AInteractiveObject, ARegistrationManager>* CTsSystem;
+  std::unique_ptr<CTsSearch<int32, AInteractiveObject>> CTsSystem;
 
   // This object is in current focus of manager, all found connections will be sent to it.
   UPROPERTY() AInteractiveObject* CentralObject = nullptr;

@@ -37,7 +37,7 @@ class AInteractiveObject;
  *       selected to choose targets for this object's gameplay mechanics
  */
 UCLASS(Abstract, Blueprintable)
-class WORKSHOP_API AInteractiveObject : public AActor, public CTSearchInterface<int32, AInteractiveObject, ARegistrationManager>
+class WORKSHOP_API AInteractiveObject : public AActor, public CTSearchInterface<int32, AInteractiveObject>
 {
 	GENERATED_BODY()
 
@@ -72,13 +72,16 @@ protected:
   // CTs System Support //
   // ------------------ //
 
+  /** Node for the graph inside CTsSearch */
   std::shared_ptr<Node<AInteractiveObject>> NodeForCT = nullptr;
 
+  /** Used to set a node for the graph inside CTsSearch */
   virtual std::shared_ptr<Node<AInteractiveObject>>& GetNodeForCT() override;
 
+public:
+  /** Used to get all CTs from the object */
   virtual const TArray<int32>* GetCTs() const override;
 
-public:
   // --------------- //
   // Object Settings //
   // --------------- //
@@ -212,6 +215,4 @@ public:
 
   /** Registration Managers are designed to set private members of Interactive objects. */
   friend class ARegistrationManager;
-
-  
 };
