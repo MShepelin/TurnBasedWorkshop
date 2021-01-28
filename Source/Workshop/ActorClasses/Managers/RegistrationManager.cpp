@@ -15,7 +15,7 @@ ARegistrationManager::ARegistrationManager()
   ManagerIcon->SetupAttachment(RootComponent);
 
   //++++ manage memory in other way, TWeakPtr<>
-  CTsSystem = new CTsSearch<int32, AInteractiveObject>();
+  CTsSystem = new CTsSearch<int32, AInteractiveObject, ARegistrationManager>();
 }
 
 void ARegistrationManager::Tick(float DeltaTime)
@@ -40,6 +40,7 @@ void ARegistrationManager::BeginPlay()
     return;
   }
 
+  // change to initialiseCTs
   for (int32 CT : GameMode->GetCTIDs())
   {
     CTsSystem->AddCT(CT);

@@ -122,7 +122,7 @@ public:
   // Others //
   // ------ //
 
-  void UpdateCharacterStatus() override;
+  void UpdateExhaust() override;
 
   // REMAKE
   // virtual FString GatherInformation() const override;

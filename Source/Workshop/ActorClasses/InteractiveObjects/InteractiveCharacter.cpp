@@ -126,9 +126,9 @@ void AInteractiveCharacter::ChangeCentralAbilityVisibility(bool bIsVisible) //++
   CentralAbility->SetActorHiddenInGame(!bIsVisible);
 }
 
-void AInteractiveCharacter::RefreshInteractive()
+void AInteractiveCharacter::BuildInteractive()
 {
-  Super::RefreshInteractive();
+  Super::BuildInteractive();
 
   // ----------------- //
   // Refresh animation //
@@ -212,10 +212,10 @@ void AInteractiveCharacter::ResolveCharacterActions()
     CentralAbility->ResolveAbility();
   }
 
-  UpdateCharacterStatus();
+  UpdateExhaust();
 }
 
-void AInteractiveCharacter::UpdateCharacterStatus()
+void AInteractiveCharacter::UpdateExhaust()
 {
   if (CharacterDataCore.bIsExhausted)
   {

@@ -53,7 +53,7 @@ void AInteractController::ConnectionHappened()
     AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(CharacterData.Get<2>(), SpawnParams);
     NewCharacter->CharacterDataCore = CharacterData.Get<0>();
     NewCharacter->InteractiveDataCore = CharacterData.Get<1>();
-    NewCharacter->RefreshInteractive();
+    NewCharacter->BuildInteractive();
     PlacableCharacters.Add(NewCharacter);
   }
 
@@ -319,7 +319,7 @@ void AInteractController::PlayerWantsToChangePhase()
     {
       for (AInteractiveAbility* Ability : PlacableCharacter->Abilities)
       {
-        Ability->UpdateCharacterStatus();
+        Ability->UpdateExhaust();
       }
 
       PlacableCharacter->ClearCentralAbility();

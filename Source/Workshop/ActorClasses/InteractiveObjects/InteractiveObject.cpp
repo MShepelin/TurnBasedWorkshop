@@ -3,7 +3,6 @@
 #include "InteractiveObject.h"
 #include "Workshop/Types/Bar.h"
 
-// Sets default values
 AInteractiveObject::AInteractiveObject()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -26,7 +25,7 @@ void AInteractiveObject::OnConstruction(const FTransform & Transform)
   Super::OnConstruction(Transform);
 
   InteractivityIcon->Initialize();
-  RefreshInteractive();
+  BuildInteractive();
 }
 
 void AInteractiveObject::PostInitializeComponents()
@@ -213,7 +212,7 @@ void AInteractiveObject::Pick()
   }
 }
 
-void AInteractiveObject::RefreshInteractive()
+void AInteractiveObject::BuildInteractive()
 {
   // Change Y-Extent
   FVector ScaledBoxExtent(CollisionBox->GetScaledBoxExtent());
@@ -225,7 +224,7 @@ void AInteractiveObject::RefreshInteractive()
     BoxLocation[0], SPRITE_Y_ORDER, BoxLocation[2]));
 }
 
-void AInteractiveObject::UpdateCharacterStatus()
+void AInteractiveObject::UpdateExhaust()
 {
 
 }

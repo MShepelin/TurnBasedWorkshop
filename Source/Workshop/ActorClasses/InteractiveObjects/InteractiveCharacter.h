@@ -106,7 +106,7 @@ public:
   void ResolveCharacterActions();
 
   // Checks stats and apply conditions based on their values.
-  void UpdateCharacterStatus() override; // RENAME!
+  void UpdateExhaust() override;
 
   void PrepareCentralAbilityToResolve();
 
@@ -127,7 +127,7 @@ public:
   // Others //
   // ------ //
 
-  void RefreshInteractive() override;
+  void BuildInteractive() override;
 
   friend class UBuildAbility; // for optimisation purposes
 };

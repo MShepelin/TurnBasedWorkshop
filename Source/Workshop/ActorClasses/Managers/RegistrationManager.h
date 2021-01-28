@@ -34,7 +34,7 @@ protected:
   //???? use TQueue?
 
   // Used for search by CTs.
-  CTsSearch<int32, AInteractiveObject>* CTsSystem;
+  CTsSearch<int32, AInteractiveObject, ARegistrationManager>* CTsSystem;
 
   // This object is in current focus of manager, all found connections will be sent to it.
   UPROPERTY() AInteractiveObject* CentralObject = nullptr;

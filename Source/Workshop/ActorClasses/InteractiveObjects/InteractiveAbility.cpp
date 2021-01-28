@@ -134,7 +134,7 @@ UTexture2D* AInteractiveAbility::GetIconUI() const
   return AbilityDataCore.IconUI;
 }
 
-void AInteractiveAbility::UpdateCharacterStatus()
+void AInteractiveAbility::UpdateExhaust()
 {
   // Clear all resolved effects
   while (AbilityDataCore.EffectsToResolve.Pop()) {};

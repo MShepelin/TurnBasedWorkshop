@@ -54,7 +54,7 @@ void AFightAI::ConnectionHappened()
   for (TSubclassOf<AInteractiveCharacter> SpawnClass : PossessedPawn->CharacterClasses)
   {
     AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(SpawnClass, SpawnParams);
-    NewCharacter->RefreshInteractive();
+    NewCharacter->BuildInteractive();
     SpawnedCharacters.Add(NewCharacter);
   }
 

@@ -31,7 +31,7 @@ void UBuildAbility::AddAllEffectsToObject(const TArray<FEffectData>& Effects, AI
     }
   }
 
-  TargetObject->UpdateCharacterStatus();
+  TargetObject->UpdateExhaust();
 }
 
 TArray<FEffectData> UBuildAbility::GatherEffects(AInteractiveAbility* Ability)
