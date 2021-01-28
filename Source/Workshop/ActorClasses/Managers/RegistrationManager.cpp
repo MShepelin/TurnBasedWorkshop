@@ -15,7 +15,7 @@ ARegistrationManager::ARegistrationManager()
   ManagerIcon->SetupAttachment(RootComponent);
 
   //++++ manage memory in other way, TWeakPtr<>
-  CTsSystem = new CTsGraph<int32, AInteractiveObject>();
+  CTsSystem = new CTsSearch<int32, AInteractiveObject>();
 }
 
 void ARegistrationManager::Tick(float DeltaTime)

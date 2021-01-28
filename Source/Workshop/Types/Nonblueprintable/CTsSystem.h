@@ -6,25 +6,28 @@
 #include "Containers/Array.h"
 #include "Containers/Map.h"
 
-
 //++++ more tests to verify correctness
 //++++ a way to clear vectors' memory after a lot of objects has been removed
 //++++ add function to add array of Objects
 //++++ change TArray return type to TQueue<Object*, EQueueMode::Spsc>
 //???? may be RemoveObject doesn't work in the most effective way
 
-
-//Node struct used in CTsGraph.
+/** Node struct used in CTsSearch. */
 template<class Object>
 struct Node
 {
   TArray<std::weak_ptr<Node<Object>>> AdjasentNodes;
   TArray<size_t> IndexesInAdjasentNodesArrays;
 
-  // If counter is -1 this node is associated with a CT and
-  // not an Object (mark that its' counter can't be changed).
-  // Otherwise it is used for search.
+  /**
+   * Counter is used during a CT search and counts the number of met CTs.
+   * If the counter is -1 this node is associated with a CT and not an Object, so it should stay unchanged.
+   */
   int32 Counter = 0;
+
+  /**
+   * Object associated with that node.
+   */
   Object* Origin = nullptr;
 
   Node(bool bIsCTNode = false)
@@ -83,12 +86,13 @@ struct Node
   }
 };
 
-
-//Provides system to search objects by needed CTs.
-//
-// @warning It should be guaranteed that Object has functions std::shared_ptr<NodeType>& GetNodeForCT(void) and TArray<CT>* GetCTs(void)
+/**
+ * Provides system to search objects by needed CTs.
+ *
+ * @warning It should be guaranteed that Object has functions std::shared_ptr<NodeType>& GetNodeForCT(void) and TArray<CT>* GetCTs(void)
+ */
 template<class CT, class Object>
-class CTsGraph
+class CTsSearch
 {
 private:
   using NodeType = Node<Object>;
@@ -98,12 +102,19 @@ private:
   TArray<std::weak_ptr<NodeType>> ObjectNodes;
 
 public:
+  /**
+   * Include CT to the search system.
+   * 
+   * @note The objects which are already added won't be updated
+   */
   void AddCT(CT CTToAdd)
   {
     CTToNodeMap.Add(CTToAdd, std::shared_ptr<NodeType>(new NodeType(true)));
   }
 
-  // Initialise list of CTs which can be connected to.
+  /**
+   * Remove all CTs and include several CTs to the search system.
+   */
   void InitialiseCTs(std::initializer_list<CT> AllAvailableCTs)
   {
     CTToNodeMap.Empty();
@@ -114,17 +125,19 @@ public:
     }
   }
 
-  CTsGraph()
+  CTsSearch()
   {
 
   }
 
-  CTsGraph(std::initializer_list<CT> AllAvailableCTs)
+  CTsSearch(std::initializer_list<CT> AllAvailableCTs)
   {
     InitialiseCTs(AllAvailableCTs);
   }
  
-  // Connects object to system of CTs.
+  /**
+   * Connects the object to the search system.
+   */
   void AddObject(Object* ObjectToAdd)
   {
     std::shared_ptr<NodeType>& ObjectNode = ObjectToAdd->GetNodeForCT();
@@ -149,13 +162,17 @@ public:
     }
   }
 
-  // Removes object connection to CTs.
+  /**
+   * Removes the object from the search system.
+   */
   void RemoveObject(Object* ObjectToRemove)
   {
     ObjectToRemove->GetNodeForCT().reset();
   }
 
-  // Finds objects which have enough number of CTs from CTsList.
+  /**
+   * Finds objects which have enough number of CTs from CTsArray.
+   */
   TArray<Object*> FindByCTs(const TArray<int32> CTsArray, int EnoughNumberOfCTs) const
   {
     if (EnoughNumberOfCTs < 0)
@@ -192,6 +209,9 @@ public:
     return FoundNodes;
   }
 
+  /**
+   * Get all objects connected to the search system.
+   */
   TArray<Object*> GetAllObjects()
   {
     TArray<Object*> AllObjects;

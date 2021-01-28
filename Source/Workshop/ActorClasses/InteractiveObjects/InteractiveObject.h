@@ -188,10 +188,10 @@ public:
   // which can change MainManager.
   friend class ARegistrationManager;
 
-  // CTsGraph is build to be fast tool to search large number of Interactive objects,
+  // CTsSearch is build to be fast tool to search large number of Interactive objects,
   // so this is used to optimise access to needed information
-  friend class CTsGraph<int32, AInteractiveObject>;
-  //++++ remove functions as CTsGraph has access to protected members
+  friend class CTsSearch<int32, AInteractiveObject>;
+  //++++ remove functions as CTsSearch has access to protected members
 
   //???? make class which can process gathering information about this class
   //     to present it for hud
