@@ -120,6 +120,12 @@ int32 AInteractiveAbility::GetTargetTypeMask() const
 void AInteractiveAbility::CenterInCharacterOwner()
 {
   check(CharacterOwner != nullptr);
+  if (this == CharacterOwner->GetCentralAbility())
+  {
+    CharacterOwner->ClearCentralAbility();
+    return;
+  }
+
   CharacterOwner->SetCentralAbility(this);
 }
 

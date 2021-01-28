@@ -291,3 +291,8 @@ void AInteractiveCharacter::PrepareCentralAbilityToResolve()
     CentralAbility->PrepareToResolve();
   }
 }
+
+AInteractiveAbility* AInteractiveCharacter::GetCentralAbility() const
+{
+  return CentralAbility;
+}

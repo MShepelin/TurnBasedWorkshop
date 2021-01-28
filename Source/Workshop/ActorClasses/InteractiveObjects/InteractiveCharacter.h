@@ -44,6 +44,8 @@ protected:
   UBillboardComponent* CentralAbilityPositionVisual;
 
 public:
+  AInteractiveCharacter();
+
   // ---------------------- //
   // Characters Description //
   // ---------------------- //
@@ -53,7 +55,8 @@ public:
 
   UPROPERTY() TArray<AInteractiveAbility*> Abilities;
 
-  AInteractiveCharacter();
+  UFUNCTION(BlueprintCallable)
+  AInteractiveAbility* GetCentralAbility() const;
 
   // ------------------------- //
   // AActor functions overload //
