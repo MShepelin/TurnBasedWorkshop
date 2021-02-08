@@ -14,21 +14,25 @@ class WORKSHOP_API ASpryCamera : public APawn
 {
   GENERATED_BODY()
 
+protected:
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) UCameraComponent* Camera;
+  UPROPERTY(VisibleDefaultsOnly) UWidgetInteractionComponent* WidgetInteraction;
+
+  UPROPERTY() APlayerController* PlayerController = nullptr;
+  UPROPERTY(EditDefaultsOnly) float ApproachDistance = 0.f;
+
+  TQueue<TTuple<AActor*, float>> ApproachTasks;
+
 private:
   UPROPERTY() FVector HiddenLocation;
 
-  bool bIsPossesed = false;
+  UPROPERTY() uint8 bIsPossesed : 1;
 
 protected:
-  UPROPERTY(EditDefaultsOnly) UCameraComponent* Camera;
-  UPROPERTY(VisibleDefaultsOnly) UWidgetInteractionComponent* WidgetInteraction;
-
-  APlayerController* PlayerController = nullptr;
+  UPROPERTY(EditDefaultsOnly)
+  uint8 bApproachType : 1;
 
 public:
-  //UPROPERTY(EditAnywhere, Category = "TurnBased")
-  //UInstancedStaticMeshComponent* SpawnLocations;
-
   ASpryCamera();
 
   virtual void OnConstruction(const FTransform & Transform) override;
@@ -37,11 +41,9 @@ public:
 
   virtual void UnPossessed() override;
 
-  /* REWORK
   UFUNCTION(BlueprintNativeEvent)
-  void OnCharacterResolvesAbility(AInteractiveCharacter* CurrentCharacter);
-  virtual void OnCharacterResolvesAbility_Implementation(AInteractiveCharacter* CurrentCharacter);
-  */
+  void OnApproach(AActor* ActorToApproach, float AvailableTime);
+  virtual void OnApproach_Implementation(AActor* ActorToApproach, float AvailableTime);
 
   UFUNCTION(BlueprintCallable)
   FVector GetHiddenLocation() const;

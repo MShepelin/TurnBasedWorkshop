@@ -18,12 +18,10 @@ ASpryCamera::ASpryCamera()
   WidgetInteraction->InteractionSource = EWidgetInteractionSource::Mouse;
 }
 
-/*
-void ASpryCamera::OnCharacterResolvesAbility_Implementation(AInteractiveCharacter* CurrentCharacter)
+void ASpryCamera::OnApproach_Implementation(AActor* ActorToApproach, float AvailableTime)
 {
-  // apply movement
+  ApproachTasks.Enqueue(TTuple<AActor*, float>{ ActorToApproach, AvailableTime });
 }
-*/
 
 FVector ASpryCamera::GetHiddenLocation() const
 {
