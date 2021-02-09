@@ -15,7 +15,7 @@ void UBuildAbility::AddAllEffectsToObject(const TArray<FEffectData>& Effects, AI
       TargetAbility->AbilityDataCore.EffectsToReceive.Enqueue(Effect);
     }
 
-    // Don't UpdateExhaust of the ability because it is done by a controller in the end of resolution
+    TargetAbility->UpdateExhaust();
     return;
   }
 

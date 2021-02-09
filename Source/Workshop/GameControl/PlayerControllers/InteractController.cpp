@@ -245,6 +245,7 @@ void AInteractController::PlayerWantsToChangePhase()
     {
       for (AInteractiveAbility* Ability : PlacableCharacter->Abilities)
       {
+        Ability->UpdateAfterResolution();
         Ability->UpdateExhaust();
       }
 

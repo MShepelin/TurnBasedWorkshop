@@ -110,6 +110,8 @@ public:
 
   void PrepareToResolve();
 
+  void UpdateAfterResolution();
+
   // ------------------- //
   // Ability's variables //
   // ------------------- //
@@ -121,11 +123,6 @@ public:
   // ------ //
   // Others //
   // ------ //
-
-  void UpdateExhaust() override;
-
-  // REMAKE
-  // virtual FString GatherInformation() const override;
 
   void ShowInfluences() const override;
 

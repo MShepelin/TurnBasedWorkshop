@@ -51,22 +51,19 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTsWithMask(const
 {
   TArray<AInteractiveObject*> FoundObjects = CTsSystem->FindByCTs(CTsArray, EnoughNumberOfCTs);
 
-  int32 AtLeastOneMask = TargetTypeMask & INTERACTIVE_TYPE_SEPARATOR_MASK;
-  int32 NecessaryMask = TargetTypeMask & ~INTERACTIVE_TYPE_SEPARATOR_MASK;
-
-  for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num(); ObjectIndex++)
+  for (size_t ObjectIndex = 0; ObjectIndex < FoundObjects.Num();)
   {
     AInteractiveObject* FoundObject = FoundObjects[ObjectIndex];
-    int32 AtLeastOneMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & INTERACTIVE_TYPE_SEPARATOR_MASK;
-    int32 NecessaryMaskTarget = (FoundObject->GetInteractiveType() & TargetTypeMask) & ~INTERACTIVE_TYPE_SEPARATOR_MASK;
+    int32 FoundObjectType = FoundObject->GetInteractiveType();
 
     // Target must have type included in NecessaryMask's possible types
-    if ((AtLeastOneMaskTarget & AtLeastOneMask) && ((NecessaryMaskTarget & NecessaryMask) == NecessaryMaskTarget) && CentralObject != FoundObject)
+    if (FoundObjectType == (FoundObjectType & TargetTypeMask) && CentralObject != FoundObject)
     {
+      ++ObjectIndex;
       continue;
     }
 
-    FoundObjects.RemoveAtSwap(ObjectIndex, FoundObjects.Num() - 1);
+    FoundObjects.RemoveAtSwap(ObjectIndex, 1);
   }
 
   return FoundObjects;
@@ -140,6 +137,6 @@ void ARegistrationManager::AwakeByCenterObject(TArray<AInteractiveObject*>& Obje
   for (AInteractiveObject* Object : Objects)
   {
     AwakenObjects.Add(Object);
-    Object->AwakeBy(Object);
+    Object->AwakeBy(CentralObject);
   }
 }
