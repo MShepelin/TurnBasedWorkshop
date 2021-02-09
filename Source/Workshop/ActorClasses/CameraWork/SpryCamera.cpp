@@ -16,11 +16,8 @@ ASpryCamera::ASpryCamera()
   WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
   WidgetInteraction->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
   WidgetInteraction->InteractionSource = EWidgetInteractionSource::Mouse;
-}
 
-void ASpryCamera::OnApproach_Implementation(AActor* ActorToApproach, float AvailableTime)
-{
-  ApproachTasks.Enqueue(TTuple<AActor*, float>{ ActorToApproach, AvailableTime });
+  bIsPossesedByPlayer = false;
 }
 
 FVector ASpryCamera::GetHiddenLocation() const
@@ -28,34 +25,35 @@ FVector ASpryCamera::GetHiddenLocation() const
   return UKismetMathLibrary::TransformLocation(GetActorTransform(), HiddenLocation);
 }
 
-void ASpryCamera::OnConstruction(const FTransform & Transform)
-{
-  Super::OnConstruction(Transform);
-
-  FVector CameraDirection = Camera->GetRelativeRotation().Vector();
-  HiddenLocation = Camera->GetRelativeLocation() - CameraDirection * MAX_OBJECT_SIZE;
-}
-
 void ASpryCamera::PossessedBy(AController * NewController)
 {
   Super::PossessedBy(NewController);
+
+  FVector CameraDirection = Camera->GetComponentRotation().Vector();
+  HiddenLocation = Camera->GetComponentLocation() - CameraDirection * MAX_OBJECT_SIZE;
+
   PlayerController = Cast<APlayerController>(NewController);
 
   if (PlayerController)
   {
-    bIsPossesed = true;
+    bIsPossesedByPlayer = true;
   }
 }
 
 void ASpryCamera::UnPossessed()
 {
   Super::UnPossessed();
-  bIsPossesed = false;
+  bIsPossesedByPlayer = false;
   PlayerController = nullptr;
 }
 
 FVector ASpryCamera::GetCameraDirection() const
 {
+  if (!bIsPossesedByPlayer)
+  {
+    return Camera->GetComponentRotation().Vector();
+  }
+
   FVector WorldLocation;
   FVector WorldDirection;
   PlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
