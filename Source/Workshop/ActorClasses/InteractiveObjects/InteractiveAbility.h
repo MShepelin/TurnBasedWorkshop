@@ -12,12 +12,13 @@
 
 class AInteractiveCharacter;
 
-// Represenatation of character's gameplay possibilities on game scene.
+/**
+ * Abilities store and resolve effects. They are held by InteractiveCharacters who determine where abilities are spawned on a level.
+ * In addition, abilities have visuals and some native events free for implementation.
+ */
 UCLASS(Abstract, Blueprintable)
 class WORKSHOP_API AInteractiveAbility : public AInteractiveObject
 {
-  //++++ add limit for ability's chosable objects
-
   GENERATED_BODY()
 
 protected:
@@ -28,15 +29,15 @@ protected:
   UPROPERTY(VisibleDefaultsOnly)
   UPaperFlipbookComponent* AbilityPresentation;
 
-  // Pins represent the number of targets that the player can choose.
+  /** Pins represent the number of targets that the player can choose. */
   UPROPERTY(EditDefaultsOnly)
   UInstancedStaticMeshComponent* TargetsPins;
 
-  // Used to create instances for TargetsPins in a certain direction. 
+  /** Used to create instances for TargetsPins in a certain direction. */
   UPROPERTY(EditDefaultsOnly)
   FVector PinSpawnDirection;
 
-  // Transform of the first instance of TargetsPins.
+  /** Transform of the first instance of TargetsPins. */
   UPROPERTY(EditDefaultsOnly)
   FTransform FirstPinLocalTransform;
 
@@ -48,7 +49,7 @@ protected:
   AInteractiveCharacter* CharacterOwner;
 
 public:
-  // Variables which ability is using to affect objects.
+  /** Variables used by the ability to affect objects. */
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
   FAbilityCore AbilityDataCore;
 
@@ -68,9 +69,13 @@ public:
   // Owning character //
   // ---------------- //
 
-  // Used to initialise character-owner.
-  void SetCharacterOwner(AInteractiveCharacter* NewCharacterOwner);
+  /** Used to initialise character-owner. */
+  UFUNCTION() void SetCharacterOwner(AInteractiveCharacter* NewCharacterOwner);
 
+  /** 
+   * Used to mark this ability as central for the character-owner.
+   * It's useful if a player needs to choose one ability for each InteractiveCharacter. 
+   */
   UFUNCTION() void CenterInCharacterOwner();
 
   // ----------------------- //
@@ -95,29 +100,47 @@ public:
   // Ability's actions //
   // ----------------- //
 
-  // Defines what happens when the ability must be resolved.
-  // 1) Use BuildAbility function library to create implementation
-  // 2) To get all chosen targets use GetTargets from BuildAbility
-  // 3) Implementation must be thead-safe
+  /** 
+   * Defines what happens when the ability must be resolved.
+   * 1) Use BuildAbility function library to create implementation
+   * 2) To get all chosen targets use GetTargets from BuildAbility
+   * 3) Implementation must be thead-safe
+   */
   UFUNCTION(BlueprintNativeEvent)
   void ResolveAbility();
   virtual void ResolveAbility_Implementation();
 
-  // Reset the counter of the number of available targets.
-  // It only changes the counter and visuals without editting the influence on other objects.
+  /**
+   * Reset the counter of the number of available targets.
+   * It only changes the counter and visuals without editting the influence on other objects.
+   */
   UFUNCTION(BlueprintCallable)
   void ResetAvailableTargets();
 
+  /** 
+   * To resolve the ability and implement transportation of needed effects outside of the main thread
+   * we should prepare the ability and put it's effects to thread-safe resources. 
+   * This functions is not thread-safe.
+   */
   void PrepareToResolve();
 
+  /**
+   * After resolution step we need to clear used resources and decrease duration of effects.
+   * This function is expected to be used in the end of the turn. This functions is not thread-safe.
+   */
   void UpdateAfterResolution();
 
   // ------------------- //
   // Ability's variables //
   // ------------------- //
 
+  /**
+   * Abilities use CTs to determine available targets but also they can use type masks.
+   * CTs and type masks are both considered when possible targets are searched.
+   */
   int32 GetTargetTypeMask() const;
 
+  /** Get the icon which the ability uses for visualisation. */
   UTexture2D* GetIconUI() const;
 
   // ------ //
@@ -126,5 +149,9 @@ public:
 
   void ShowInfluences() const override;
 
-  friend class UBuildAbility; // for optimisation purposes
+  /**
+   * BuildAbility gives prepared functions which help to make new actions for resolution step with ResolveAbility.
+   * For optimisation purposes BuildAbility was designed to work with private members of abilities.
+   */
+  friend class UBuildAbility;
 };

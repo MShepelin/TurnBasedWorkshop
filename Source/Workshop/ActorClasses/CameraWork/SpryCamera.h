@@ -33,9 +33,17 @@ private:
 public:
   ASpryCamera();
 
+  // -------------- //
+  // APawn override //
+  // -------------- //
+
   virtual void PossessedBy(AController * NewController) override;
 
   virtual void UnPossessed() override;
+
+  // ----------------------------- //
+  // Camera and widget interaction //
+  // ----------------------------- //
 
   /** Get a location relative to the camera to put objects so that they can't be seen by camera */
   UFUNCTION(BlueprintCallable)
