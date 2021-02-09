@@ -53,11 +53,14 @@ void ACameraController::SetPawn(APawn * InPawn)
 {
   Super::SetPawn(InPawn);
 
-  CurrentCamera = Cast<ASpryCamera>(InPawn);
-
-  if (!CurrentCamera)
+  ASpryCamera* PotentialCamera = Cast<ASpryCamera>(InPawn);
+  if (PotentialCamera)
   {
-    UE_LOG(LogTemp, Error, TEXT("Pawn must be inherited from SpryCamera"));
+    CurrentCamera = PotentialCamera;
+  }
+  else
+  {
+    UE_LOG(LogTemp, Warning, TEXT("ACameraController is designed to controll Spry Camera, but the possessed pawn is not"));
   }
 }
 

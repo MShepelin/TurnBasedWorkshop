@@ -6,10 +6,11 @@
 #include "CameraController.h"
 #include "Components/WidgetComponent.h"
 #include "Workshop/UI/TurnBasedEvent/AbilitiesWidget.h"
-#include "Workshop/Types/Components/TurnBasedComponent.h"
 #include "HAL/Runnable.h"
 #include <memory>
 #include "HAL/ThreadSafeBool.h"
+#include "Workshop/Interfaces/TurnBasedInterface.h"
+#include "Workshop/ActorClasses/Managers/TurnBasedObserver.h"
 #include "InteractController.generated.h"
 
 class ATurnBasedManager;
@@ -17,15 +18,12 @@ class AInteractiveCharacter;
 class FCharactersResolve;
 
 UCLASS(Blueprintable)
-class WORKSHOP_API AInteractController : public ACameraController
+class WORKSHOP_API AInteractController : public ACameraController, public ITurnBasedInterface
 {
 	GENERATED_BODY()
 
 protected:
-  UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
-
-  UPROPERTY() TArray<AInteractiveCharacter*> PlacableCharacters;
-  TArray<TPair<int32, FTransform>> CharactersSpawnTransforms;
+  UPROPERTY() ATurnBasedObserver* PossessedObserver;
 
   AInteractiveCharacter* FirstToSwap[2];
   UPROPERTY() bool bSwapModeIsActive;
@@ -43,10 +41,6 @@ protected:
   // Tries to pick an Interactive object
   UFUNCTION() void StartInteract();
   UFUNCTION() void StopInteract();
-
-  UFUNCTION() void ConnectionHappened();
-  UFUNCTION() void TurnControllGained();
-  UFUNCTION() void TurnControllLost();
   
   UFUNCTION() void PlayerWantsToChangePhase();
 
@@ -63,13 +57,31 @@ protected:
 public:
   AInteractController();
 
-  void BeginPlay() override;
+  virtual void BeginPlay() override;
 
-  void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+  virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-  void SetupInputComponent() override;
+  virtual void SetupInputComponent() override;
 
-  void PostInitializeComponents() override;
+  virtual void PostInitializeComponents() override;
+
+  virtual void SetPawn(APawn *InPawn) override;
+
+  // ------------------ //
+  // TurnBasedInterface //
+  // ------------------ //
+
+  virtual void OnConnectToManager_Implementation() override;
+
+  virtual void OnDisconnectFromManager_Implementation() override;
+
+  virtual void OnGetTurnControl_Implementation() override;
+
+  virtual void OnLoseTurnControl_Implementation() override;
+
+  // ------ //
+  // Others //
+  // ------ //
 
   UFUNCTION(BlueprintCallable)
   void ResolveCharactersAbilities();
@@ -79,17 +91,6 @@ public:
 
   UFUNCTION(BlueprintCallable)
   UAbilitiesWidget* GetAbilitiesWidget();
-
-  // Should be called before any other functions 
-  // when all objects used by controller are prepared
-  
-  //UFUNCTION(BlueprintCallable)
-  //void ObjectsReady(ATurnBasedManager* EventManager);
-
-  UFUNCTION() void PrepareCharacters();
-
-  UFUNCTION(BlueprintCallable)
-  void AddSpawnTransform(FTransform NewSpawn, int32 Order);
 };
 
 class FCharactersResolve : public FRunnable

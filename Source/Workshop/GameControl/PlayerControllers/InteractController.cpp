@@ -21,58 +21,14 @@ AInteractController::AInteractController()
   bEnableClickEvents = true;
   bEnableMouseOverEvents = true;
 
-  TurnControl = CreateDefaultSubobject<UTurnBasedComponent>(TEXT("TurnControl"));
-  AddOwnedComponent(TurnControl);
-  TurnControl->ConnectDelegate.BindUObject(this, &AInteractController::ConnectionHappened);
-  TurnControl->TurnIsTakenUnderControl.BindUObject(this, &AInteractController::TurnControllGained);
-  TurnControl->TurnIsOutOfControl.BindUObject(this, &AInteractController::TurnControllLost);
+  //TurnControl = CreateDefaultSubobject<UTurnBasedComponent>(TEXT("TurnControl"));
+  //AddOwnedComponent(TurnControl);
+  //TurnControl->ConnectDelegate.BindUObject(this, &AInteractController::ConnectionHappened);
+  //TurnControl->TurnIsTakenUnderControl.BindUObject(this, &AInteractController::TurnControllGained);
+  //TurnControl->TurnIsOutOfControl.BindUObject(this, &AInteractController::TurnControllLost);
 
   bSwapModeIsActive = false;
   FirstToSwap[0] = FirstToSwap[1] = nullptr;
-}
-
-void AInteractController::ConnectionHappened()
-{
-  // Disconnect from previous manager.
-  ATurnBasedManager* EventManager = Cast<ATurnBasedManager>(UsedManager);
-  if (EventManager)
-  {
-    EventManager->RemoveController(this);
-  }
-
-  // Find new manager. //++++ change this part for more general case
-  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
-  check(GameMode);
-  EventManager = GameMode->FightManager;
-
-  // Spawn characters.
-  FActorSpawnParameters SpawnParams = FActorSpawnParameters();
-  SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-  for (TTuple<FCharacterCore, FInteractiveCore, TSubclassOf<AInteractiveCharacter>> CharacterData : Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->ChosenCharacters)
-  {
-    AInteractiveCharacter* NewCharacter = GetWorld()->SpawnActor<AInteractiveCharacter>(CharacterData.Get<2>(), SpawnParams);
-    NewCharacter->CharacterDataCore = CharacterData.Get<0>();
-    NewCharacter->InteractiveDataCore = CharacterData.Get<1>();
-    NewCharacter->BuildInteractive();
-    PlacableCharacters.Add(NewCharacter);
-  }
-
-  // Give characters appropriate transforms.
-  int32 MaxLocations = CharactersSpawnTransforms.Num();
-  check(MaxLocations >= PlacableCharacters.Num());
-  FTransform CameraSpawnTransoform;
-  int32 LocationCounter = (MaxLocations - PlacableCharacters.Num()) / 2;
-  for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
-  {
-    CameraSpawnTransoform = CharactersSpawnTransforms[LocationCounter].Value;
-    PlacableCharacter->SetActorTransform(CameraSpawnTransoform);
-    LocationCounter++;
-
-    EventManager->ConnectObject(PlacableCharacter);
-  }
-
-  // Set new manager.
-  UsedManager = EventManager;
 }
 
 void AInteractController::StartInteract()
@@ -111,6 +67,7 @@ void AInteractController::StartInteract()
   {
     FirstToSwap[1] = InteractiveCharacter;
 
+    auto& PlacableCharacters = PossessedObserver->GetSpawnedCharactes();
     PlacableCharacters.Swap(PlacableCharacters.Find(FirstToSwap[0]), PlacableCharacters.Find(FirstToSwap[1]));
 
     //++++ add movement
@@ -169,22 +126,24 @@ void AInteractController::TurnSwapMode()
     UsedManager->GetCentralObject()->UnpickedAsCentral();
   }
 
-  if (UsedAbilitiesWidget)
+  if (!UsedAbilitiesWidget)
   {
-    if (bSwapModeIsActive)
-    {
-      UsedAbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsActiveText);
-    }
-    else
-    {
-      UsedAbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsInactiveText);
-    }
+    return;
+  }
+
+  if (bSwapModeIsActive)
+  {
+    UsedAbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsActiveText);
+  }
+  else
+  {
+    UsedAbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsInactiveText);
   }
 }
 
 void AInteractController::ResolveCharactersAbilities()
 {
-  for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
+  for (AInteractiveCharacter* PlacableCharacter : PossessedObserver->GetSpawnedCharactes())
   {
     PlacableCharacter->ResolveCharacterActions();
   }
@@ -214,7 +173,7 @@ void AInteractController::LinkWithAbilitiesWidget(UAbilitiesWidget* AbilitiesWid
     AbilitiesWidget->SwapText->SetText(UsedAbilitiesWidget->SwapIsInactiveText);
   }
 
-  UpdatePhaseInfo();
+  UpdatePhaseInfo(); //++++ move to UsedAbilitiesWidget
 }
 
 UAbilitiesWidget* AInteractController::GetAbilitiesWidget()
@@ -222,38 +181,9 @@ UAbilitiesWidget* AInteractController::GetAbilitiesWidget()
   return UsedAbilitiesWidget;
 }
 
-void AInteractController::AddSpawnTransform(FTransform NewSpawn, int32 Order)
-{
-  CharactersSpawnTransforms.Add(TPairInitializer<int32, FTransform>(Order, NewSpawn));
-}
-
 void AInteractController::PostInitializeComponents()
 {
   Super::PostInitializeComponents();
-
-  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
-
-  if (GameMode)
-  {
-    GameMode->ObjectsReady.AddUObject(this, &AInteractController::PrepareCharacters);
-  }
-}
-
-void AInteractController::PrepareCharacters()
-{
-  // Sort transforms by orderID
-  CharactersSpawnTransforms.Sort([](const TPair<int32, FTransform>& Left, const TPair<int32, FTransform>& Right) { return Left.Key < Right.Key; });
-}
-
-void AInteractController::TurnControllGained()
-{
-  bTurnIsControlled = true;
-  bCanPick = true;
-}
-
-void AInteractController::TurnControllLost()
-{
-  bTurnIsControlled = false;
 }
 
 void AInteractController::PlayerWantsToChangePhase()
@@ -270,7 +200,6 @@ void AInteractController::PlayerWantsToChangePhase()
   ATurnBasedManager* Manager;
   if (nullptr == (Manager = Cast<ATurnBasedManager>(UsedManager)))
   {
-    // Error
     return;
   }
 
@@ -291,16 +220,13 @@ void AInteractController::PlayerWantsToChangePhase()
     }
 
     // Remove abilities from the player's screen
-    for (AInteractiveCharacter* ControlledCharacter : PlacableCharacters)
+    for (AInteractiveCharacter* ControlledCharacter : PossessedObserver->GetSpawnedCharactes())
     {
       // Pointers to central abilities must stay valid for their characters
       ControlledCharacter->ClearCentralAbility(true);
-    }
 
-    // To make all effects work, we need to prepare abilities to resolve
-    for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
-    {
-      PlacableCharacter->PrepareCentralAbilityToResolve();
+      // Preparation step is needed to store all effects in a thread-safe place
+      ControlledCharacter->PrepareCentralAbilityToResolve();
     }
 
     ResolveRunnable = std::make_shared<FCharactersResolve>(this);
@@ -315,7 +241,7 @@ void AInteractController::PlayerWantsToChangePhase()
 
   if (Manager->GetPhase() == ETurnPhase::End)
   {
-    for (AInteractiveCharacter* PlacableCharacter : PlacableCharacters)
+    for (AInteractiveCharacter* PlacableCharacter : PossessedObserver->GetSpawnedCharactes())
     {
       for (AInteractiveAbility* Ability : PlacableCharacter->Abilities)
       {
@@ -378,6 +304,55 @@ void AInteractController::CantPickCallback()
     GetWorldTimerManager().SetTimer(Handler, UsedAbilitiesWidget, &UAbilitiesWidget::ShowBasicText, DEFAULT_DELAY, true);
   }
 }
+
+void AInteractController::OnConnectToManager_Implementation()
+{
+  PossessedObserver->SpawnCharacters();
+  PossessedObserver->ConnectAllSpawnedObjects();
+  UsedManager = PossessedObserver->GetManager();
+}
+
+void AInteractController::OnDisconnectFromManager_Implementation()
+{
+  PossessedObserver->RemoveCharacters();
+  UsedManager = nullptr;
+}
+
+void AInteractController::OnGetTurnControl_Implementation()
+{
+  bTurnIsControlled = true;
+  bCanPick = true;
+}
+
+void AInteractController::OnLoseTurnControl_Implementation()
+{
+  bTurnIsControlled = false;
+}
+
+void AInteractController::SetPawn(APawn *InPawn)
+{
+  Super::SetPawn(InPawn);
+
+  ATurnBasedObserver* PotentialObserver = Cast<ATurnBasedObserver>(InPawn);
+  if (!PotentialObserver)
+  {
+    UE_LOG(LogTemp, Warning, TEXT("AInteractController is designed to controll TurnBasedObserver, but the possessed pawn is not"));
+    return;
+  }
+
+  PossessedObserver = PotentialObserver;
+
+  UChoicesInstance* Choices = Cast<UChoicesInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+  if (Choices->ChosenCharacterClasses.Num())
+  {
+    PossessedObserver->SetCharactersToUse(
+      Choices->ChosenCharacterClasses, 
+      &Choices->ChosenCharacterOptions,
+      &Choices->ChosenInteractiveOptions
+    );
+  }
+}
+
 
 FCharactersResolve::FCharactersResolve(AInteractController* Controller) : UsedController(Controller)
 {

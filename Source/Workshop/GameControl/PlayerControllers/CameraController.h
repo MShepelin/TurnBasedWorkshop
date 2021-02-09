@@ -25,7 +25,7 @@ public:
 
   void BeginPlay() override;
 
-  void SetPawn(APawn * InPawn) override;
+  virtual void SetPawn(APawn *InPawn) override;
 
   ASpryCamera* GetCurrentCamera() const;
 

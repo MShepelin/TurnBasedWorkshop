@@ -5,7 +5,7 @@
 #include "Workshop/GameControl/GameModes/FightGameMode.h"
 #include "Workshop/GameControl/AI/FightAI.h"
 #include "Kismet/GameplayStatics.h"
-
+/*
 void ACharacterSpawn::PostInitializeComponents()
 {
   Super::PostInitializeComponents();
@@ -25,6 +25,7 @@ void ACharacterSpawn::PostInitializeComponents()
 
 void ACharacterSpawn::RegisterSpawnTransform()
 {
+  
   if (ControllerID == -1)
   {
     AInteractController* Controller = Cast<AInteractController>(
@@ -42,3 +43,4 @@ void ACharacterSpawn::RegisterSpawnTransform()
       TPairInitializer<int32, FTransform>(CharacterOrderID, GetActorTransform()));
   }
 }
+*/

@@ -9,15 +9,15 @@ void ITurnBasedInterface::OnConnectToManager_Implementation()
 
 void ITurnBasedInterface::OnDisconnectFromManager_Implementation()
 {
-  UE_LOG(LogTemp, Warning, TEXT("Got control"));
+  UE_LOG(LogTemp, Warning, TEXT("Disconnection"));
 }
 
 void ITurnBasedInterface::OnLoseTurnControl_Implementation()
 {
-
+  UE_LOG(LogTemp, Warning, TEXT("Lost control"));
 }
 
 void ITurnBasedInterface::OnGetTurnControl_Implementation()
 {
-
+  UE_LOG(LogTemp, Warning, TEXT("Got control"));
 }

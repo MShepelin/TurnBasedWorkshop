@@ -6,7 +6,7 @@
 #include "RegistrationManager.h"
 #include "Workshop/Types/TurnPhase.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
-#include "../CharacterSpawn.h"
+#include "Workshop/Types/SpawnCollection.h"
 #include "TurnBasedManager.generated.h"
 
 class UTurnBasedComponent;
@@ -21,29 +21,30 @@ class WORKSHOP_API ATurnBasedManager : public ARegistrationManager
 	GENERATED_BODY()
 
 protected:
-  UPROPERTY() TArray<UTurnBasedComponent*> JoinedControllers;
+  UPROPERTY() TArray<ATurnBasedObserver*> JoinedControllers;
 
   UPROPERTY() int32 CurrentControllerIndex;
 
   UPROPERTY() ETurnPhase CurrentTurnPhase = ETurnPhase::Start;
 
   UPROPERTY(EditAnywhere)
-  TArray<ACharacterSpawn*> SpawnLocations;
+  TMap<int32, FSpawnCollection> SpawnLocations;
   
 public:
   ATurnBasedManager();
-
-  UFUNCTION(BlueprintCallable) void MakeObjectsReady();
 
   UFUNCTION(BlueprintCallable) void NextPhase();
 
   // Controller will join turn order last.
   UFUNCTION(BlueprintCallable)
-  void AddController(AController* NewController);
+  void AddTurnBasedController(ATurnBasedObserver* NewController);
 
   UFUNCTION(BlueprintCallable)
-  void RemoveController(AController* NewController);
+  void RemoveTurnBasedController(ATurnBasedObserver* NewController);
 
   UFUNCTION(BlueprintCallable)
   ETurnPhase GetPhase() const;
+
+  UFUNCTION(BlueprintCallable)
+  const TArray<ACharacterSpawn*>& GetCharacterSpawns(int32 TurnBasedID) const;
 };

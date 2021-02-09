@@ -6,32 +6,22 @@
 #include "GameFramework/Controller.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
 #include "Workshop/ActorClasses/Managers/TurnBasedManager.h"
-#include "Workshop/Types/Components/TurnBasedComponent.h"
+#include "Workshop/Interfaces/TurnBasedInterface.h"
+#include "Workshop/ActorClasses/Managers/TurnBasedObserver.h"
 #include "FightAI.generated.h"
 
 UCLASS(Blueprintable)
-class WORKSHOP_API AFightAI : public AController
+class WORKSHOP_API AFightAI : public AController, public ITurnBasedInterface
 {
   GENERATED_BODY()
 
 public:
   UPROPERTY() ATurnBasedManager* UsedManager;
 
-  // Unique for every controller. Used to sort controllers and give them CharacterSpawns.
-  UPROPERTY() int32 ControllerID;
-
-  UPROPERTY(EditInstanceOnly) TArray<TSubclassOf<AInteractiveCharacter>> CharacterClasses;
-  UPROPERTY() TArray<AInteractiveCharacter*> SpawnedCharacters;
-  TArray<TPair<int32, FTransform>> CharactersSpawnTransforms;
-
-  UPROPERTY(VisibleDefaultsOnly) UTurnBasedComponent* TurnControl;
-
 public:
   AFightAI();
 
-  void PostInitializeComponents() override;
+  void OnConnectToManager_Implementation() override;
 
-  UFUNCTION() void ConnectionHappened();
-
-  UFUNCTION() void TurnControllGained();
+  void OnGetTurnControl_Implementation() override;
 };

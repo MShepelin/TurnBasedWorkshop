@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetInteractionComponent.h"
+#include "../Managers/TurnBasedObserver.h"
 #include "SpryCamera.generated.h"
 
 class AInteractiveCharacter;
@@ -14,7 +15,7 @@ class AInteractiveCharacter;
   * without rotating an in-game camera, this pawn can be used.
   */
 UCLASS(Blueprintable)
-class WORKSHOP_API ASpryCamera : public APawn
+class WORKSHOP_API ASpryCamera : public ATurnBasedObserver
 {
   GENERATED_BODY()
 

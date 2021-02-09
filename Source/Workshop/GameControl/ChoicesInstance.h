@@ -17,5 +17,7 @@ class WORKSHOP_API UChoicesInstance : public UGameInstance
   GENERATED_BODY()
 
 public:
-  TArray<TTuple<FCharacterCore, FInteractiveCore, TSubclassOf<AInteractiveCharacter>>> ChosenCharacters;
+  TArray<TSubclassOf<AInteractiveCharacter>> ChosenCharacterClasses;
+  TArray<FCharacterCore> ChosenCharacterOptions;
+  TArray<FInteractiveCore> ChosenInteractiveOptions;
 };

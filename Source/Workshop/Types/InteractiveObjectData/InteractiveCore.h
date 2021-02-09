@@ -41,7 +41,4 @@ struct WORKSHOP_API FInteractiveCore
   FInteractiveCore();
   FInteractiveCore(const FInteractiveCore & AnotherBar);
   FInteractiveCore& operator=(const FInteractiveCore & AnotherCore);
-
-  // Array of effects which are applied in the current state.
-  // TMap<ETurnPhase, TArray<UEffectData*>> AccumulatedEffects;
 };

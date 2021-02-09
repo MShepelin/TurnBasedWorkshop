@@ -14,48 +14,42 @@ ATurnBasedManager::ATurnBasedManager()
   
 }
 
-void ATurnBasedManager::AddController(AController* NewController)
+void ATurnBasedManager::AddTurnBasedController(ATurnBasedObserver* NewController)
 {
-  UActorComponent* NeededComponent = NewController->GetComponentByClass(UTurnBasedComponent::StaticClass());
-  if (!NeededComponent)
-  {
-    UE_LOG(LogTemp, Error, TEXT("Can't add controller without UTurnBasedComponent"));
-    return;
-  }
-
-  UTurnBasedComponent* TurnBasedComponent = Cast<UTurnBasedComponent>(NeededComponent);
-  JoinedControllers.Add(TurnBasedComponent);
-  TurnBasedComponent->ConnectDelegate.ExecuteIfBound();
+  JoinedControllers.Add(NewController);
+  NewController->OnConnectToManager(this);
 
   // Initialise turn if needed
   if (JoinedControllers.Num() == 1)
   {
     CurrentControllerIndex = 0;
     CurrentTurnPhase = ETurnPhase::Start;
-    JoinedControllers[CurrentControllerIndex]->TurnIsTakenUnderControl.ExecuteIfBound();
+    JoinedControllers[CurrentControllerIndex]->OnGetTurnControl();
   }
 }
 
-void ATurnBasedManager::RemoveController(AController* NewController)
+void ATurnBasedManager::RemoveTurnBasedController(ATurnBasedObserver* RemovedController)
 {
-  // REWORK needed as objects of InteractController don't get removed
-  UActorComponent* NeededComponent = NewController->GetComponentByClass(UTurnBasedComponent::StaticClass());
-  if (!NeededComponent)
+  int32 FoundIndex = JoinedControllers.Find(RemovedController);
+  if (FoundIndex == INDEX_NONE)
   {
-    UE_LOG(LogTemp, Error, TEXT("Can't remove controller without UTurnBasedComponent"));
+    UE_LOG(LogTemp, Error, TEXT("The observer isn't connected with this Manager"));
     return;
   }
 
-  UTurnBasedComponent* TurnBasedComponent = Cast<UTurnBasedComponent>(NeededComponent);
-
-  if (JoinedControllers.Find(TurnBasedComponent) == INDEX_NONE)
+  if (FoundIndex > CurrentControllerIndex)
   {
-    UE_LOG(LogTemp, Error, TEXT("UTurnBasedComponent wasn't connected to this Manager"));
-    return;
+    --CurrentControllerIndex;
   }
 
-  JoinedControllers.Remove(TurnBasedComponent);
-  JoinedControllers.Shrink();
+  if (FoundIndex == CurrentControllerIndex)
+  {
+    CurrentTurnPhase = ETurnPhase::Start;
+    JoinedControllers[CurrentControllerIndex]->OnGetTurnControl();
+  }
+
+  JoinedControllers.RemoveAt(FoundIndex);
+  RemovedController->OnLoseTurnControl();
 }
 
 ETurnPhase ATurnBasedManager::GetPhase() const
@@ -69,7 +63,7 @@ void ATurnBasedManager::NextPhase()
 
   if (!JoinedControllers.Num())
   {
-    UE_LOG(LogTemp, Warning, TEXT("Can't go to the next phase without external controllers"));
+    UE_LOG(LogTemp, Warning, TEXT("Can't go to the next phase without controllers"));
     return;
   }
 
@@ -85,26 +79,20 @@ void ATurnBasedManager::NextPhase()
   if (CurrentTurnPhase == ETurnPhase::Start)
   {
     // Change current controller
-    JoinedControllers[CurrentControllerIndex]->TurnIsOutOfControl.ExecuteIfBound();
+    JoinedControllers[CurrentControllerIndex]->OnLoseTurnControl();
     
     CurrentControllerIndex++;
     if (CurrentControllerIndex == JoinedControllers.Num())
     {
-      CurrentControllerIndex = 0;
+      CurrentControllerIndex = 0; 
     }
 
-    JoinedControllers[CurrentControllerIndex]->TurnIsTakenUnderControl.ExecuteIfBound();
+    JoinedControllers[CurrentControllerIndex]->OnGetTurnControl();
   }
 }
 
-void ATurnBasedManager::MakeObjectsReady()
+const TArray<ACharacterSpawn*>& ATurnBasedManager::GetCharacterSpawns(int32 TurnBasedID) const
 {
-  AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
-  check(GameMode);
-
-  GameMode->FightManager = this;
-  GameMode->FightControllers.Sort(
-    [](const TPair<int32, AFightAI*>& Left, const TPair<int32, AFightAI*>& Right) { return Left.Key < Right.Key; });
-  GameMode->RegisterAllSpawnLocations.Broadcast();
-  GameMode->ObjectsReady.Broadcast();
+  check(SpawnLocations.Contains(TurnBasedID));
+  return SpawnLocations[TurnBasedID].CharacterSpawns;
 }

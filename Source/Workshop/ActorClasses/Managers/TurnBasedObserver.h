@@ -7,6 +7,7 @@
 #include "Workshop/Types/InteractiveObjectData/InteractiveCore.h"
 #include "Workshop/Types/InteractiveObjectData/CharacterCore.h"
 #include "TurnBasedManager.h"
+#include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
 #include "TurnBasedObserver.generated.h"
 
 class ITurnBasedInterface;
@@ -30,6 +31,8 @@ protected:
 
   UPROPERTY() TArray<AInteractiveCharacter*> SpawnedCharacters;
 
+  UPROPERTY(EditAnywhere) int32 TurnBasedID;
+
 public:
   virtual void PossessedBy(AController *NewController) override;
 
@@ -42,6 +45,10 @@ public:
   void OnGetTurnControl();
 
   void OnLoseTurnControl();
+
+  void SetTurnBasedID(int32 NewID);
+
+  int32 GetTurnBasedID();
 
   // ----------------------------- //
   // Communication with Controller //
@@ -57,8 +64,13 @@ public:
   );
 
   UFUNCTION(BlueprintCallable)
-  void SpawnCharacters(FVector HiddenLocation);
+  void SpawnCharacters();
 
   UFUNCTION(BlueprintCallable)
   void RemoveCharacters();
+
+  UFUNCTION(BlueprintCallable)
+  void ConnectAllSpawnedObjects();
+
+  TArray<AInteractiveCharacter*>& GetSpawnedCharactes();
 };
