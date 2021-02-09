@@ -1,7 +1,6 @@
 // ...
 
 #include "FightAI.h"
-#include "Workshop/ActorClasses/CharactersCollection.h"
 #include "Workshop/GameControl/GameModes/FightGameMode.h"
 
 AFightAI::AFightAI()

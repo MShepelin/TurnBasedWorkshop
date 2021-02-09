@@ -116,6 +116,9 @@ public:
 
   /** Remove all CTs and include several CTs to the search system.  */
   void InitialiseCTs(std::initializer_list<CT> AllAvailableCTs);
+
+  /** Remove all CTs and include several CTs to the search system.  */
+  void InitialiseCTs(const TArray<CT> &AllAvailableCTs);
  
   /** Connects the object to the search system. */
   void AddObject(Object* AdditionalObject);
@@ -170,6 +173,18 @@ void CTsSearch<CT, Object>::InitialiseCTs(std::initializer_list<CT> AllAvailable
   for (iterator CTIterator = AllAvailableCTs.begin(); CTIterator != AllAvailableCTs.end(); ++CTIterator)
   {
     AddCT(*CTIterator);
+  }
+}
+
+/** Remove all CTs and include several CTs to the search system.  */
+template<class CT, class Object>
+void  CTsSearch<CT, Object>::InitialiseCTs(const TArray<CT> &AllAvailableCTs)
+{
+  CTToNodeMap.Empty();
+
+  for (int32 CTIndex = 0; CTIndex < AllAvailableCTs.Num(); ++CTIndex)
+  {
+    AddCT(AllAvailableCTs[CTIndex]);
   }
 }
 

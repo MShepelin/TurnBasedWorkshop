@@ -39,11 +39,7 @@ void ARegistrationManager::BeginPlay()
     return;
   }
 
-  //++++ change to initialiseCTs
-  for (int32 CT : GameMode->GetCTIDs())
-  {
-    CTsSystem->AddCT(CT);
-  }
+  CTsSystem->InitialiseCTs(GameMode->GetCTIDs());
 }
 
 // Find objects with respect to chosen CentralObject.
