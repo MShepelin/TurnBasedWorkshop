@@ -1,5 +1,7 @@
 //...
 
+#pragma once
+
 #include "CoreMinimal.h"
 #include "Managers/TurnBasedManager.h"
 #include "Workshop/GameControl/PlayerControllers/InteractController.h"

@@ -15,10 +15,22 @@ class ITurnBasedInterface
 {
   GENERATED_BODY()
 
-protected:
-  UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+public:
+  UFUNCTION(BlueprintNativeEvent)
   void OnConnectToManager();
   virtual void OnConnectToManager_Implementation();
+
+  UFUNCTION(BlueprintNativeEvent)
+  void OnDisconnectFromManager();
+  virtual void OnDisconnectFromManager_Implementation();
+
+  UFUNCTION(BlueprintNativeEvent)
+  void OnGetTurnControl();
+  virtual void OnGetTurnControl_Implementation();
+
+  UFUNCTION(BlueprintNativeEvent)
+  void OnLoseTurnControl();
+  virtual void OnLoseTurnControl_Implementation();
 
   friend ATurnBasedObserver;
 };

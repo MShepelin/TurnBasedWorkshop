@@ -6,10 +6,13 @@
 #include "RegistrationManager.h"
 #include "Workshop/Types/TurnPhase.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"
+#include "../CharacterSpawn.h"
 #include "TurnBasedManager.generated.h"
 
 class UTurnBasedComponent;
 class AInteractiveCharacter;
+class ATurnBasedObserver;
+class ACharacterSpawn;
 
 // Supports turn's phases change for connected controllers, which can join any time.
 UCLASS()
@@ -19,8 +22,13 @@ class WORKSHOP_API ATurnBasedManager : public ARegistrationManager
 
 protected:
   UPROPERTY() TArray<UTurnBasedComponent*> JoinedControllers;
+
   UPROPERTY() int32 CurrentControllerIndex;
+
   UPROPERTY() ETurnPhase CurrentTurnPhase = ETurnPhase::Start;
+
+  UPROPERTY(EditAnywhere)
+  TArray<ACharacterSpawn*> SpawnLocations;
   
 public:
   ATurnBasedManager();

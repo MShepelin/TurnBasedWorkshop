@@ -6,6 +6,8 @@
 #include "Workshop/GameControl/GameModes/FightGameMode.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveAbility.h"
+#include "Workshop/ActorClasses/CharacterSpawn.h"
+#include "TurnBasedObserver.h"
 
 ATurnBasedManager::ATurnBasedManager()
 {
