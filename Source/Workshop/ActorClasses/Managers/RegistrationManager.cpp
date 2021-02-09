@@ -42,7 +42,6 @@ void ARegistrationManager::BeginPlay()
   CTsSystem->InitialiseCTs(GameMode->GetCTIDs());
 }
 
-// Find objects with respect to chosen CentralObject.
 TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTs(const TArray<int32>& CTsArray, int32 EnoughNumberOfCTs)
 {
   return CTsSystem->FindByCTs(CTsArray, EnoughNumberOfCTs);
@@ -67,9 +66,7 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTsWithMask(const
       continue;
     }
 
-    //++++ remove at swap
-    FoundObjects.Swap(ObjectIndex, FoundObjects.Num() - 1);
-    FoundObjects.Pop();
+    FoundObjects.RemoveAtSwap(ObjectIndex, FoundObjects.Num() - 1);
   }
 
   return FoundObjects;
@@ -97,46 +94,44 @@ AInteractiveObject* ARegistrationManager::GetCentralObject()
   return CentralObject;
 }
 
+void ARegistrationManager::DisconnectObject(AInteractiveObject* Object)
+{
+  CTsSystem->RemoveObject(Object);
+  if (CentralObject == Object)
+  {
+    Object->UnpickedAsCentral();
+  }
+}
+
 void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
 {
-  //++++ move to public function ->
-  ARegistrationManager*& ObjectsManager = Object->MainManager;
+  ARegistrationManager* ObjectsManager = Object->GetManager();
 
   // Remove previuos Manager if it was chosen for an object
-  //???? check if object is already connected
   if (ObjectsManager)
   {
-    ObjectsManager->CTsSystem->RemoveObject(Object);
-
-    if (ObjectsManager->CentralObject == Object)
-    {
-      Object->UnpickedAsCentral();
-    }
+    ObjectsManager->DisconnectObject(Object);
   }
 
-  ObjectsManager = this;
-  // <- end++++
+  Object->SetManager(this);
 
   CTsSystem->AddObject(Object);
 
-  //++++ connect additional objects ->
   AInteractiveCharacter* ObjectAsCharacter = Cast<AInteractiveCharacter>(Object);
-  if (ObjectAsCharacter)
+  if (ObjectAsCharacter && (ObjectAsCharacter->GetInteractiveType() & static_cast<int32>(EInteractiveType::Character)))
   {
-    for (AInteractiveAbility* CharactersAbility : ObjectAsCharacter->Abilities)
+    for (AInteractiveAbility* CharactersAbility : *ObjectAsCharacter->GetAbilties())
     {
       ConnectObject(CharactersAbility);
     }
   }
-  // <- 
 }
 
 void ARegistrationManager::PutToSleepManagedObjects(ARegistrationManager* Manager)
 {
   while (AwakenObjects.Num())
   {
-    //++++ move to function
-    AwakenObjects.Pop()->InteractivityIcon->Hide();
+    AwakenObjects.Pop()->Sleep();
   }
 }
 
@@ -145,22 +140,6 @@ void ARegistrationManager::AwakeByCenterObject(TArray<AInteractiveObject*>& Obje
   for (AInteractiveObject* Object : Objects)
   {
     AwakenObjects.Add(Object);
-
-
-    // Using friend status not to add new functions
-
-     //++++ move to function ->
-    Object->InteractivityIcon->Show();
-
-
-    if (CentralObject->InfluencesOn.Find(Object))
-    {
-      Object->InteractivityIcon->SetIconState(EIconState::ChosenTarget);
-    }
-    else
-    {
-      Object->InteractivityIcon->SetIconState(EIconState::AvailableTarget);
-    }
-    // <-
+    Object->AwakeBy(Object);
   }
 }

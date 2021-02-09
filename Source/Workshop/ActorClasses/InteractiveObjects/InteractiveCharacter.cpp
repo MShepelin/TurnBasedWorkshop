@@ -296,3 +296,8 @@ AInteractiveAbility* AInteractiveCharacter::GetCentralAbility() const
 {
   return CentralAbility;
 }
+
+TArray<AInteractiveAbility*>* AInteractiveCharacter::GetAbilties()
+{
+  return &Abilities;
+}

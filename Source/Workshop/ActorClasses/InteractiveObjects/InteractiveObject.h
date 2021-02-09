@@ -127,6 +127,9 @@ public:
   UFUNCTION(BlueprintCallable)
   ARegistrationManager* GetManager() const;
 
+  /** Inside function to pair a manager with this object. */
+  void SetManager(ARegistrationManager* NewManager);
+
   /** Check if this object is considered central for the connected Manager */
   UFUNCTION(BlueprintCallable)
   bool IsCentralInManager() const;
@@ -149,6 +152,10 @@ public:
 
   /** Called when a player wants to stop using object as target of other object's influence. */
   UFUNCTION() virtual void UnpickedAsTarget();
+
+  void Sleep();
+
+  void AwakeBy(AInteractiveObject* Object);
 
   // --------------------------- //
   // Influences and dependencies //
@@ -212,7 +219,4 @@ public:
    * so friend status is used for optimisation and code clearness.
    */
   friend class AInteractiveObject;
-
-  /** Registration Managers are designed to set private members of Interactive objects. */
-  friend class ARegistrationManager;
 };

@@ -98,6 +98,12 @@ public:
 
   void Pick() override;
 
+  /**
+    * When a character is connected to a manager this character's abilities need to be connected to.
+    * This function is the way to get abilities fast (by pointer).
+    */
+  TArray<AInteractiveAbility*>* GetAbilties();
+
   // ------------------ //
   // Turn-Based actions //
   // ------------------ //

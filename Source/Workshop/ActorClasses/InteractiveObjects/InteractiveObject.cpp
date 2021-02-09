@@ -238,3 +238,27 @@ void AInteractiveObject::OnExhausted_Implementation()
 {
 
 }
+
+void AInteractiveObject::SetManager(ARegistrationManager* NewManager)
+{
+  MainManager = NewManager;
+}
+
+void AInteractiveObject::Sleep()
+{
+  InteractivityIcon->Hide();
+}
+
+void AInteractiveObject::AwakeBy(AInteractiveObject* Object)
+{
+  InteractivityIcon->Show();
+
+  if (DependsOn.Find(Object))
+  {
+    InteractivityIcon->SetIconState(EIconState::ChosenTarget);
+  }
+  else
+  {
+    InteractivityIcon->SetIconState(EIconState::AvailableTarget);
+  }
+}
