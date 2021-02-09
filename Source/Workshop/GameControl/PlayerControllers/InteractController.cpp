@@ -268,7 +268,7 @@ void AInteractController::PlayerWantsToChangePhase()
   bTurnIsControlled = false;
 
   ATurnBasedManager* Manager;
-  if ((Manager = Cast<ATurnBasedManager>(UsedManager)) == nullptr)
+  if (nullptr == (Manager = Cast<ATurnBasedManager>(UsedManager)))
   {
     // Error
     return;

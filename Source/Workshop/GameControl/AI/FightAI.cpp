@@ -83,11 +83,7 @@ void AFightAI::PostInitializeComponents()
   }
 
   AFightGameMode* GameMode = Cast<AFightGameMode>(GetWorld()->GetAuthGameMode());
-  if (!GameMode)
-  {
-    // throw smth
-    return;
-  }
+  check(GameMode);
 
   GameMode->FightControllers.Add(
     TPairInitializer<int32, AFightAI*>(ControllerID, this));

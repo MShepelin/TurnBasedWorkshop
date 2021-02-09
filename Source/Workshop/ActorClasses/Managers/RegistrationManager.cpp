@@ -14,7 +14,6 @@ ARegistrationManager::ARegistrationManager()
   ManagerIcon = CreateDefaultSubobject<UBillboardComponent>(TEXT("ManagerIcon"));
   ManagerIcon->SetupAttachment(RootComponent);
 
-  //++++ manage memory in other way, TWeakPtr<>
   CTsSystem = std::make_unique<CTsSearch<int32, AInteractiveObject>>();
 }
 
@@ -72,6 +71,7 @@ TArray<AInteractiveObject*> ARegistrationManager::FindObjectsByCTsWithMask(const
       continue;
     }
 
+    //++++ remove at swap
     FoundObjects.Swap(ObjectIndex, FoundObjects.Num() - 1);
     FoundObjects.Pop();
   }
@@ -103,6 +103,7 @@ AInteractiveObject* ARegistrationManager::GetCentralObject()
 
 void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
 {
+  //++++ move to public function ->
   ARegistrationManager*& ObjectsManager = Object->MainManager;
 
   // Remove previuos Manager if it was chosen for an object
@@ -118,8 +119,11 @@ void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
   }
 
   ObjectsManager = this;
+  // <- end++++
+
   CTsSystem->AddObject(Object);
 
+  //++++ connect additional objects ->
   AInteractiveCharacter* ObjectAsCharacter = Cast<AInteractiveCharacter>(Object);
   if (ObjectAsCharacter)
   {
@@ -128,12 +132,14 @@ void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
       ConnectObject(CharactersAbility);
     }
   }
+  // <- 
 }
 
 void ARegistrationManager::PutToSleepManagedObjects(ARegistrationManager* Manager)
 {
   while (AwakenObjects.Num())
   {
+    //++++ move to function
     AwakenObjects.Pop()->InteractivityIcon->Hide();
   }
 }
@@ -144,8 +150,12 @@ void ARegistrationManager::AwakeByCenterObject(TArray<AInteractiveObject*>& Obje
   {
     AwakenObjects.Add(Object);
 
+
     // Using friend status not to add new functions
+
+     //++++ move to function ->
     Object->InteractivityIcon->Show();
+
 
     if (CentralObject->InfluencesOn.Find(Object))
     {
@@ -155,5 +165,6 @@ void ARegistrationManager::AwakeByCenterObject(TArray<AInteractiveObject*>& Obje
     {
       Object->InteractivityIcon->SetIconState(EIconState::AvailableTarget);
     }
+    // <-
   }
 }
