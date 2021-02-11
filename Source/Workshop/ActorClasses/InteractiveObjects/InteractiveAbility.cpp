@@ -162,7 +162,7 @@ void AInteractiveAbility::DecreaseEffectsDuration()
     FEffectData& ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
 
     // Remove effect if it is no longer present
-    if (!ChosenEffect.DecreaseDuration())
+    if (!ChosenEffect.DecreaseDuration() && ChosenEffect.bIsBonusEffect)
     {
       AbilityDataCore.UsedEffects.RemoveAt(EffectIndex);
     }
