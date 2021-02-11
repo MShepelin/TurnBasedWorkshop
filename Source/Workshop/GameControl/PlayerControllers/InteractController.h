@@ -25,18 +25,19 @@ class WORKSHOP_API AInteractController : public ACameraController, public ITurnB
 protected:
   UPROPERTY() ATurnBasedObserver* PossessedObserver;
 
-  AInteractiveCharacter* FirstToSwap[2];
+  size_t FirstToSwap;
   UPROPERTY() bool bSwapModeIsActive;
 
   UPROPERTY() UAbilitiesWidget* UsedAbilitiesWidget;
 
   std::shared_ptr<FCharactersResolve> ResolveRunnable;
-  FRunnableThread* ResolveThread = nullptr;
+  FRunnableThread* ResolveThread;
+
+  UPROPERTY() uint8 bCanPick : 1;
   
 public:
-  FThreadSafeBool bTurnIsControlled = false; //++++ change to private
-  UPROPERTY() bool bCanPick = false; //++++ change to private
-
+  FThreadSafeBool bTurnIsControlled; //++++ change to protected
+  
 protected:
   // Tries to pick an Interactive object
   UFUNCTION() void StartInteract();

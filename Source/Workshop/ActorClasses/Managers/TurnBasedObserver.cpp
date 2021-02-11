@@ -176,7 +176,12 @@ int32 ATurnBasedObserver::GetTurnBasedID()
   return TurnBasedID;
 }
 
-TArray<AInteractiveCharacter*>& ATurnBasedObserver::GetSpawnedCharactes()
+const TArray<AInteractiveCharacter*>& ATurnBasedObserver::GetSpawnedCharacters()
 {
   return SpawnedCharacters;
+}
+
+void ATurnBasedObserver::SwapCharacters(size_t FirstIndex, size_t SecondIndex)
+{
+  SpawnedCharacters.Swap(FirstIndex, SecondIndex);
 }

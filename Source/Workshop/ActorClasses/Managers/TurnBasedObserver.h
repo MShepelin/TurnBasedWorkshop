@@ -63,6 +63,10 @@ public:
     const TArray<FInteractiveCore> *NewInteractiveOptions = nullptr
   );
 
+  const TArray<AInteractiveCharacter*>& GetSpawnedCharacters();
+
+  void SwapCharacters(size_t FirstIndex, size_t SecondIndex);
+
   UFUNCTION(BlueprintCallable)
   void SpawnCharacters();
 
@@ -71,6 +75,4 @@ public:
 
   UFUNCTION(BlueprintCallable)
   void ConnectAllSpawnedObjects();
-
-  TArray<AInteractiveCharacter*>& GetSpawnedCharactes();
 };

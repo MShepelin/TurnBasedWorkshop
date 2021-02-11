@@ -127,7 +127,7 @@ void AInteractiveObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
   }
 }
 
-int32 AInteractiveObject::GetInteractiveType() const
+uint8 AInteractiveObject::GetInteractiveType() const
 {
   return InteractiveDataCore.InteractiveType;
 }

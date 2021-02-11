@@ -19,9 +19,13 @@ AInteractController::AInteractController()
 {
   bEnableClickEvents = true;
   bEnableMouseOverEvents = true;
+  FirstToSwap = INDEX_NONE;
 
   bSwapModeIsActive = false;
-  FirstToSwap[0] = FirstToSwap[1] = nullptr;
+
+  ResolveThread = nullptr;
+  bTurnIsControlled = false;
+  bCanPick = false;
 }
 
 void AInteractController::StartInteract()
@@ -54,25 +58,31 @@ void AInteractController::StartInteract()
   AInteractiveCharacter* InteractiveCharacter = Cast<AInteractiveCharacter>(InteractiveObject);
 
   if (!InteractiveCharacter || InteractiveCharacter->CharacterDataCore.bIsExhausted)
-    return;
-
-  if (FirstToSwap[0])
   {
-    FirstToSwap[1] = InteractiveCharacter;
+    return;
+  }
 
-    auto& PlacableCharacters = PossessedObserver->GetSpawnedCharactes();
-    PlacableCharacters.Swap(PlacableCharacters.Find(FirstToSwap[0]), PlacableCharacters.Find(FirstToSwap[1]));
+  if (FirstToSwap != INDEX_NONE)
+  {
+    size_t SecondToSwap = PossessedObserver->GetSpawnedCharacters().Find(InteractiveCharacter);
+    if (SecondToSwap == INDEX_NONE)
+    {
+      return;
+    }
+
+    const auto& PlacableCharacters = PossessedObserver->GetSpawnedCharacters(); 
+    PossessedObserver->SwapCharacters(FirstToSwap, SecondToSwap);
 
     //++++ add movement
-    FTransform FirstTransform = FirstToSwap[0]->GetActorTransform();
-    FirstToSwap[0]->SetActorTransform(FirstToSwap[1]->GetActorTransform());
-    FirstToSwap[1]->SetActorTransform(FirstTransform);
+    FTransform FirstTransform = PlacableCharacters[FirstToSwap]->GetActorTransform();
+    PlacableCharacters[FirstToSwap]->SetActorTransform(PlacableCharacters[SecondToSwap]->GetActorTransform());
+    PlacableCharacters[SecondToSwap]->SetActorTransform(FirstTransform);
 
-    FirstToSwap[0] = FirstToSwap[1] = nullptr;
+    FirstToSwap = INDEX_NONE;
   }
   else
   {
-    FirstToSwap[0] = InteractiveCharacter;
+    FirstToSwap = PossessedObserver->GetSpawnedCharacters().Find(InteractiveCharacter);
   }
 
   //++++ you can store one pointer in FirstToSwap except of 2
@@ -121,6 +131,10 @@ void AInteractController::TurnSwapMode()
   }
 
   bSwapModeIsActive = !bSwapModeIsActive;
+  if (!bSwapModeIsActive)
+  {
+    FirstToSwap = INDEX_NONE;
+  }
 
   // Unpick central object if needed
   if (UsedManager->HasCentralObject())
@@ -145,7 +159,7 @@ void AInteractController::TurnSwapMode()
 
 void AInteractController::ResolveCharactersAbilities()
 {
-  for (AInteractiveCharacter* PlacableCharacter : PossessedObserver->GetSpawnedCharactes())
+  for (AInteractiveCharacter* PlacableCharacter : PossessedObserver->GetSpawnedCharacters())
   {
     PlacableCharacter->ResolveCharacterActions();
   }
@@ -222,7 +236,7 @@ void AInteractController::PlayerWantsToChangePhase()
     }
 
     // Remove abilities from the player's screen
-    for (AInteractiveCharacter* ControlledCharacter : PossessedObserver->GetSpawnedCharactes())
+    for (AInteractiveCharacter* ControlledCharacter : PossessedObserver->GetSpawnedCharacters())
     {
       // Pointers to central abilities must stay valid for their characters
       ControlledCharacter->ClearCentralAbility(true);
@@ -243,7 +257,7 @@ void AInteractController::PlayerWantsToChangePhase()
 
   if (Manager->GetPhase() == ETurnPhase::End)
   {
-    for (AInteractiveCharacter* PlacableCharacter : PossessedObserver->GetSpawnedCharactes())
+    for (AInteractiveCharacter* PlacableCharacter : PossessedObserver->GetSpawnedCharacters())
     {
       for (AInteractiveAbility* Ability : PlacableCharacter->Abilities)
       {

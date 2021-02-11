@@ -36,6 +36,14 @@ void AFightAI::OnConnectToManager_Implementation()
   }
 
   PossessedObserver->SpawnCharacters();
+  for (AInteractiveCharacter* SpawnedCharacter : PossessedObserver->GetSpawnedCharacters())
+  {
+    uint8 TypeMask = SpawnedCharacter->GetInteractiveType();
+    TypeMask |= static_cast<uint8>(EInteractiveType::NotPlayerControlled);
+    TypeMask &= ~static_cast<uint8>(EInteractiveType::PlayerControlled);
+    SpawnedCharacter->SetInteractiveType(static_cast<EInteractiveType>(TypeMask));
+  }
+
   PossessedObserver->ConnectAllSpawnedObjects();
   UsedManager = PossessedObserver->GetManager();
 }

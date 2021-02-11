@@ -194,7 +194,7 @@ public:
     * For example, it desribes if the object is controlled by character and whether the object is exhausted.
     */
   UFUNCTION(BlueprintCallable)
-  int32 GetInteractiveType() const;
+  uint8 GetInteractiveType() const;
 
   UFUNCTION(BlueprintCallable)
   void SetInteractiveType(EInteractiveType NewType);
