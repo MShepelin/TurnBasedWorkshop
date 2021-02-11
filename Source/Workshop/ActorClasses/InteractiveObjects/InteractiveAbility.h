@@ -150,7 +150,9 @@ public:
   // Others //
   // ------ //
 
+#if WITH_EDITOR
   void ShowInfluences() const override;
+#endif
 
   /**
    * BuildAbility gives prepared functions which help to make new actions for resolution step with ResolveAbility.

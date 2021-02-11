@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"
-#include "AIController.h"
 #include "FightCore.generated.h"
 
 USTRUCT(BlueprintType)

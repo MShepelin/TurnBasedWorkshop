@@ -68,8 +68,6 @@ public:
 
   virtual void OnConstruction(const FTransform & Transform) override;
 
-  virtual void PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent);
-
   virtual void Tick(float DeltaTime) override;
 
   // ---------- //

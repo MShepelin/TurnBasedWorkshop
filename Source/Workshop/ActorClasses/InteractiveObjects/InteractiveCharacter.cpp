@@ -54,11 +54,6 @@ void AInteractiveCharacter::PostInitProperties()
   }
 }
 
-void AInteractiveCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& ChangeEvent)
-{
-  Super::PostEditChangeProperty(ChangeEvent);
-}
-
 void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
 {
   Super::OnConstruction(Transform);

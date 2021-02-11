@@ -6,10 +6,12 @@
 #include "Kismet/GameplayStatics.h"
 #include "Workshop/GameControl/PlayerControllers/InteractController.h"
 
+#if WITH_EDITOR
 void AInteractiveAbility::ShowInfluences() const
 {
   Super::ShowInfluences();
 }
+#endif
 
 AInteractiveAbility::AInteractiveAbility()
 {
@@ -76,7 +78,10 @@ void AInteractiveAbility::PickedAsCentral()
 {
   Super::PickedAsCentral();
 
-  TArray<AInteractiveObject*> FoundObjects = MainManager->FindObjectsByCTsWithMask(AbilityDataCore.CTsToAffect, 1, AbilityDataCore.TargetTypeMask);
+  TArray<AInteractiveObject*> FoundObjects = MainManager->FindObjectsByCTsWithMask(
+    AbilityDataCore.CTsToAffect, 
+    AbilityDataCore.CTsToAffect.Num(), 
+    AbilityDataCore.TargetTypeMask);
 
   MainManager->AwakeByCenterObject(FoundObjects);
 
