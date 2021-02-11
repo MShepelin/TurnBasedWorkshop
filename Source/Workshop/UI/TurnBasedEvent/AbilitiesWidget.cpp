@@ -19,7 +19,6 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
     }
 
     VerticalBoxSlots[SlotsIndex]->SetChosenAbility(Ability, bIsControlled);
-    AbilitiesLayout->InvalidateLayoutAndVolatility();
     
     SlotsIndex++;
   }
@@ -28,6 +27,8 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
   {
     RemoveAbilitySlot();
   }
+
+  AbilitiesLayout->InvalidateLayoutAndVolatility();
 }
 
 void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars)
@@ -48,16 +49,17 @@ void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars)
     }
 
     BarsSlots[SlotsIndex]->SetBarAndText(Bar, GameMode);
-    BarsLayout->InvalidateLayoutAndVolatility();
 
     SlotsIndex++;
   }
 
   while (BarsSlots.Num() > Bars.Num())
   {
-    BarsSlots[BarsSlots.Num() - 1]->RemoveFromParent();
+    BarsSlots.Last()->RemoveFromParent();
     BarsSlots.Pop();
   }
+
+  BarsLayout->InvalidateLayoutAndVolatility();
 }
 
 void UAbilitiesWidget::NativePreConstruct()
@@ -69,12 +71,15 @@ void UAbilitiesWidget::NativePreConstruct()
     return;
   }
 
+  bIsFocusable = true;
+
   // Add DEFAULT_SLOTS_COUNT to vertical box; 
   for (size_t SlotsIndex = 0; SlotsIndex < DEFAULT_SLOTS_COUNT; SlotsIndex++)
   {
     AddAbilitySlot();
   }
 
+  HideAbilitySlots();
   HideName();
 
   Super::NativePreConstruct();
@@ -89,7 +94,7 @@ void UAbilitiesWidget::AddAbilitySlot()
 
   UVerticalBoxSlot* NewSlot = AbilitiesLayout->AddChildToVerticalBox(NewAbilitySlot);
   NewSlot->SetSize(FSlateChildSize(ESlateSizeRule::Type::Fill));
-  AbilitiesLayout->InvalidateLayoutAndVolatility();
+  //AbilitiesLayout->InvalidateLayoutAndVolatility();
 }
 
 void UAbilitiesWidget::AddBarSlot()
@@ -99,7 +104,7 @@ void UAbilitiesWidget::AddBarSlot()
 
   UVerticalBoxSlot* NewSlot = BarsLayout->AddChildToVerticalBox(NewBarSlot);
   NewSlot->SetSize(FSlateChildSize(ESlateSizeRule::Type::Fill));
-  BarsLayout->InvalidateLayoutAndVolatility();
+  //BarsLayout->InvalidateLayoutAndVolatility();
 }
 
 void UAbilitiesWidget::RemoveAbilitySlot()

@@ -80,17 +80,19 @@ void AInteractiveAbility::PickedAsCentral()
 
   MainManager->AwakeByCenterObject(FoundObjects);
 
-  // Add list of abilities to the AbilitiesWidget.
+  // Add the ability to the AbilitiesWidget.
   UAbilitiesWidget* AbilitiesWidget = Cast<AInteractController>(
     UGameplayStatics::GetPlayerController(GetWorld(), 0))->GetAbilitiesWidget();
   if (AbilitiesWidget)
   {
-    AbilitiesWidget->FillAbilitySlots({ this }, false);
-    AbilitiesWidget->FillBarSlots(InteractiveDataCore.Stats);
+    TArray<AInteractiveAbility*> AbilitySlots = { this };
+    TArray<FBar> BarSlots = {};
+    AbilitiesWidget->FillAbilitySlots(AbilitySlots, false);
+    AbilitiesWidget->FillBarSlots(BarSlots);
 
     AbilitiesWidget->ShowAbilitySlots();
     AbilitiesWidget->ShowBarsSlots();
-
+    
     AbilitiesWidget->SetInteractiveObjectData(InteractiveDataCore);
   }
 }
@@ -139,25 +141,26 @@ void AInteractiveAbility::UpdateAfterResolution()
   // Clear all resolved effects
   while (AbilityDataCore.EffectsToResolve.Pop()) {};
 
-  // Decrease effects' durations
-  for (int EffectIndex = AbilityDataCore.UsedEffects.Num() - 1; EffectIndex >= 0; EffectIndex--)
-  {
-    FEffectData& ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
-
-    // BonusEffects always go after basic effects
-    if (!ChosenEffect.bIsBonusEffect)
-      break;
-
-    // Remove effect if it is no longer present
-    if (!ChosenEffect.DecreaseDuration())
-      AbilityDataCore.UsedEffects.RemoveAtSwap(EffectIndex);
-  }
-
   // Receive additional effects
   while (!AbilityDataCore.EffectsToReceive.IsEmpty())
   {
     AbilityDataCore.UsedEffects.Add(FEffectData());
     AbilityDataCore.EffectsToReceive.Dequeue(AbilityDataCore.UsedEffects.Last());
+  }
+}
+
+void AInteractiveAbility::DecreaseEffectsDuration()
+{
+  // Decrease effects' durations
+  for (size_t EffectIndex = 0; EffectIndex < AbilityDataCore.UsedEffects.Num(); ++EffectIndex)
+  {
+    FEffectData& ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
+
+    // Remove effect if it is no longer present
+    if (!ChosenEffect.DecreaseDuration())
+    {
+      AbilityDataCore.UsedEffects.RemoveAt(EffectIndex);
+    }
   }
 }
 

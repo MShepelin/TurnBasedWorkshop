@@ -125,10 +125,13 @@ public:
   void PrepareToResolve();
 
   /**
-   * After resolution step we need to clear used resources and decrease duration of effects.
-   * This function is expected to be used in the end of the turn. This functions is not thread-safe.
+   * After resolution step we need to clear used resources.
+   * This function is expected to be used after resoultion step. This functions is not thread-safe.
    */
   void UpdateAfterResolution();
+
+  /** Decreases duration of bonus effects applied to the ability. */
+  void DecreaseEffectsDuration();
 
   // ------------------- //
   // Ability's variables //

@@ -71,5 +71,5 @@ void UAbilitySlot::NativePreConstruct()
   Super::NativePreConstruct();
 
   AbilityButton->SetBackgroundColor(FLinearColor(0, 0, 0, 0));
-  AbilityButton->OnPressed.AddDynamic(this, &UAbilitySlot::AbilityClicked);
+  AbilityButton->OnClicked.AddDynamic(this, &UAbilitySlot::AbilityClicked);
 }
