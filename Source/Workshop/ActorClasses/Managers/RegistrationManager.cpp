@@ -115,7 +115,7 @@ void ARegistrationManager::ConnectObject(AInteractiveObject* Object)
   CTsSystem->AddObject(Object);
 
   AInteractiveCharacter* ObjectAsCharacter = Cast<AInteractiveCharacter>(Object);
-  if (ObjectAsCharacter && (ObjectAsCharacter->GetInteractiveType() & static_cast<int32>(EInteractiveType::Character)))
+  if (ObjectAsCharacter && (ObjectAsCharacter->GetInteractiveType()))
   {
     for (AInteractiveAbility* CharactersAbility : *ObjectAsCharacter->GetAbilties())
     {

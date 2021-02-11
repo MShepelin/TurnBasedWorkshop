@@ -189,9 +189,15 @@ public:
   virtual void ShowInfluences() const;
 #endif
 
-  /** Get a mask with information about types of this Interactive Object (such as control properties). */
+  /**
+    * Interactive types desribe the possible interactions with this object. 
+    * For example, it desribes if the object is controlled by character and whether the object is exhausted.
+    */
   UFUNCTION(BlueprintCallable)
   int32 GetInteractiveType() const;
+
+  UFUNCTION(BlueprintCallable)
+  void SetInteractiveType(EInteractiveType NewType);
 
   /** 
    * Thread-safe way to play animations. 

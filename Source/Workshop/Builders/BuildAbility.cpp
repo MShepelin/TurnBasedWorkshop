@@ -7,7 +7,7 @@ void UBuildAbility::AddAllEffectsToObject(const TArray<FEffectData>& Effects, AI
 {
   // Check if we should apply special logic to TargetObject
   AInteractiveAbility* TargetAbility = Cast<AInteractiveAbility>(TargetObject);
-  if (TargetAbility && (TargetObject->GetInteractiveType() & static_cast<int32>(EInteractiveType::Ability)))
+  if (TargetAbility)
   {
     for (const FEffectData& Effect : Effects)
     {

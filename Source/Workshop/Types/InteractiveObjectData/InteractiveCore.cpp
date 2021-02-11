@@ -30,5 +30,5 @@ TArray<FBar> FInteractiveCore::GetStats()
 
 FInteractiveCore::FInteractiveCore()
 {
-  InteractiveType = static_cast<int32>(EInteractiveType::Nothing);
+  InteractiveType = static_cast<uint8>(EInteractiveType::Nothing);
 }

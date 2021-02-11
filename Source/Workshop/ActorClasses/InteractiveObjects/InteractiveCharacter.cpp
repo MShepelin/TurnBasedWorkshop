@@ -12,7 +12,7 @@
 
 AInteractiveCharacter::AInteractiveCharacter()
 {
-  InteractiveDataCore.InteractiveType = static_cast<int32>(EInteractiveType::Character);
+  InteractiveDataCore.InteractiveType = static_cast<uint8>(EInteractiveType::Character);
 
   CharacterPresentation = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CharacterSprite"));
   CharacterPresentation->SetupAttachment(RootComponent);
@@ -62,7 +62,7 @@ void AInteractiveCharacter::PickedAsCentral()
 {
   Super::PickedAsCentral();
 
-  int32 CheckControll = InteractiveDataCore.InteractiveType & static_cast<int32>(EInteractiveType::PlayerControlled);
+  uint8 CheckControll = InteractiveDataCore.InteractiveType & static_cast<uint8>(EInteractiveType::PlayerControlled);
 
   // Add list of abilities to the AbilitiesWidget.
   UAbilitiesWidget* AbilitiesWidget = Cast<AInteractController>(

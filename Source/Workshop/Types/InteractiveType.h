@@ -7,14 +7,15 @@
 
 
 UENUM(meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
-enum class EInteractiveType : int32
+enum class EInteractiveType : uint8
 {
   Nothing             = 0,
   Ability             = 1,
   Character           = 2,
   Item                = 4,
   PlayerControlled    = 8, 
-  NotPlayerControlled = 16
+  NotPlayerControlled = 16,
+  Exhausted           = 32
 };
 
 // In search all bits starting from log(INTERACTIVE_TYPE_SEPARATOR_MASK)+1

@@ -13,19 +13,11 @@ struct WORKSHOP_API FInteractiveCore
 {
   GENERATED_BODY()
 
-  // ---------------------- //
-  // Interactive Properties //
-  // ---------------------- //
-
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings", meta = (Bitmask, BitmaskEnum = "EInteractiveType"))
-  int32 InteractiveType;
+  uint8 InteractiveType;
 
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings", meta = (ClampMin = "1"));
   TArray<int32> CTsOfObject;
-
-  // ----------------- //
-  // Object Statistics //
-  // ----------------- //
 
   // Name to display.
   UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "InteractiveSettings")

@@ -262,3 +262,8 @@ void AInteractiveObject::AwakeBy(AInteractiveObject* Object)
     InteractivityIcon->SetIconState(EIconState::AvailableTarget);
   }
 }
+
+void AInteractiveObject::SetInteractiveType(EInteractiveType NewType)
+{
+  InteractiveDataCore.InteractiveType = static_cast<uint8>(NewType);
+}
