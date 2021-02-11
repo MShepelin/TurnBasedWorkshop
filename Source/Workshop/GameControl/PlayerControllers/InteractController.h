@@ -41,6 +41,7 @@ protected:
   // Tries to pick an Interactive object
   UFUNCTION() void StartInteract();
   UFUNCTION() void StopInteract();
+  UFUNCTION() void ScrollWheel(float ScrollDelta);
   
   UFUNCTION() void PlayerWantsToChangePhase();
 

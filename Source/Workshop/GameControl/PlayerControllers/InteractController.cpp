@@ -20,12 +20,6 @@ AInteractController::AInteractController()
   bEnableClickEvents = true;
   bEnableMouseOverEvents = true;
 
-  //TurnControl = CreateDefaultSubobject<UTurnBasedComponent>(TEXT("TurnControl"));
-  //AddOwnedComponent(TurnControl);
-  //TurnControl->ConnectDelegate.BindUObject(this, &AInteractController::ConnectionHappened);
-  //TurnControl->TurnIsTakenUnderControl.BindUObject(this, &AInteractController::TurnControllGained);
-  //TurnControl->TurnIsOutOfControl.BindUObject(this, &AInteractController::TurnControllLost);
-
   bSwapModeIsActive = false;
   FirstToSwap[0] = FirstToSwap[1] = nullptr;
 }
@@ -96,6 +90,14 @@ void AInteractController::StopInteract()
   }
 }
 
+void AInteractController::ScrollWheel(float ScrollDelta)
+{
+  if (CurrentCamera)
+  {
+    CurrentCamera->PlayerScrolledWheel(ScrollDelta);
+  }
+}
+
 void AInteractController::BeginPlay()
 {
   Super::BeginPlay();
@@ -107,6 +109,7 @@ void AInteractController::SetupInputComponent()
 
   InputComponent->BindAction("Interact", IE_Pressed, this, &AInteractController::StartInteract);
   InputComponent->BindAction("Interact", IE_Released, this, &AInteractController::StopInteract);
+  InputComponent->BindAxis("Wheel", this, &AInteractController::ScrollWheel);
 }
 
 void AInteractController::TurnSwapMode()

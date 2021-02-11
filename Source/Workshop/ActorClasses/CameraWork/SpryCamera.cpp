@@ -71,6 +71,11 @@ void ASpryCamera::PlayerReleasedClick()
   WidgetInteraction->ReleasePointerKey(FKey("LeftMouseButton"));
 }
 
+void ASpryCamera::PlayerScrolledWheel(float ScrollDelta)
+{
+  WidgetInteraction->ScrollWheel(ScrollDelta);
+}
+
 FVector ASpryCamera::GetCameraLocation() const
 {
   return Camera->GetComponentLocation();

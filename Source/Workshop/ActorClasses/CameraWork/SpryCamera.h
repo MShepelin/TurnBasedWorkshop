@@ -61,8 +61,11 @@ public:
   FVector GetCameraLocation() const;
 
   /** Interact with widgets as the player presses left mouse button. */
-  UFUNCTION() void PlayerPressedClick();
+  UFUNCTION() void PlayerPressedClick(); //++++ rename
 
   /** Interact with widgets as the player releases left mouse button. */
-  UFUNCTION() void PlayerReleasedClick();
+  UFUNCTION() void PlayerReleasedClick(); //++++ rename
+
+  /** Interact with widgets as the player scrolls the mouse wheel. */
+  UFUNCTION() void PlayerScrolledWheel(float ScrollDelta);
 };
