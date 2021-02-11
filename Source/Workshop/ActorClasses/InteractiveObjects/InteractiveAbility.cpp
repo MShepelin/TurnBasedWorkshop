@@ -157,12 +157,18 @@ void AInteractiveAbility::UpdateAfterResolution()
 void AInteractiveAbility::DecreaseEffectsDuration()
 {
   // Decrease effects' durations
-  for (size_t EffectIndex = 0; EffectIndex < AbilityDataCore.UsedEffects.Num(); ++EffectIndex)
+  for (size_t EffectIndex = 0; EffectIndex < AbilityDataCore.UsedEffects.Num();)
   {
     FEffectData& ChosenEffect = AbilityDataCore.UsedEffects[EffectIndex];
 
+    if (!ChosenEffect.bIsBonusEffect)
+    {
+      ++EffectIndex;
+      continue;
+    }
+
     // Remove effect if it is no longer present
-    if (!ChosenEffect.DecreaseDuration() && ChosenEffect.bIsBonusEffect)
+    if (!ChosenEffect.DecreaseDuration())
     {
       AbilityDataCore.UsedEffects.RemoveAt(EffectIndex);
     }
