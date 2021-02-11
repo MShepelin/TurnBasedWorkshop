@@ -28,7 +28,7 @@ void UAbilitiesWidget::FillAbilitySlots(const TArray<AInteractiveAbility*>& Abil
     RemoveAbilitySlot();
   }
 
-  AbilitiesLayout->InvalidateLayoutAndVolatility();
+  //AbilitiesLayout->InvalidateLayoutAndVolatility();
 }
 
 void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars)
@@ -55,11 +55,10 @@ void UAbilitiesWidget::FillBarSlots(const TArray<FBar>& Bars)
 
   while (BarsSlots.Num() > Bars.Num())
   {
-    BarsSlots.Last()->RemoveFromParent();
-    BarsSlots.Pop();
+    RemoveBarSlot();
   }
 
-  BarsLayout->InvalidateLayoutAndVolatility();
+  //BarsLayout->InvalidateLayoutAndVolatility();
 }
 
 void UAbilitiesWidget::NativePreConstruct()
@@ -73,18 +72,9 @@ void UAbilitiesWidget::NativePreConstruct()
 
   bIsFocusable = true;
 
-  // Add DEFAULT_SLOTS_COUNT to vertical box; 
-  for (size_t SlotsIndex = 0; SlotsIndex < DEFAULT_SLOTS_COUNT; SlotsIndex++)
-  {
-    AddAbilitySlot();
-  }
-
-  HideAbilitySlots();
   HideName();
 
   Super::NativePreConstruct();
-
-  //++++ AbilitiesLayout -> set standart indent
 }
 
 void UAbilitiesWidget::AddAbilitySlot()
@@ -94,7 +84,6 @@ void UAbilitiesWidget::AddAbilitySlot()
 
   UVerticalBoxSlot* NewSlot = AbilitiesLayout->AddChildToVerticalBox(NewAbilitySlot);
   NewSlot->SetSize(FSlateChildSize(ESlateSizeRule::Type::Fill));
-  //AbilitiesLayout->InvalidateLayoutAndVolatility();
 }
 
 void UAbilitiesWidget::AddBarSlot()
@@ -104,13 +93,18 @@ void UAbilitiesWidget::AddBarSlot()
 
   UVerticalBoxSlot* NewSlot = BarsLayout->AddChildToVerticalBox(NewBarSlot);
   NewSlot->SetSize(FSlateChildSize(ESlateSizeRule::Type::Fill));
-  //BarsLayout->InvalidateLayoutAndVolatility();
 }
 
 void UAbilitiesWidget::RemoveAbilitySlot()
 {
-  VerticalBoxSlots[VerticalBoxSlots.Num() - 1]->RemoveFromParent();
+  VerticalBoxSlots.Last()->RemoveFromParent();
   VerticalBoxSlots.Pop();
+}
+
+void UAbilitiesWidget::RemoveBarSlot()
+{
+  BarsSlots.Last()->RemoveFromParent();
+  BarsSlots.Pop();
 }
 
 void UAbilitiesWidget::HideAbilitySlots()

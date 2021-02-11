@@ -56,6 +56,7 @@ protected:
   UFUNCTION() void AddBarSlot();
 
   UFUNCTION() void RemoveAbilitySlot();
+  UFUNCTION() void RemoveBarSlot();
 
 public:
   UFUNCTION() void NativePreConstruct() override;

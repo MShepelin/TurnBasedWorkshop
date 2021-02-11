@@ -62,8 +62,6 @@ public:
   // AActor functions overload //
   // ------------------------- //
 
-  virtual void PostInitProperties() override;
-
   virtual void BeginPlay() override;
 
   virtual void OnConstruction(const FTransform & Transform) override;

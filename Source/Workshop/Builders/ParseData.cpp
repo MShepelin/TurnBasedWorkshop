@@ -81,7 +81,7 @@ void UParseData::DrawBar(const UMixedProgressBar* BarWidget, FPaintContext& Cont
     BarWidget->BackgroundText,
     { Position.X + ColorScheme.PaddingFromLine, CurrentValuePosition.Y },
     ColorScheme.TextFont,
-    ColorScheme.FontSizeNormal,
+    ColorScheme.FontSizeBig,
     FName("Bold"),
     ColorScheme.BackgroundColor);
 

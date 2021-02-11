@@ -10,7 +10,6 @@
 #include "UObject/UObjectBaseUtility.h"
 #include "Async/AsyncWork.h"
 #include "Kismet/GameplayStatics.h"
-#include "UnrealEd.h"
 #include "Workshop/GameControl/GameModes/FightGameMode.h"
 #include "../ChoicesInstance.h"
 #include "Workshop/Types/Nonblueprintable/GameConstants.h"

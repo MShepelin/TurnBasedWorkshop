@@ -44,19 +44,14 @@ void AInteractiveCharacter::PlayAnimation(int32 AnimationId, bool bWaitUntilEnds
   }
 }
 
-void AInteractiveCharacter::PostInitProperties()
-{
-  Super::PostInitProperties();
-
-  if (!CharacterDataCore.AnimationsMap.Find(IDLE_ANIMATION_ID))
-  {
-    UE_LOG(LogTemp, Error, TEXT("%d animation id (IDLE_ANIMATION_ID) must be set"), IDLE_ANIMATION_ID);
-  }
-}
-
 void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
 {
   Super::OnConstruction(Transform);
+
+  if (!CharacterDataCore.AnimationsMap.Find(IDLE_ANIMATION_ID))
+  {
+    UE_LOG(LogTemp, Warning, TEXT("%d animation id (IDLE_ANIMATION_ID) must be set"), IDLE_ANIMATION_ID);
+  }
 
   CentralAbilityRelativePosition = FVector(
     CentralAbilityRelativePositionInput[0], WIDGET_Y_ORDER, CentralAbilityRelativePositionInput[1]);
