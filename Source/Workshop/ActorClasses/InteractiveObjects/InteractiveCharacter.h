@@ -45,6 +45,9 @@ protected:
   UPROPERTY()
   UBillboardComponent* CentralAbilityPositionVisual;
 
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+  TArray<FVector> TargetLocations;
+
 public:
   AInteractiveCharacter();
 
@@ -122,6 +125,16 @@ public:
    * In other words, this function should be called one time before ResolveCharacterActions().
    */
   void PrepareCentralAbilityToResolve();
+
+  /** Any additional actions that should happen before any actions by this character should happen. */
+  UFUNCTION(BlueprintNativeEvent)
+  void PrepareToResolve();
+  virtual void PrepareToResolve_Implementation();
+
+  /** Any additional actions that should happen before after actions by this character happen. */
+  UFUNCTION(BlueprintNativeEvent)
+  void AfterResolution();
+  virtual void AfterResolution_Implementation();
 
   // ----------------- //
   // UI with abilities //

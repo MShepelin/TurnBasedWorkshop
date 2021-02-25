@@ -131,10 +131,7 @@ void AInteractController::TurnSwapMode()
   }
 
   bSwapModeIsActive = !bSwapModeIsActive;
-  if (!bSwapModeIsActive)
-  {
-    FirstToSwap = INDEX_NONE;
-  }
+  if (!bSwapModeIsActive) FirstToSwap = INDEX_NONE;
 
   // Unpick central object if needed
   if (UsedManager->HasCentralObject())
@@ -142,10 +139,7 @@ void AInteractController::TurnSwapMode()
     UsedManager->GetCentralObject()->UnpickedAsCentral();
   }
 
-  if (!UsedAbilitiesWidget)
-  {
-    return;
-  }
+  if (!UsedAbilitiesWidget) return;
 
   if (bSwapModeIsActive)
   {
@@ -241,6 +235,8 @@ void AInteractController::PlayerWantsToChangePhase()
       // Pointers to central abilities must stay valid for their characters
       ControlledCharacter->ClearCentralAbility(true);
 
+      ControlledCharacter->PrepareToResolve();
+
       // Preparation step is needed to store all effects in a thread-safe place
       ControlledCharacter->PrepareCentralAbilityToResolve();
     }
@@ -259,6 +255,8 @@ void AInteractController::PlayerWantsToChangePhase()
   {
     for (AInteractiveCharacter* PlacableCharacter : PossessedObserver->GetSpawnedCharacters())
     {
+      PlacableCharacter->AfterResolution();
+
       for (AInteractiveAbility* Ability : PlacableCharacter->Abilities)
       {
         Ability->UpdateAfterResolution();

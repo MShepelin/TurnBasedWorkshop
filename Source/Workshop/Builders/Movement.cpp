@@ -48,3 +48,55 @@ void UMovement::MoveFlipbookAcrossSpline(USplineComponent*& ObjectSplineReferenc
   Timeline->SetPlayRate(1 / Duration);
   Timeline->PlayFromStart();
 }
+
+FVector UMovement::LerpLocationWithCurve(float Alpha, FVector Start, FVector Finish, const UCurveFloat* Curve, float StartTime, float FinishTime, bool GlobalDeviation, bool ZDeviation)
+{
+  check(Curve);
+  check(FinishTime >= StartTime);
+  check(Alpha >= 0.f);
+  if (Alpha > 1.f) Alpha = 1.f;
+
+  float LerpTime = (StartTime * (1 - Alpha)) + (FinishTime * Alpha);
+  FVector BasicLerp = (Start * (1 - Alpha)) + (Finish * Alpha);
+  float DeviationScale = Curve->GetFloatValue(LerpTime);
+
+  if (GlobalDeviation)
+  {
+    if (!ZDeviation) UE_LOG(LogTemp, Error, TEXT("GlobalDeviation can work only with a z-axis deviation!"));
+    BasicLerp.Z += DeviationScale;
+    return BasicLerp;
+  }
+
+  FVector DeltaVector = Finish - Start;
+
+  if (DeltaVector.IsNearlyZero()) return Finish;
+
+  FVector XYProjection = DeltaVector;
+
+  if (ZDeviation)
+  {
+    XYProjection.Z = 0;
+  }
+  else
+  {
+    XYProjection.X = 0;
+  }
+
+  if (XYProjection.IsNearlyZero())
+  {
+    UE_LOG(LogTemp, Error, TEXT("The vector from start to finish is almost collinear to the deviation axes"));
+    return BasicLerp;
+  }
+
+  FVector XYProjectionPerp = DeltaVector ^ XYProjection;
+  FVector DeviationUnit = XYProjectionPerp ^ DeltaVector;
+  if (!DeviationUnit.Normalize())
+  {
+    UE_LOG(LogTemp, Error, TEXT("The vector from start to finish is almost collinear to the deviation axes"));
+    return BasicLerp;
+  }
+
+  DeviationUnit *= DeviationScale;
+
+  return BasicLerp + DeviationUnit;
+}

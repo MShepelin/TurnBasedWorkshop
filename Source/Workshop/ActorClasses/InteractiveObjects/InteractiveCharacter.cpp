@@ -291,3 +291,18 @@ TArray<AInteractiveAbility*>* AInteractiveCharacter::GetAbilties()
 {
   return &Abilities;
 }
+
+void AInteractiveCharacter::PrepareToResolve_Implementation()
+{
+  if (!CentralAbility) return;
+
+  for (AInteractiveObject* Target : CentralAbility->GetInfluences())
+  {
+    TargetLocations.Add(Target->GetActorLocation());
+  }
+}
+
+void AInteractiveCharacter::AfterResolution_Implementation()
+{
+  TargetLocations.Empty();
+}

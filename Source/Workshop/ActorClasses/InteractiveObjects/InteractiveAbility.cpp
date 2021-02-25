@@ -40,7 +40,6 @@ void AInteractiveAbility::SetCharacterOwner(AInteractiveCharacter* NewCharacterO
 
 void AInteractiveAbility::ResolveAbility_Implementation()
 {
-  UE_LOG(LogTemp, Warning, TEXT("HEY!"));
   // Gather and remove all effects from EffectsToResolve
   TArray<FEffectData> ResolveEffects = UBuildAbility::GatherEffects(this);
 

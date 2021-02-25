@@ -179,6 +179,9 @@ public:
   /** Called to stop any influence on this object. */
   UFUNCTION() virtual void ClearDependencies();
 
+  /** Get all objects that are dependent on this object. */
+  UFUNCTION() TArray<AInteractiveObject*> GetInfluences() const;
+
   // ------ //
   // Others //
   // ------ //

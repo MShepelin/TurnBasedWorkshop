@@ -267,3 +267,8 @@ void AInteractiveObject::SetInteractiveType(EInteractiveType NewType)
 {
   InteractiveDataCore.InteractiveType = static_cast<uint8>(NewType);
 }
+
+TArray<AInteractiveObject*> AInteractiveObject::GetInfluences() const
+{
+  return InfluencesOn.Array();
+}
