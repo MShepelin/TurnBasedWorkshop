@@ -69,7 +69,7 @@ FVector UMovement::GetDeviationUnit(FVector Start, FVector Finish, bool GlobalDe
     return FVector::ZeroVector;
   }
 
-  FVector XYProjectionPerp = DeltaVector ^ XYProjection;
+  FVector XYProjectionPerp = XYProjection ^ DeltaVector;
   FVector DeviationUnit = XYProjectionPerp ^ DeltaVector;
   if (!DeviationUnit.Normalize())
   {

@@ -46,7 +46,7 @@ protected:
   UBillboardComponent* CentralAbilityPositionVisual;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-  TArray<FVector> TargetLocations;
+  TArray<AInteractiveObject*> Targets;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
   FVector LastTargetLocation;

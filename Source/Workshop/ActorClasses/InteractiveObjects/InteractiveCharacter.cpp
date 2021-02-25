@@ -298,22 +298,22 @@ void AInteractiveCharacter::PrepareToResolve_Implementation()
 
   for (AInteractiveObject* Target : CentralAbility->GetInfluences())
   {
-    TargetLocations.Add(Target->GetActorLocation());
+    Targets.Add(Target);
   }
 }
 
 void AInteractiveCharacter::AfterResolution_Implementation()
 {
-  TargetLocations.Empty();
+  Targets.Empty();
 }
 
 void AInteractiveCharacter::PopTarget()
 {
   LastStartLocation = GetActorLocation();
 
-  if (TargetLocations.Num())
+  if (Targets.Num())
   {
-    LastTargetLocation = TargetLocations.Pop();
+    LastTargetLocation = Targets.Pop()->GetActorLocation();
   }
   else
   {
