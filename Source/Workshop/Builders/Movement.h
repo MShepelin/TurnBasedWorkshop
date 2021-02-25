@@ -40,4 +40,7 @@ public:
 
   UFUNCTION(BlueprintCallable)
   static void MoveFlipbookAcrossSpline(UPARAM(ref) USplineComponent*& ObjectSplineReference, USplineComponent* SplineToUse, UTimelineComponent* Timeline, float Duration);
+
+  UFUNCTION(BlueprintCallable)
+  static FVector GetApproachLocation(FVector Start, FVector Finish, float ApproachDistance);
 };

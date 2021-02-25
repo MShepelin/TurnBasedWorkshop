@@ -110,3 +110,17 @@ void UMovement::MoveFlipbookAcrossSpline(USplineComponent*& ObjectSplineReferenc
   Timeline->SetPlayRate(1 / Duration);
   Timeline->PlayFromStart();
 }
+
+FVector UMovement::GetApproachLocation(FVector Start, FVector Finish, float ApproachDistance)
+{
+  float RealDistance = (Finish - Start).Size();
+
+  if (RealDistance < ApproachDistance)
+  {
+    return Finish;
+  }
+
+  float Alpha = (RealDistance - ApproachDistance) / RealDistance;
+
+  return Start * (1 - Alpha) + Finish * Alpha;
+}

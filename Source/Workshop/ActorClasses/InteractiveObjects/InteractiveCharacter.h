@@ -51,10 +51,10 @@ protected:
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
   AInteractiveObject* LastTarget;
 
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
   FVector LastTargetLocation;
 
-  UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+  UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
   FVector LastStartLocation;
 
 public:
