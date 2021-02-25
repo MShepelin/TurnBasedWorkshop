@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright © Dmitriy Shepelin 2021. MIT License.
 
 #pragma once
 
@@ -21,9 +21,11 @@ class UInformationWidget;
 class UAbilitySlot;
 class AInteractController;
 
-// Interactive characters have visual represenation, abilities, types, 
-// they are able to take actions in turn-based events and connected to 
-// skill activations.
+/**
+ * Interactive characters have Paper2D visual represenation, abilities and animations.
+ * They also implement the concept of central ability, which will be used if a character 
+ * gets an opportunity to act.
+ */
 UCLASS(Abstract, Blueprintable)
 class WORKSHOP_API AInteractiveCharacter : public AInteractiveObject
 {
@@ -72,14 +74,18 @@ public:
   // Animations //
   // ---------- //
 
-  // Play animation by it's ID thread-safely.
-  // Returns true if ID was found, and false if not.
+  /**
+   * Play animation by it's ID thread-safely.
+   * Returns true if ID was found, and false if not.
+   * If bWaitUntilEnds is true the thread that called this function will sleep until the animation is finished.
+   */
   virtual void PlayAnimation(int32 AnimationId, bool bWaitUntilEnds) override;
 
-  // Return to playing default animation.
+  /** Return to default animation thread-safely. */
   UFUNCTION(BlueprintCallable)
   void ResetAnimation();
 
+  /** Any additional actions that should happen when animation starts to play with given duration and ID. */
   UFUNCTION(BlueprintNativeEvent)
   void ActionWithAnimation(float Duration, int32 AnimationID);
   virtual void ActionWithAnimation_Implementation(float Duration, int32 AnimationID);
@@ -104,24 +110,36 @@ public:
   // Turn-Based actions //
   // ------------------ //
 
+  /** If a creature isn't exhausted this function activates central ability as an action of this character. */
   UFUNCTION(BlueprintCallable)
   void ResolveCharacterActions();
 
-  // Checks stats and apply conditions based on their values.
+  /** Checks stats and apply conditions based on their values. */
   void UpdateExhaust() override;
 
+  /** 
+   * Before characterc can their central abilities must have sertain preparations. 
+   * In other words, this function should be called one time before ResolveCharacterActions().
+   */
   void PrepareCentralAbilityToResolve();
 
   // ----------------- //
   // UI with abilities //
   // ----------------- //
 
+  /** Change visibility of the ability that is currently central for this character. */
   UFUNCTION(BlueprintCallable)
   void ChangeCentralAbilityVisibility(bool bIsInvisible);
 
+  /** Make some ability central and move it to an appropriate location. */
   UFUNCTION(BlueprintCallable)
   void SetCentralAbility(AInteractiveAbility* Ability);
 
+  /** 
+   * Hide central ability visually. 
+   * If bOnlyVisually is false remove all influences and dependecies of the current central ability
+   * and mark that this character doesn't have central ability anymore
+   */
   UFUNCTION(BlueprintCallable)
   void ClearCentralAbility(bool bOnlyVisually = false);
 

@@ -8,6 +8,7 @@
 #include "Workshop/Types/StatData.h"
 #include "WorkshopGameModeBase.generated.h"
 
+/** Basic mode base for a turn-based game. It stores global data about names of stats and CTs. */
 UCLASS()
 class WORKSHOP_API AWorkshopGameModeBase : public AGameModeBase
 {

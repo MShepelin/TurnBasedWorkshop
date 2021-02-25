@@ -1,4 +1,4 @@
-//...
+// Copyright © Dmitriy Shepelin 2021. MIT License.
 
 #include "CharacterCore.h"
 #include "Workshop/ActorClasses/InteractiveObjects/InteractiveCharacter.h"

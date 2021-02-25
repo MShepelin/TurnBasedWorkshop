@@ -1,4 +1,4 @@
-// ...
+// Copyright © Dmitriy Shepelin 2021. MIT License.
 
 #include "FightAI.h"
 #include "Workshop/GameControl/GameModes/FightGameMode.h"

@@ -1,4 +1,4 @@
-// ...
+// Copyright © Dmitriy Shepelin 2021. MIT License.
 
 #include "TurnBasedComponent.h"
 #include "Workshop/ActorClasses/Managers/TurnBasedManager.h"

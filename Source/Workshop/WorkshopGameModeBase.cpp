@@ -60,27 +60,24 @@ FString AWorkshopGameModeBase::GetStatNameByID(int32 StatID) const
 
 FName AWorkshopGameModeBase::IntToFName(int32 Value)
 {
-  // Convert int32 to FName assuming base ten using the code from FString::AppendInt.
-  const ANSICHAR* DigitToChar = "9876543210123456789";
-  constexpr int32 ZeroDigitIndex = 9;
   bool bIsNumberNegative = (Value < 0);
-  const int32 TempBufferSize = 16; // 16 is big enough
+  const int32 TempBufferSize = 16; // Big enough size for a null-terminated string
   ANSICHAR TempNum[TempBufferSize];
-  int32 TempAt = TempBufferSize;
+  int32 TempIndex = TempBufferSize;
 
   do
   {
-    TempNum[--TempAt] = DigitToChar[ZeroDigitIndex + (Value % 10)];
+    int32 Digit = Value % 10;
+    if (bIsNumberNegative) Digit = -Digit;
+
+    TempNum[--TempIndex] = Digit + '0';
     Value /= 10;
   } while (Value);
 
-  if (bIsNumberNegative)
-  {
-    TempNum[--TempAt] = '-';
-  }
+  if (bIsNumberNegative) TempNum[--TempIndex] = '-';
 
-  const ANSICHAR* CharPtr = TempNum + TempAt;
-  const int32 NumChars = TempBufferSize - TempAt;
+  const ANSICHAR* CharPtr = TempNum + TempIndex;
+  const int32 NumChars = TempBufferSize - TempIndex;
 
   return FName(NumChars, CharPtr);
 }

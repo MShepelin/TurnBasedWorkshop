@@ -1,4 +1,4 @@
-//...
+// Copyright © Dmitriy Shepelin 2021. MIT License.
 
 #include "SpryCamera.h"
 #include "../InteractiveObjects/InteractiveCharacter.h"
