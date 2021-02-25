@@ -28,13 +28,16 @@ public:
   UFUNCTION(BlueprintCallable)
   static void CompleteSplineToDestination(UCurveFloat* Curve, USplineComponent* Spline, FVector Destination);
 
-  UFUNCTION(BlueprintCallable)
-  static void MoveFlipbookAcrossSpline(UPARAM(ref)  USplineComponent*& ObjectSplineReference, USplineComponent* SplineToUse, UTimelineComponent* Timeline, float Duration);
-
   /** 
    * If a path is defined as a vector from one location to another and a curve which desribes global or relative deviation of this vector, 
    * LerpLocationWithSpline can return the location on this path as if it was passed by Alpha (0 <= Alpha <= 1).
    */
   UFUNCTION(BlueprintCallable)
-  static FVector LerpLocationWithCurve(float Alpha, FVector Start, FVector Finish, const UCurveFloat* Curve, float StartTime, float FinishTime, bool GlobalDeviation = true, bool ZDeviation = true);
+  static FVector LerpLocationWithCurve(float Alpha, FVector Start, FVector Finish, const UCurveFloat* Curve, FVector DeviationUnit);
+
+  UFUNCTION(BlueprintCallable)
+  static FVector GetDeviationUnit(FVector Start, FVector Finish, bool GlobalDeviation = false, bool ZDeviation = true);
+
+  UFUNCTION(BlueprintCallable)
+  static void MoveFlipbookAcrossSpline(UPARAM(ref) USplineComponent*& ObjectSplineReference, USplineComponent* SplineToUse, UTimelineComponent* Timeline, float Duration);
 };

@@ -45,8 +45,14 @@ protected:
   UPROPERTY()
   UBillboardComponent* CentralAbilityPositionVisual;
 
-  UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
   TArray<FVector> TargetLocations;
+
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+  FVector LastTargetLocation;
+
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+  FVector LastStartLocation;
 
 public:
   AInteractiveCharacter();
@@ -92,6 +98,10 @@ public:
   UFUNCTION(BlueprintNativeEvent)
   void ActionWithAnimation(float Duration, int32 AnimationID);
   virtual void ActionWithAnimation_Implementation(float Duration, int32 AnimationID);
+
+  /** Pops TargetLocations and updates LastTargetLocation and LastStartLocation. */
+  UFUNCTION(BlueprintCallable)
+  void PopTarget();
 
   // ----------------------- //
   // Connection with Manager //

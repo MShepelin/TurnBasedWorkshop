@@ -306,3 +306,17 @@ void AInteractiveCharacter::AfterResolution_Implementation()
 {
   TargetLocations.Empty();
 }
+
+void AInteractiveCharacter::PopTarget()
+{
+  LastStartLocation = GetActorLocation();
+
+  if (TargetLocations.Num())
+  {
+    LastTargetLocation = TargetLocations.Pop();
+  }
+  else
+  {
+    LastTargetLocation = GetActorLocation();
+  }
+}
