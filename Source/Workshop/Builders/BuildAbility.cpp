@@ -1,6 +1,5 @@
 // Copyright © Dmitriy Shepelin 2021. MIT License.
 
-
 #include "BuildAbility.h"
 
 void UBuildAbility::AddAllEffectsToObject(const TArray<FEffectData>& Effects, AInteractiveObject* TargetObject)

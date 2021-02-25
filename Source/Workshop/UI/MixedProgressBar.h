@@ -27,7 +27,18 @@ public:
 
   UPROPERTY(BlueprintReadOnly) FText BackgroundText;
 
+protected:
+  virtual int32 NativePaint(
+    const FPaintArgs& Args, 
+    const FGeometry& AllottedGeometry, 
+    const FSlateRect& MyCullingRect, 
+    FSlateWindowElementList& OutDrawElements, 
+    int32 LayerId, 
+    const FWidgetStyle& InWidgetStyle, 
+    bool bParentEnabled) const override;
+
 public:
   UFUNCTION(BlueprintCallable) void SetBar(const FBar& Bar);
+
   UFUNCTION(BlueprintCallable) void SetBarAndText(const FBar& Bar, AWorkshopGameModeBase *GameMode);
 };
