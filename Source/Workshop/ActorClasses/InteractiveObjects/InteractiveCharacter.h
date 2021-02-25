@@ -49,6 +49,9 @@ protected:
   TArray<AInteractiveObject*> Targets;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+  AInteractiveObject* LastTarget;
+
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
   FVector LastTargetLocation;
 
   UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -99,7 +102,7 @@ public:
   void ActionWithAnimation(float Duration, int32 AnimationID);
   virtual void ActionWithAnimation_Implementation(float Duration, int32 AnimationID);
 
-  /** Pops TargetLocations and updates LastTargetLocation and LastStartLocation. */
+  /** Pops TargetLocations and updates LastTargetLocation, LastTarget and LastStartLocation. */
   UFUNCTION(BlueprintCallable)
   void PopTarget();
 

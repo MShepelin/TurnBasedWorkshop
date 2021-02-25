@@ -29,19 +29,13 @@ AInteractiveCharacter::AInteractiveCharacter()
 
 void AInteractiveCharacter::PlayAnimation(int32 AnimationId, bool bWaitUntilEnds)
 {
-  UPaperFlipbook** FoundFlipbook = CharacterDataCore.AnimationsMap.Find(AnimationId);
-  if (FoundFlipbook && *FoundFlipbook)
-  {
-    float AnimationDuration = (**FoundFlipbook).GetTotalDuration();
-    CharacterDataCore.AnimationQueue.Enqueue(TTuple<UPaperFlipbook*, float, int32>{ *FoundFlipbook, AnimationDuration, AnimationId });
+  UPaperFlipbook** FoundFlipbook = CharacterDataCore.AnimationsMap.Find(AnimationId); // NOT THREAD SAFE
+  if (!(FoundFlipbook && *FoundFlipbook)) return;
 
-    if (bWaitUntilEnds)
-      FPlatformProcess::Sleep(THREAD_SLEEP(AnimationDuration));
-  }
-  else
-  {
-    UE_LOG(LogTemp, Error, TEXT("Animation not found!"));
-  }
+  float AnimationDuration = (**FoundFlipbook).GetTotalDuration();
+  CharacterDataCore.AnimationQueue.Enqueue(TTuple<UPaperFlipbook*, float, int32>{ *FoundFlipbook, AnimationDuration, AnimationId });
+
+  if (bWaitUntilEnds) FPlatformProcess::Sleep(THREAD_SLEEP(AnimationDuration));
 }
 
 void AInteractiveCharacter::OnConstruction(const FTransform & Transform)
@@ -313,7 +307,8 @@ void AInteractiveCharacter::PopTarget()
 
   if (Targets.Num())
   {
-    LastTargetLocation = Targets.Pop()->GetActorLocation();
+    LastTarget = Targets.Pop();
+    LastTargetLocation = LastTarget->GetActorLocation();
   }
   else
   {

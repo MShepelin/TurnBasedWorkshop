@@ -19,25 +19,25 @@ struct WORKSHOP_API FAbilityCore
   // -------------------------- //
 
   // Animation identifier which should be played by owner when this ability is resolved.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings")
+  UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "AbilitySettings")
   int32 AbilityAnimationId;
 
   // This array collectes all effects used in ability.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings")
+  UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "AbilitySettings")
   TArray<FEffectData> UsedEffects;
 
   TQueue<FEffectData> EffectsToResolve;
   TQueue<FEffectData> EffectsToReceive;
 
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings")
+  UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "AbilitySettings")
   TArray<int32> CTsToAffect;
 
   // Target on which this affect is applicable.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings", meta = (Bitmask, BitmaskEnum = "EInteractiveType"))
+  UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "AbilitySettings", meta = (Bitmask, BitmaskEnum = "EInteractiveType"))
   int32 TargetTypeMask = static_cast<int32>(EInteractiveType::Character);
 
   // Number of objects which can be chosen.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AbilitySettings", meta = (ClampMin = "1"))
+  UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "AbilitySettings", meta = (ClampMin = "1"))
   int32 NumOfTargets = 1;
 
   // ------- //
@@ -45,11 +45,11 @@ struct WORKSHOP_API FAbilityCore
   // ------- //
 
   // Icon of Ability in UI.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
+  UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "AnimationSettings")
   UTexture2D* IconUI;
 
   // Icon of Ability on scene.
-  UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "AnimationSettings")
+  UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "AnimationSettings")
   UPaperFlipbook* IconScene;
 
   FAbilityCore& operator=(const FAbilityCore& AnotherCore);
