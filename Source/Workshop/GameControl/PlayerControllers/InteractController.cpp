@@ -196,6 +196,16 @@ void AInteractController::PostInitializeComponents()
   Super::PostInitializeComponents();
 }
 
+void AInteractController::Tick(float DeltaTime)
+{
+  if (bForceNextPhase)
+  {
+    bForceNextPhase = false;
+    bTurnIsControlled = true;
+    PlayerWantsToChangePhase();
+  }
+}
+
 void AInteractController::PlayerWantsToChangePhase()
 {
   if (!bTurnIsControlled)
@@ -213,7 +223,7 @@ void AInteractController::PlayerWantsToChangePhase()
     return;
   }
 
-  if (Manager->GetPhase() == ETurnPhase::AbilitiesEffect)
+  if (Manager->GetPhase() == ETurnPhase::Start)
   {
     bCanPick = false;
 
@@ -285,16 +295,16 @@ void AInteractController::UpdatePhaseInfo() //???? move to AbilitiesWidget
   }
 
   ETurnPhase Phase = Manager->GetPhase();
-  UsedAbilitiesWidget->PhaseText->SetText(FText::FromString(UEnum::GetValueAsString(Phase).RightChop(PHASE_ENUM_NAME_LENGTH)));
-
-  if (Phase == ETurnPhase::End)
+  if (Phase == ETurnPhase::Start)
   {
     UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString("End turn"));
     return;
   }
-  else
+
+  if (Phase == ETurnPhase::End)
   {
-    Phase = static_cast<ETurnPhase>(static_cast<uint8>(Phase) + 1);
+    UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString("Action"));
+    return;
   }
 
   UsedAbilitiesWidget->NextPhaseText->SetText(FText::FromString(UEnum::GetValueAsString(Phase).RightChop(PHASE_ENUM_NAME_LENGTH)));
@@ -307,7 +317,7 @@ void AInteractController::EndPlay(const EEndPlayReason::Type EndPlayReason)
   if (ResolveRunnable && ResolveThread)
   {
     ResolveThread->Suspend(true);
-    ResolveThread->Kill(false); //???? change somehow to prevent problems with threads
+    ResolveThread->Kill();
     ResolveRunnable.reset();
   }
 }
@@ -369,6 +379,16 @@ void AInteractController::SetPawn(APawn *InPawn)
   }
 }
 
+void AInteractController::ForceNextPhase()
+{
+  bForceNextPhase = true;
+}
+
+void AInteractController::SetControl(bool bNowTurnIsControlled)
+{
+  bTurnIsControlled = true;
+}
+
 
 FCharactersResolve::FCharactersResolve(AInteractController* Controller) : UsedController(Controller)
 {
@@ -379,7 +399,7 @@ uint32 FCharactersResolve::Run()
 {
   // UE_LOG(LogTemp, Warning, TEXT("Thread is running"));
   UsedController->ResolveCharactersAbilities();
-  UsedController->bTurnIsControlled = true;
+  UsedController->ForceNextPhase();
   return 0;
 }
 

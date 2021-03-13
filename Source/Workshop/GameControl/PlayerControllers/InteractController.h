@@ -35,8 +35,9 @@ protected:
 
   UPROPERTY() uint8 bCanPick : 1;
   
-public:
   FThreadSafeBool bTurnIsControlled; //++++ change to protected
+
+  FThreadSafeBool bForceNextPhase; //++++ change to protected
   
 protected:
   // Tries to pick an Interactive object
@@ -61,6 +62,8 @@ public:
 
   virtual void BeginPlay() override;
 
+  virtual void Tick(float DeltaTime) override;
+
   virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
   virtual void SetupInputComponent() override;
@@ -80,6 +83,17 @@ public:
   virtual void OnGetTurnControl_Implementation() override;
 
   virtual void OnLoseTurnControl_Implementation() override;
+
+  // --------------- //
+  // Control changes //
+  // --------------- //
+
+
+  /** Thread-safe way to force the controller to change the phase. */
+  void ForceNextPhase();
+
+  /** Thread-safe way to set the control status of the controller. */
+  void SetControl(bool bNowTurnIsControlled);
 
   // ------ //
   // Others //

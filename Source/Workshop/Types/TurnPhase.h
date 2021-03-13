@@ -10,6 +10,5 @@ UENUM(BlueprintType)
 enum class ETurnPhase : uint8
 {
   Start = 0,
-  AbilitiesEffect = 1,
-  End = 2
+  End = 1
 };

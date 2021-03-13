@@ -39,7 +39,6 @@ protected:
 
 public:
   UPROPERTY(meta = (BindWidget)) UButton* NextPhaseButton;
-  UPROPERTY(meta = (BindWidget)) URichTextBlock* PhaseText;
   UPROPERTY(meta = (BindWidget)) URichTextBlock* NextPhaseText;
 
   UPROPERTY(meta = (BindWidget)) UButton* TurnSwapButton;
